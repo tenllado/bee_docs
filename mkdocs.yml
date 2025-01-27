@@ -1,0 +1,6 @@
+site_name: BEE Docs
+
+nav:
+  - Home: index.md
+
+theme: readthedocs
