@@ -1,6 +1,7 @@
 site_name: BEE Docs
 
 nav:
-  - Home: index.md
+  - Placa de Expansion: index.md
+  - Bloques de periféricos: perifericos.md
 
 theme: readthedocs
