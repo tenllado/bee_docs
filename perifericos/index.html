@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Bloques de periféricos - BEE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Bloques de perif\u00e9ricos";
+        var mkdocs_page_input_path = "perifericos.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> BEE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Placa de Expansion</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Bloques de periféricos</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#interruptores-y-leds">Interruptores y leds</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">BEE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Bloques de periféricos</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="bloques-de-perifericos">Bloques de periféricos</h1>
+<h2 id="interruptores-y-leds">Interruptores y leds</h2>
+<p>La siguiente figura muestra el esquemático de este sencillo bloque de
+periféricos, que es común para las dos versiones de la placa.</p>
+<p><img alt="Interruptores_leds" src="../img/Interruptores_leds.png" /></p>
+<p>Por un lado tenemos tres leds (D1-D3) con el cátodo conectado a GND. El ánodo de
+cada uno de ellos se conecta a una resistencia de polarización de 220 Ohmios,
+cuyo otro extremo se conecta a uno de los pines de la tira J4. Podemos usar esos
+pines de J4 para conectarlos a un pin libre de la raspberry pi usando un cable
+dupont hembra-hembra. Entonces desde un programa que ejecute en la raspberry pi
+podemos enceder el correspondiente led si ponemos el pin seleccionado a 1 (Vdd),
+ya que entonces la corriente en el led será de aproximadamente 7 mA: (3.3 -
+1.8)/220 = 7 mA.</p>
+<p>Por otro lado, tenemos tres pulsadores de botón (SW1-SW3), con un terminal
+conectado a GND y el otro conectado a una resistencia que a su vez conecta a la
+alimentación (3.3 V). El punto entre la resistencia y el pulsador de botón se
+conecta a uno de los pines de la tira J4. Estos pines pueden conectarse a alguno
+de los GPIOs de la raspberry pi usando un cable dupont hembra-hembra. Si dicho
+GPIO se configura como entrada podremos usarlo para ver si el pulsador está
+pulsado (el valor leído del pin será 0) o sin pulsar (el valor leído del pin
+será 1). Siempre habrá que tener en cuenta que en los cambios de estado se
+producirán rebotes, debido principalmente a las oscilaciones mecánicas del
+muelle incluido en el pulsador. Estos rebotes pueden ser filtrados por software.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Placa de Expansion"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

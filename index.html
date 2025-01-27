@@ -12,7 +12,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Home";
+        var mkdocs_page_name = "Placa de Expansion";
         var mkdocs_page_input_path = "index.md";
         var mkdocs_page_url = null;
       </script>
@@ -41,19 +41,27 @@
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href=".">Placa de Expansion</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#que-es-la-placa-bee">Qué es la placa BEE</a>
+    <li class="toctree-l2"><a class="reference internal" href="#placa-de-expansion-bee">Placa de expansión BEE</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#versiones">Versiones</a>
+    <li class="toctree-l2"><a class="reference internal" href="#bee-v1">BEE v1</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#bee-v1">BEE v1</a>
+    <li class="toctree-l3"><a class="reference internal" href="#esquematico-de-la-bee-v1">Esquemático de la BEE v1</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#bee-v2">BEE v2</a>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#bee-v2">BEE v2</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#esquematico-de-la-bee-v2">Esquemático de la BEE v2</a>
     </li>
         </ul>
     </li>
     </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="perifericos/">Bloques de periféricos</a>
                 </li>
               </ul>
       </div>
@@ -70,7 +78,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="." class="icon icon-home" alt="Docs"></a> &raquo;</li>
-      <li>Home</li>
+      <li>Placa de Expansion</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -80,104 +88,140 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="bee-docs">BEE Docs</h1>
-<h2 id="que-es-la-placa-bee">Qué es la placa BEE</h2>
-<p>La placa de expansión BEE fué desarrollada como una placa de expansión para la
-primera versión de la Raspberry Pi, con el fin de facilitar montar puestos de
+<h2 id="placa-de-expansion-bee">Placa de expansión BEE</h2>
+<p>La placa BEE fué desarrollada como una placa de expansión para la primera
+versión de la Raspberry Pi, con el fin de facilitar montar puestos de
 laboratorio económicos en torno a este <em>computador de una sola placa</em>.</p>
-<p>La misión de la placa BEE es la proporcionar una serie de periféricos que sean
-fácilmente conectables a la raspberry pi. La conexión no se ha hecho fija, sino
-que es el usuario el que debe conectar cada uno de los periféricos a los pines
-deseados usando cables de puente dupont hembra-hembra. Los pines de la raspberry
-pi se han dejado disponibles en la propia placa de expansión, algunos de ellos
-colocados junto a algún periférico por ser los más adecuados para la conexión
-a dicho periférico, evitando en todo momento que un pin pueda ser conectado a
-más de un dispositivo externo.</p>
-<h2 id="versiones">Versiones</h2>
-<p>Se ha desarrollado hasta el momento dos versiones de la placa. La primera
-versión incluye dispositivos pensados para el desarrollo de prácticas de dos
-asignaturas del departamento:</p>
+<p>La placa BEE proporciona una serie de periféricos que son fácilmente conectables
+a los pines GPIO de la raspberry pi. En lugar de proporcionar una conexión fija
+entre los periféricos y los GPIOS de del microcontrolador, es el usuario el que
+debe conectar cada uno de los periféricos a los pines deseados usando cables de
+puente dupont hembra-hembra.</p>
+<p>Los pines de la raspberry pi se han dejado disponibles en distintas tiras de
+pines en la propia placa de expansión. Algunas de estas tiras se han colocado
+junto a los circuitos de los periféricos para los que esos pines se usarán con
+mayor frecuencia. Para esos casos la conexión entre el periférico y la raspberry
+pi puede hacerse sólo con jumpers.</p>
+<p>En todo momento se ha evitado que un pin pueda ser conectado a más de un
+dispositivo externo, para evitar errores frecuentes entre los alumnos que
+generan cortocircuitos.</p>
+<p>Se ha desarrollado hasta el momento dos versiones de la placa BEE. La primera
+versión (v1) es más pequeña y económica de manejar, y contiene un conjunto más
+reducido de dispositivos pensados inicialmente para el desarrollo de dos
+asignaturas del Grado de Ingeniería Electrónica de Comunicaciones.</p>
+<p>La segunda versión (v2) extiende el conjunto de dispositivos incluidos para
+ampliar el espectro de asignaturas que pueden sacar provecho de esta económica y
+versátil placa.</p>
+<p>Los detalles de estos dos modelos se presentan en las próximas secciones.</p>
+<h2 id="bee-v1">BEE v1</h2>
+<p>La primera versión de la BEE incluye el siguiente conjunto básico de
+dispositivos:</p>
 <ul>
 <li>
-<p>Estructura de Computadores: se realizan prácticas de programación de entrada
-  salida <em>bare-metal</em>, usando pines digitales de entrada y salida, conectados a
-  leds y pulsadores, manejo de puerto serie y conexión a dispositivos por SPI o
-  I2C.</p>
-</li>
-<li>
-<p>Control de Sistemas: se utilizan sensores analógicos y digitales, ADC, DAC y
-  controladores PWM.</p>
-</li>
-</ul>
-<p>En la seguna versión de la placa se extendieron los dispositivos incluidos para
-dar soporte a asignaturas de programación de drivers en Linux y Android, así
-como mejorar la flexibilidad de la polarización de los sensores respecto de la
-versión anterior para asignaturas de control y robótica.</p>
-<h3 id="bee-v1">BEE v1</h3>
-<p>Las siguientes imágenes muestran un modelo 3D de la primera versión de la placa,
-una foto aislada de un montaje real de la placa y su conexión a la Raspberry Pi
-en el montaje utilizado el el Grado de Ingeniería Electrónica de Comunicaciones
-de la Universidad Complutense de Madrid:</p>
-<p><img alt="BEE v1" src="img/bee_v1_3dmodel.png" /></p>
-<p><img alt="BEE v1 foto" src="img/bee_v1_foto.jpg" /></p>
-<p><img alt="BEE v1 y raspi" src="img/raspi_bee_v1_montaje.jpg" /></p>
-<p>Esta versión de la placa incorpora los siguientes dispositivos:</p>
-<ul>
-<li>
-<p>MCP3008: un conversor analógico digital (ADC) de 10 bits con 8 canales, que
-  puede ser conectado a los pines SPI usando 5 <em>jumpers</em>, usando el CE0.</p>
+<p>Un MCP3008. Se trata de un conversor analógico digital (ADC) de 10 bits con 8
+  canales. Su montaje en la placa permite una conexión sencilla de sus entradas
+  a las salidas de sensores, y su interfaz digital SPI puede ser conectada
+  mediante 5 <em>jumpers</em> a los pines SPI de la Raspberry Pi por el canal CE0.</p>
 </li>
 <li>
 <p>Sockets para la conexión rápida de sensores a la entrada del ADC, con
-  posibilidad de polarizar a 0 o alimentación (3.3 V o 5 V).</p>
+  posibilidad de polarizar dichos sensores a 0 o alimentación (3.3 V o 5 V).</p>
 </li>
 <li>
-<p>MCO4911: un conversor digital analógico de 10 bits, que también puede ser
-  conectado al controlador SPI usando los mismos 5 jumpers, quedando conectado
-  al CE1.</p>
+<p>Un MCO4911. Se trata de un conversor digital analógico (DAC) de 10 bits, que
+  también puede ser conectado al controlador SPI usando los mismos 5 <em>jumpers</em>,
+  quedando conectado al canal CE1.</p>
 </li>
 <li>
-<p>3 circuitos simples que permiten detectar pulsaciones de un pulsador conectado
-  a un pin de entrada.</p>
+<p>3 circuitos simples de pulsador, que pueden ser conectados a pines digitales
+  de entrada del microcontrolador para recibir acciones de usuario.</p>
 </li>
 <li>
-<p>3 circuitos simples que permiten encender un led a partir de un pin de salida.</p>
+<p>3 circuitos simples de led polarizado, que permiten encender el led desde un
+  programa si se conecta el circuito a un pin de salida del microcontrolador.</p>
 </li>
 <li>
 <p>Un conector para cables FTDI-232-R con conexión directa a los pines del puerto
-  serie de la raspberry pi.</p>
+  serie de la raspberry pi. Facilita la comunicación serie desde un PC con la
+  raspberry pi.</p>
 </li>
 <li>
 <p>Un conector para JTAG estándar de 20 pines, conectado a los pines de
   depuración en circuito de la raspberry pi.</p>
 </li>
 <li>
-<p>1 Zumbador piezo-eléctrico que puede ser conectado con <em>jumpers</em> a algunos de
+<p>1 Zumbador piezoeléctrico que puede ser conectado con <em>jumpers</em> a algunos de
   los pines pwm de la Raspberry PI.</p>
 </li>
 </ul>
-<h3 id="bee-v2">BEE v2</h3>
-<p>La siguiente imagen muestra un modelo 3D de la segunda iteración de la placa:</p>
-<p><img alt="BEE v2" src="img/bee_v2_3dmodel.png" /></p>
-<p>Esta versión de la placa añade a la versión anterior los siguientes periféricos:</p>
+<p>Estos dispositivos están incluidos para dar soporte al desarrollo de prácticas
+de dos asignaturas del departamento:</p>
+<ul>
+<li>
+<p>Estructura de Computadores: en la que se realizan prácticas de programación de
+  entrada salida <em>bare-metal</em>, usando pines digitales de entrada y salida,
+  conectados a leds y pulsadores, manejo de puerto serie y conexión a
+  dispositivos por SPI o I2C.</p>
+</li>
+<li>
+<p>Control de Sistemas: se utilizan sensores analógicos y digitales, ADC, DAC y
+  controladores PWM.</p>
+</li>
+</ul>
+<p>Las siguientes imágenes muestran un modelo 3D de la BEE v1, una foto aislada de
+un montaje real de la placa y su conexión a la Raspberry Pi en el montaje
+utilizado el laboratorio del Grado de Ingeniería Electrónica de Comunicaciones
+de la Universidad Complutense de Madrid:</p>
+<p><img alt="BEE v1" src="img/bee_v1_3dmodel.png" /></p>
+<p><img alt="BEE v1 foto" src="img/bee_v1_foto.jpg" /></p>
+<p><img alt="BEE v1 y raspi" src="img/raspi_bee_v1_montaje.jpg" /></p>
+<h3 id="esquematico-de-la-bee-v1">Esquemático de la BEE v1</h3>
+<p>La siguiente figura muestra el esquemático de la primera versión de la placa
+BEE:</p>
+<p><img alt="BEE v1_schematic" src="img/BEE_v1_schematic.png" /></p>
+<p>Cada uno de los bloques de periféricos se explica y documenta en las secciones
+correspondientes.</p>
+<h2 id="bee-v2">BEE v2</h2>
+<p>La segunda versión de la placa extiende los dispositivos incluidos para dar
+soporte a un mayor número de asignaturas de nuestro departamento, como por
+ejemplo Arquitectura Interna Linux y Android, dónde se programan drivers para
+varios tipos de dispositivos en estos sistemas. Asimismo se incorpora una red de
+polarización mucho más versátil, con el objetivo de facilitar la polarización de
+sensores analógicos que se quieran conectar a la entrada del ADC, proporcionando
+las resistencias de polarización más habituales, posibilidades de combinarlas en
+serie o en paralelo y microinterruptores para polarizarlas a gnd o alimentación.</p>
+<p>Concretamente, en esta versión de la placa se han añadido a los dispositivos
+incluidos en la versión 1 la siguiente lista de periféricos: </p>
 <ul>
 <li>
 <p>Un desplazador con buffer conectado a un display de 7 segmentos (con punto
-  decimal), permite escribir en el display 7 segmentos desde la raspberry-pi.</p>
+  decimal), permite escribir en el display 7 segmentos desde la raspberry-pi
+  usando pines genéricos de entrada y salida.</p>
 </li>
 <li>
-<p>Un led RGB polarizado.</p>
+<p>Un led RGB polarizado, que puede ser operado desde la raspberry pi con pines
+  genéricos de entrada salida.</p>
 </li>
 <li>
 <p>Una red de polarización de sensores, con micro interruptores y resistencias
-  habituales para una conexión rápida. </p>
-</li>
-<li>
-<p>Un conector adicional para un sensor </p>
+  habituales para una polarización de sensores analógicos que quieran conectarse
+  a las entradas del ADC. </p>
 </li>
 </ul>
+<p>La siguiente imagen muestra un modelo 3D de la segunda iteración de la placa:</p>
+<p><img alt="BEE v2" src="img/bee_v2_3dmodel.png" /></p>
+<h3 id="esquematico-de-la-bee-v2">Esquemático de la BEE v2</h3>
+<p>La siguiente figura muestra el esquemático de la primera versión de la placa
+BEE:</p>
+<p><img alt="BEE v2_schematic" src="img/BEE_v2_schematic.png" /></p>
+<p>Cada uno de los bloques de periféricos se explica y documenta en las secciones
+correspondientes.</p>
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="perifericos/" class="btn btn-neutral float-right" title="Bloques de periféricos">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 
@@ -200,6 +244,8 @@ de la Universidad Complutense de Madrid:</p>
     
     
     
+      <span><a href="perifericos/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
   </span>
 </div>
     <script>var base_url = '.';</script>
@@ -217,5 +263,5 @@ de la Universidad Complutense de Madrid:</p>
 
 <!--
 MkDocs version : 1.4.2
-Build Date UTC : 2025-01-27 12:01:31.607130+00:00
+Build Date UTC : 2025-01-27 18:18:44.677549+00:00
 -->
