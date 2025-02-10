@@ -13,23 +13,43 @@ debe conectar cada uno de los periféricos a los pines deseados usando cables de
 puente dupont hembra-hembra.
 
 Los pines de la raspberry pi se han dejado disponibles en distintas tiras de
-pines en la propia placa de expansión. Algunas de estas tiras se han colocado
-junto a los circuitos de los periféricos para los que esos pines se usarán con
-mayor frecuencia. Para esos casos la conexión entre el periférico y la raspberry
-pi puede hacerse sólo con jumpers.
+pines en la propia placa de expansión. Algunas de estas tiras de pines se han
+colocado junto a los circuitos de algun periférico, debido a que la
+funcionalidad adicional de estos pines está relacionada con dicho periférico Por
+ejemplo, los pines que proporcionan conexiones a los controladores hardware de
+PWM se han colocado junto al circuito del zumbador. Para esos casos la conexión
+entre el periférico y la raspberry pi puede hacerse de forma cómoda y sencilla
+usando jumpers.
 
 En todo momento se ha evitado que un pin pueda ser conectado a más de un
-dispositivo externo, para evitar errores frecuentes entre los alumnos que
-generan cortocircuitos.
+dispositivo externo, para evitar cortocircuitos provocados por los estudiantes
+menos cuidadosos.
 
-Se ha desarrollado hasta el momento dos versiones de la placa BEE. La primera
+Se han desarrollado hasta el momento dos versiones de la placa BEE. La primera
 versión (v1) es más pequeña y económica de manejar, y contiene un conjunto más
-reducido de dispositivos pensados inicialmente para el desarrollo de dos
-asignaturas del Grado de Ingeniería Electrónica de Comunicaciones.
+reducido de dispositivos, pensados inicialmente para dar servicio a los
+laboratorios de un par de asignaturas del Grado de Ingeniería Electrónica de
+Comunicaciones y otro par de asignaturas del Master de Nuevas Tecnologías
+Electrónicas y fotónicas, ambas en la Facultad de CC. Físicas de la Universidad
+Complutense de Madrid.
 
 La segunda versión (v2) extiende el conjunto de dispositivos incluidos para
 ampliar el espectro de asignaturas que pueden sacar provecho de esta económica y
-versátil placa.
+versátil placa de expansión.
+
+En ambas versiones, los pines etiquetados como Bx en la placa BEE, tanto en el
+esquemático como en la serigrafía sobre la propia pcb, se corresponden con los
+pines BCMx de la documentación de Broadcom, también denotados como GPIOx en
+algunos sitios web, como por ejemplo en [https://pinout.xyz/](https://pinout.xyz/).
+
+Como ejemplo, la siguiente figura muestra la disposición de las tiras de pines
+en la BEE v1, marcando en rojo las tiras que exponen los pines de la raspberry
+pi (etiquetados como Bx en la serigrafía). Como única excepción, los pines
+B22-B25 y B27, que deben usarse en el caso de realizar una depuración en
+circuito con el controlador JTAG, están disponibles en la tira etiquetada en
+azul como JTAG.
+
+![BEE v1 etiquetada](img/bee_v1_pinout_etiquetado.png)
 
 Los detalles de estos dos modelos se presentan en las próximas secciones.
 
@@ -46,7 +66,7 @@ dispositivos:
 - Sockets para la conexión rápida de sensores a la entrada del ADC, con
   posibilidad de polarizar dichos sensores a 0 o alimentación (3.3 V o 5 V).
 
-- Un MCO4911. Se trata de un conversor digital analógico (DAC) de 10 bits, que
+- Un MCP4911. Se trata de un conversor digital analógico (DAC) de 10 bits, que
   también puede ser conectado al controlador SPI usando los mismos 5 *jumpers*,
   quedando conectado al canal CE1.
 
@@ -67,15 +87,22 @@ dispositivos:
   los pines pwm de la Raspberry PI.
 
 Estos dispositivos están incluidos para dar soporte al desarrollo de prácticas
-de dos asignaturas del departamento:
+de las siguientes asignaturas del departamento de Arquitectura de Computadores y
+Automática de la Universidad Complutense de Madrid:
 
 - Estructura de Computadores: en la que se realizan prácticas de programación de
   entrada salida *bare-metal*, usando pines digitales de entrada y salida,
   conectados a leds y pulsadores, manejo de puerto serie y conexión a
   dispositivos por SPI o I2C.
 
-- Control de Sistemas: se utilizan sensores analógicos y digitales, ADC, DAC y
+- Robótica: se utilizan sensores analógicos y digitales, ADC, DAC y
   controladores PWM.
+
+- Robótica y Mecatrónica: igual que en robótica, se usan sensores analógicos y
+  digitales, ADC, DAC, motores, etc.
+
+- Programación de Nodos Sensores para Internet de las Cosas: se utilizan también
+  sensores analógicos, temporizadores, controladores PWM, etc.
 
 Las siguientes imágenes muestran un modelo 3D de la BEE v1, una foto aislada de
 un montaje real de la placa y su conexión a la Raspberry Pi en el montaje
@@ -87,6 +114,20 @@ de la Universidad Complutense de Madrid:
 ![BEE v1 foto](img/bee_v1_foto.jpg)
 
 ![BEE v1 y raspi](img/raspi_bee_v1_montaje.jpg)
+
+Como vemos, la BEE se conecta a la Raspberry Pi a través de la tira de 2x20
+pines J1, mediante un cable plano. La totalidad de los pines de la Raspberry
+quedan entonces accesibles al usuario a través de otras tiras de pines. 
+
+Los pines quedan distribuidos según su uso entre varias tiras de pines
+adicionales, algunas de ellas próximas a los circuitos de periféricos que
+generalmente necesitarán de dichos pines para su manejo y control. En estos
+casos la conexión entre el periférico y la raspberry pi se puede hacer de forma
+cómoda y sencilla utilizando jumpers. 
+
+Se han incorporado dispositivos que se utilizan típicamente en las asignaturas
+anteriormente mencionadas.
+
 
 ### Esquemático de la BEE v1
 
