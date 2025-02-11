@@ -3,11 +3,11 @@
 ## Descripción general
 
 La BEE es una placa de expansión, diseñada inicialmente para la primera versión
-de la Raspberry Pi, pero que pude ser utilizada con cualquiera de las versiones
-de este  *computador de una sola placa*. Este complemento convierte a la
-Raspberry Pi en una suerte de entrenador económico para estudiar distintas
-temáticas de varias titulaciones universitarias del ámbito de las TIC y la
-Electrónica.
+de la [Raspberry Pi](https://www.raspberrypi.com/), pero que pude ser utilizada
+con cualquiera de las versiones de este  *computador de una sola placa*. Este
+complemento convierte a la Raspberry Pi en una suerte de entrenador económico
+para estudiar distintas temáticas de varias titulaciones universitarias del
+ámbito de las TIC y la Electrónica.
 
 Este equipo se ha utilizado con gran éxito para montar los puestos de
 laboratorio para varias asignaturas de distintas titulaciones del Departamento
