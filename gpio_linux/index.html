@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Control GPIO en Linux - BEE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Control GPIO en Linux";
+        var mkdocs_page_input_path = "gpio_linux/index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> BEE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Placa de expansión BEE</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Prácticas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Control GPIO en Linux</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#introduccion">Introducción</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#utilidades-de-linea-de-comandos">Utilidades de línea de comandos</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#gpiodetect">gpiodetect</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gpioinfo">gpioinfo</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gpiofind">gpiofind</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gpioset">gpioset</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gpioget">gpioget</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gpiomon">gpiomon</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#driver-gpio">Driver GPIO</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#operaciones-ioctl">Operaciones ioctl</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#obtener-informacion-del-controlador-gpio">Obtener información del controlador GPIO</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pines-de-entrada-y-salida">Pines de entrada y salida</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../control_servomotores/">Control de servomotores con PWM</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">BEE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Prácticas &raquo;</li>
+      <li>Control GPIO en Linux</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="control-gpio-en-linux">Control GPIO en Linux</h1>
+<p>En esta práctica utilizaremos los drivers que proporciona linux para controlar
+el GPIO. Puedes hacer esta práctica si tienes una raspberry-pi con Raspbian,
+consiguiendo manejar dispositivos sencillos, como los pulsadores y los leds que
+incorpora la placa BEE, desde un programa de usuario escrito en C.</p>
+<h2 id="introduccion">Introducción</h2>
+<p>Linux expone los controladores del GPIO como dispositivos orientados a
+caracteres <em>/dev/gpiochip#</em>. Usar estos dispositivos ofrece las siguientes
+ventajas:</p>
+<ul>
+<li>Portabilidad: el código es prácticamente independiente del hardware, a
+  excepción de los GPIOS/pines que hay que usar</li>
+<li>No requiere privilegios de root</li>
+<li>Ofrece un mecanismo para tratar eventos hw desde el espacio de usuario</li>
+<li>Mantiene la semántica UNIX tradicional de <em>todo es un fichero</em></li>
+</ul>
+<p>Como con cualquier otro dispositivo, podemos trabajar con el gpio como si fuese
+un fichero, utilizando las llamadas al sistema <em>open()</em>, <em>read()</em>, <em>write()</em>,
+<em>ioctl()</em>, <em>close()</em>.</p>
+<p>En esta práctica usaremos la versión 2 del ABI, la 1 se considera obsoleta
+(<em>deprecated</em>). La fuente más fiable de referencia/documentación es el propio
+fichero de cabecera <em>/usr/include/linux/gpio.h</em>.</p>
+<h2 id="utilidades-de-linea-de-comandos">Utilidades de línea de comandos</h2>
+<p>La librería libgpiod nos ofrece unos programas de ejemplo que podemos utilizar
+como utilidades de línea de comandos para interactuar con los controladores de
+GPIO.</p>
+<p>Para disponer de estas herramientas debemos instalar algunos paquetes de
+raspbian:</p>
+<pre><code class="language-sh">sudo apt install gpiod libgpiod-dev libgpiod-doc
+</code></pre>
+<p>Una vez instalados estos paquetes tendremos disponibles las utilidades
+descritas en las siguientes secciones.</p>
+<h3 id="gpiodetect">gpiodetect</h3>
+<p>Esta utilidad nos da una lista de los dispositivos de caracteres para control
+del gpio disponibles en nuestra plataforma:</p>
+<pre><code class="language-sh">pi@raspberrypi:~ $ gpiodetect
+gpiochip0 [pinctrl-bcm2835] (54 lines)
+gpiochip1 [brcmvirt-gpio] (2 lines)
+gpiochip2 [raspberrypi-exp-gpio] (8 lines)
+pi@raspberrypi:~ $
+</code></pre>
+<h3 id="gpioinfo">gpioinfo</h3>
+<p>Esta utilidad lista los pines controlados por uno de los controladores:</p>
+<pre><code class="language-sh">pi@raspberrypi:~ $ gpioinfo gpiochip0
+gpiochip0 - 54 lines:
+    line   0:      unnamed       unused   input  active-high
+    line   1:      unnamed       unused   input  active-high
+    line   2:      unnamed       unused   input  active-high
+    line   3:      unnamed       unused   input  active-high
+    ...
+pi@raspberrypi:~ $
+</code></pre>
+<h3 id="gpiofind">gpiofind</h3>
+<p>Utilidad que nos da el número de línea de gpio para líneas identificadas con un
+  nombre en el <em>device-tree</em></p>
+<h3 id="gpioset">gpioset</h3>
+<p>Utilidad que permite asignar un valor a un conjunto de líneas del gpio mientras
+ejecuta el comando. Con <em>-m modo</em> podemos configurar lo que hace el comando tras
+dar el valor a las líneas. Los posibles modos son:</p>
+<ul>
+<li>wait: espera a que el usuario pulse enter</li>
+<li>exit: termina inmediatamente</li>
+<li>time: duerme por el periodo de tiempo especificado con el flag -s o el flag -u</li>
+<li>signal: espera hasta recibir SIGINT o SIGTERM</li>
+</ul>
+<p>Por ejemplo, para encender 3 leds conectados a los pines 20, 21 y 26, 
+hasta que el usuario pulse enter:</p>
+<pre><code class="language-sh">pi@raspberrypi:~ $ gpioset -m wait 0 20=1 21=1 26=1
+pi@raspberrypi:~ $
+</code></pre>
+<p>El siguiente script es un ejemplo de uso de gpioset que hace oscilar una luz
+entre tres leds.</p>
+<pre><code class="language-bash">#!/bin/bash
+
+ini=0x01
+dir=0
+while true
+do
+    bit26=$(( (ini &amp; 0x4) &gt;&gt; 2 ))
+    bit21=$(( (ini &amp; 0x2) &gt;&gt; 1 ))
+    bit20=$((ini &amp; 0x1))
+    gpioset -m time -s 1 0 26=$bit26 21=$bit21 20=$bit20
+    if [ $dir -eq 0 ]; then
+        ini=$(((ini &lt;&lt; 1) &amp; 0x7))
+    else
+        ini=$(((ini &gt;&gt; 1) &amp; 0x7))
+    fi
+    if [ $ini -eq 0 ]; then
+        dir=$(((dir + 1) &amp; 1))
+        ini=0x2
+    fi
+done
+</code></pre>
+<h3 id="gpioget">gpioget</h3>
+<p>Esta utilidad nos da el estado actual de las líneas solicitadas en el chip de
+control indicado en la linea de comandos</p>
+<h3 id="gpiomon">gpiomon</h3>
+<p>Esta utilidad nos permite monitorizar el estado de unos pines. Usa la llamada al
+sistema <em>poll</em>, con las siguientes opciones:</p>
+<ul>
+<li>-n NUM: termina después de \texttt{NUM} eventos</li>
+<li>-s: no imprime información de evento</li>
+<li>-r: procesa sólo eventos de flanco de subida</li>
+<li>-f: procesa sólo eventos de flanco de bajada</li>
+<li>-F FMT: especifica el formato de salida (consulta la página de manual)</li>
+</ul>
+<p>Por ejemplo, para monitorizar tres pulsadores conectados a las líneas 19, 6 y 5:</p>
+<pre><code class="language-bash">pi@raspberrypi:~ $ gpiomon -f 0 19 6 5
+event: FALLING EDGE offset: 19 timestamp: [ 2740.887807571]
+event: FALLING EDGE offset: 6 timestamp: [  2742.291116096]
+event: FALLING EDGE offset: 5 timestamp: [  2744.609921761]
+^Cpi@raspberrypi:~ $
+</code></pre>
+<h2 id="driver-gpio">Driver GPIO</h2>
+<p>Vamos a ver cómo podemos manejar los pines del GPIO desde un programa de usuario
+escrito en C utilizando el driver de GPIO proporcionado por Linux. Para ello
+debemos comprender qué son las operaciones ioctl en el estándar POSIX, que serán
+vitales para la comunicación con el driver. Luego iremos viendo como podemos
+utilizar estas operaciones para interactuar con el controlador GPIO.</p>
+<h3 id="operaciones-ioctl">Operaciones ioctl</h3>
+<p>En los sistemas POSIX las operaciones sobre un dispositivo que no sean read o 
+write se realizan con la llamada al sistema <em>ioctl</em>, cuyo prototipo es:</p>
+<pre><code class="language-c">int ioctl(int fd, unsigned long request, void *argp);
+</code></pre>
+<p>dónde:</p>
+<ul>
+<li><em>fd</em>: descriptor de fichero devuelto por open</li>
+<li><em>request</em>: petición de operación, dependiente del dispositivo.</li>
+<li><em>argp</em>: dirección a un buffer que depende del tipo de operación.</li>
+</ul>
+<p>No hay un estándar para los códigos de las peticiones, pero un convenio que es
+ampliamente usado es el siguiente:</p>
+<ul>
+<li>Dos bits para indicar la dirección: 00 (nada),  01 (lectura), 10 (escritura) y
+  11 (lectura y escritura).</li>
+<li>14 bits que indican el tamaño del dato pasado como argumento</li>
+<li>8 bits de tipo de operación</li>
+<li>8 bits de número de operación</li>
+</ul>
+<p>El sistema define unas macros para ayudar a la codificación de estas peticiones:
+_IOR(type, nr, arg), _IOW(type, nr, arg), _IOWR(type, nr, arg) e _IO(type, nr).</p>
+<h3 id="obtener-informacion-del-controlador-gpio">Obtener información del controlador GPIO</h3>
+<p>Para obtener información del controlador podemos utilizar la petición <em>ioctl</em>
+GPIO_GET_CHIP_INFO, que requiere como parámetro adicional la dirección de una
+estructura del siguiente tipo:</p>
+<pre><code class="language-c">struct gpiochip_info {
+  char name[32];    /* Nombre del controlador en el kernel */
+  char label[32];   /* Nombre funcional, de producto */
+  __u32 lines;      /* número de líneas que maneja */
+};
+</code></pre>
+<p>Un ejemplo de uso sería el siguiente:</p>
+<pre><code class="language-c">int fd;
+struct gpiochip_info info;
+fd = open(&quot;/dev/gpiochip0&quot;, O_RDONLY);
+ioctl(fd, GPIO_GET_CHIPINFO_IOCTL, &amp;info);
+close(fd);
+printf(&quot;label: %s\n&quot;, info.label);
+printf(&quot;name: %s\n&quot;, info.name);
+printf(&quot;number of lines: %u\n&quot;, info.lines);
+</code></pre>
+<p>Examinar el ejemplo <a href="src/gpio_info.c">gpio_info</a> y comprobar su funcionamiento.</p>
+<h3 id="pines-de-entrada-y-salida">Pines de entrada y salida</h3>
+<p>El driver de GPIO nos permite definir <em>líneas de pines</em>, que representan grupos
+de pines con un nombre de usuario (por ejemplo sevenseg), y que comparten la
+misma configuración. Una vez creada la línea se obtiene un descriptor de fichero
+que la representa, con el que podremos manejar este grupo de pines.</p>
+<p>Para crear una de estas <em>líneas de pines</em>, una vez abierto el dispositivo,
+debemos hacer una petición ioctl de tipo <em>line_request</em>:</p>
+<pre><code class="language-c">ioctl(fd, GPIO_V2_GET_LINE_IOCTL, &amp;req);
+</code></pre>
+<p>dónde <em>req</em> es un <code>struct gpio_v2_line_request</code>:</p>
+<pre><code class="language-c">struct gpio_v2_line_request {
+    __u32 offsets[GPIO_V2_LINES_MAX];  //pines a manejar      (in)
+    char consumer[GPIO_MAX_NAME_SIZE]; //nombre por usuario   (in)
+    struct gpio_v2_line_config config; //configuración        (in)
+    __u32 num_lines;                   //num pines en offsets (in)
+    __u32 event_buffer_size;           //para eventos         (in)
+    __u32 padding[5];                  //no usado
+    __s32 fd;                          //fd de salida         (out)
+};
+</code></pre>
+<p>El campo <em>offsets</em> debe contener los números de los pines que pertenecen a la
+línea, indicando el número total de pines de la línea en <em>num_lines</em>. La
+configuración de los pines de la línea se indica en el campo <em>config</em>. A la
+salida, el campo <em>fd</em> es un nuevo descriptor de fichero que podemos usar para
+operar sobre los pines (leer/escribir).</p>
+<p>El campo <em>config</em> del es del tipo:</p>
+<pre><code class="language-c">struct gpio_v2_line_config {
+    __aligned_u64 flags; // flags por defecto para los pines
+    __u32 num_attrs;     // número de atributos en attrs
+    __u32 padding[5];    // no usado
+    struct gpio_v2_line_config_attribute
+     attrs[GPIO_V2_LINE_NUM_ATTRS_MAX]; // array de atributos
+};
+</code></pre>
+<p>El campo <em>flags</em> de esta estructura es una máscara de bits que permite
+seleccionar la configuración de los pines de la línea, combinando con una or las
+siguientes macros:</p>
+<ul>
+<li><code>GPIO_V2_LINE_FLAG_USED</code></li>
+<li><code>GPIO_V2_LINE_FLAG_ACTIVE_LOW</code></li>
+<li><code>GPIO_V2_LINE_FLAG_INPUT</code></li>
+<li><code>GPIO_V2_LINE_FLAG_OUTPUT</code></li>
+<li><code>GPIO_V2_LINE_FLAG_EDGE_RISING</code></li>
+<li><code>GPIO_V2_LINE_FLAG_EDGE_FALLING</code></li>
+<li><code>GPIO_V2_LINE_FLAG_OPEN_DRAIN</code></li>
+<li><code>GPIO_V2_LINE_FLAG_OPEN_SOURCE</code></li>
+<li><code>GPIO_V2_LINE_FLAG_BIAS_PULL_UP</code></li>
+<li><code>GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN</code></li>
+<li><code>GPIO_V2_LINE_FLAG_BIAS_DISABLED</code></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Placa de expansión BEE"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../control_servomotores/" class="btn btn-neutral float-right" title="Control de servomotores con PWM">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../control_servomotores/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
