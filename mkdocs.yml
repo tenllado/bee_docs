@@ -3,6 +3,7 @@ site_name: BEE Docs
 nav:
   - index.md
   - Prácticas: 
-    - practicas/control_servomotores.md
+    - gpio_linux/index.md
+    - control_servomotores/index.md
 
 theme: readthedocs
