@@ -2,7 +2,7 @@ site_name: BEE Docs
 
 nav:
   - index.md
-  - Ejemplos: 
-    - ejemplos/control_servomotores.md
+  - Prácticas: 
+    - practicas/control_servomotores.md
 
 theme: readthedocs
