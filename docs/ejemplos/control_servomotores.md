@@ -1,4 +1,4 @@
-## Práctica de control de servomotores con PWM
+# Control de servomotores con PWM
 
 En esta práctica vamos a aprender como controlar un servomotor usando el generador
 de PWM de la Raspberry Pi, la placa BEE y la librería wiringpi. Esta práctica
@@ -6,7 +6,7 @@ es parte de la asignatura de Robótica y Mecatrónica del Máster en Nuevas Tecn
 Electrónicas y Fotónicas de la Universidad Complutense de Madrid. Es parte de un proyecto
 donde los alumnos crean desde cero su propia plataforma robótica móvil.
 
-### Servomotores
+## Servomotores
 
 Para la elección de los servomotores se elegirán dos servomotores del tipo Parallax Continous
 Rotation Servo. Estos servomotores tienen una velocidad máxima de 50rpm son bidireccionales
@@ -15,9 +15,9 @@ consultar en la hoja de referencia disponible online ([Aqui](https://docs.rs-onl
 
 <p align="center">
   <img src="img/servos.jpg" alt="drawing" width="300"/>
-</p>
+</p>ejemplos-practicas.md
 
-### Señal PWM
+## Señal PWM
 
 Existen dos posibilidades de generar una señal PWM usando la Raspberry Pi.
 
@@ -32,7 +32,7 @@ específico para la generación de esta señal. Al no depender del sistema opera
 este método suele ser mucho más preciso y el que se recomienda usar para el control
 de motores. En esta práctica explicaremos la implementación de la señal usando el PWM hardware.
 
-#### PWM hardware
+### PWM hardware
 Lo primero que hay que saber para trabajar con la señal de PWM, es que el
 reloj disponible en la Raspberry Pi funciona a una frecuencia constante de
 19.2 Mhz. Nuestro primero objetivo es adaptar esta frecuencia a la frecuencia de
@@ -45,7 +45,7 @@ el divisor y el rango. El divisor nos permite escalar la frecuencia de trabajo d
 reloj. El rango nos define la resolución de cada periodo de PWM y por lo tanto
 también la frecuencia máxima que podremos conseguir.
 
-#### Configuración de la Frecuencia PWM
+### Configuración de la Frecuencia PWM
 
 Para ajustar la frecuencia de la señal PWM, utilizamos dos parámetros:
 
@@ -67,14 +67,14 @@ Cálculo:
 ```
 f_PWM = 19.2 MHz / (192 × 2000) = 50 Hz
 ```
-#### Código
+### Código
 
 Para implementar la señal PWM con la frecuencia indicada en el apartado anterior
 se puede utilizar el siguiente código base. Este código utiliza la biblioteca
 WiringPi para generar señales PWM y controlar la intensidad de giro de dos motores
 conectados a la Raspberry Pi.
 
-###### Código en C:
+##### Código en C:
 
 ```c
 #include <wiringPi.h>
@@ -154,7 +154,7 @@ En este código se realizan los siguientes pasos:
 movimientos de los motores cambiando cada valor con una pulsación de teclado.
 5. Luego, se realiza una variación gradual de la intensidad de la señal PWM.
 
-### Conexiones con la placa BEE
+## Conexiones con la placa BEE
 
 Una vez tenemos implementado el código lo único que nos quedaría sería realizar
 las conexiones correspondientes entre la placa BEE y los servomotores para probar

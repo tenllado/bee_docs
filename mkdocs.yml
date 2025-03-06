@@ -1,6 +1,8 @@
 site_name: BEE Docs
 
 nav:
-  - Placa BEE: index.md
+  - index.md
+  - Ejemplos: 
+    - ejemplos/control_servomotores.md
 
 theme: readthedocs
