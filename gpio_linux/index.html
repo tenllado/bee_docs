@@ -78,6 +78,8 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#gpio-mapeado-en-memoria">GPIO mapeado en memoria</a>
+    </li>
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../control_servomotores/">Control de servomotores con PWM</a>
@@ -458,6 +460,189 @@ pulsar, el led volverá a parpadear síncronamente con el resto.</p>
 </ul>
 </li>
 </ul>
+<h2 id="gpio-mapeado-en-memoria">GPIO mapeado en memoria</h2>
+<p>Linux incorpora el dispositivo /dev/mem que permite acceder a la memoria física
+del computador. El offset en este fichero es interpretado como una dirección
+física y el driver controla los rangos accesibles (configurable con la opción de
+compilación del kernel <em>CONFIG_STRICT_DEVMEM</em>) en función de la arquitectura del
+computador. Sólo root tiene acceso a este dispositvo, ya que usarlo implica
+saltarse prácticamente todos los mecanismos de control y las abstracciones del
+sistema operativo.</p>
+<p>Raspbian incorpora también el dispositivo /dev/gpiomem, que es un dispositivo
+que permite el acceso al rango de direcciones físicas controlado por el GPIO.
+Todos los usuarios que pertenezcan al grupo gpio tienen acceso a este fichero,
+además de root. Este fichero permite acceder <em>en crudo</em> a los registros del gpio
+puenteando al driver gpio. Aunque no se recomienda su uso (mejor utilizar el
+driver gpio), puede ser útil usarlo para estudiar el funcionamiento del
+controlador gpio.</p>
+<p>Como ejemplo vamos a ver cómo podemos implementar el ejemplo gpio_blink
+utilizando este dispositivo. Para ello primero debemos revisar la documentación
+de Broadcom para ver cómo funciona el controlador GPIO. Resumimos aquí los
+aspectos más destacados.</p>
+<p>En el controlador GPIO la función de cada pin se configura en los registros de
+selección <em>GPFSELn</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Registro</th>
+<th><strong>Dir. Física</strong></th>
+<th><strong>Pines GPI</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPFSEL0</td>
+<td>0x3F200000</td>
+<td>GPIO0 - GPIO9</td>
+</tr>
+<tr>
+<td>GPFSEL1</td>
+<td>0x3F200004</td>
+<td>GPIO10 - GPIO19</td>
+</tr>
+<tr>
+<td>GPFSEL2</td>
+<td>0x3F200008</td>
+<td>GPIO20 - GPIO29</td>
+</tr>
+<tr>
+<td>GPFSEL3</td>
+<td>0x3F20000C</td>
+<td>GPIO30 - GPIO39</td>
+</tr>
+<tr>
+<td>GPFSEL4</td>
+<td>0x3F200010</td>
+<td>GPIO40 - GPIO49</td>
+</tr>
+<tr>
+<td>GPFSEL5</td>
+<td>0x3F200014</td>
+<td>GPIO50 - GPIO53</td>
+</tr>
+</tbody>
+</table>
+<p>Se utilizan tres bits por pin, con la codificación indicada en la siguiente
+tabla:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Función (según doc. Broadcom</strong>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>000</td>
+<td>Entrada</td>
+</tr>
+<tr>
+<td>001</td>
+<td>Salida</td>
+</tr>
+<tr>
+<td>100</td>
+<td>Función alternativa 0</td>
+</tr>
+<tr>
+<td>101</td>
+<td>Función alternativa 1</td>
+</tr>
+<tr>
+<td>110</td>
+<td>Función alternativa 2</td>
+</tr>
+<tr>
+<td>111</td>
+<td>Función alternativa 3</td>
+</tr>
+<tr>
+<td>011</td>
+<td>Función alternativa 4</td>
+</tr>
+<tr>
+<td>010</td>
+<td>Función alternativa 5</td>
+</tr>
+</tbody>
+</table>
+<p>Para operar sobre los pines de salida hay dos pares de registros:</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Pin</th>
+<th>Registro</th>
+<th>Dirección (ARM)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0-31</td>
+<td>GPFSET0</td>
+<td>0x3F20001C</td>
+</tr>
+<tr>
+<td>1</td>
+<td>32-53</td>
+<td>GPFSET1</td>
+<td>0x3F200020</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0-31</td>
+<td>GPFCLR0</td>
+<td>0x3F200028</td>
+</tr>
+<tr>
+<td>0</td>
+<td>32-53</td>
+<td>GPFCLR1</td>
+<td>0x3F20002C</td>
+</tr>
+</tbody>
+</table>
+<p>Así, para poner a 1 un pin de salida debemos escribir un 1 en la posición
+correspondiente del registro GPSET que corresponda. Y para poner dicho pin a 0
+deberemos escribir un 1 en el la misma posición del registro GPCLR
+correspondiente. Escribir un 0 no modifica el valor del pin.</p>
+<p>El programa <a href="src/gpio_blink_mem.c">gpio_blink_mem</a> proyectan el dispositivo
+<em>/dev/gpiomem</em> en el mapa virtual de memoria del proceso utilizando mmap, con el
+fin de acceder diréctamente a los registros del controlador. Se utilizan unos
+arrays para almacenar los offsets de los registros:</p>
+<pre><code class="language-c">uint32_t gpfsel_offset[] = {0x00,0x04,0x08,0x0C,0x10,0x14};
+uint32_t gpfset_offset[] = {0x1C, 0x20};
+uint32_t gpfclr_offset[] = {0x28, 0x2C};
+</code></pre>
+<p>Estos offsets se suman a la dirección base que es un puntero a byte,
+convirtiendo el resultado a un puntero a <em>uint32_t</em> por conveniencia:</p>
+<pre><code class="language-c">    uint8_t *gpiomem;
+    volatile uint32_t * fpsel;
+  ...
+    gpiomem = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0x3f200000);
+  ...
+    n = get_int(argv[i+1], 10, desc);
+    fpsel = (uint32_t *)(gpiomem + gpfsel_offset[n / 10]);
+</code></pre>
+<p>Las escrituras en los registros se hacen desreferenciado los punteros, que se
+han declarado como volátiles:</p>
+<pre><code class="language-c">    *fpsel |= (0x1 &lt;&lt; (n % 10)*3);
+</code></pre>
+<p>Aunque este mecanismo permite controlar los gpios, debemos notar que el código
+es muy dependiente del hardware, utilizando offsets y selecciones de registros
+en función del número de pin o la operación a realizar; y escogiendo
+adecuadamente los códigos a escribir en los registros siguiendo la documentación
+del fabricante del SoC. Notemos además que el estado de los leds se mantiene
+cuando el programa termina, y puede entrar en conflicto con cualquier otro
+proceso que use el driver del sistema para el gpio. Este código es mucho más
+propenso a errores que no serán identificados por el sistema (no hay valor de
+retorno de error).</p>
+<p>La librería <a href="https://www.airspayce.com/mikem/bcm2835/">bcm2835</a> usa entrada
+salida mapeada en memoria y ofrece un API más sencillo y práctico para el manejo
+de los controladores de la raspberry pi, pero sigue saltándose todos los
+controles del sistema operativo, por lo que resulta más adecuando aprender a
+utilizar el driver GPIO estudiado en la sección anterior.</p>
               
             </div>
           </div><footer>

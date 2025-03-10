@@ -68,10 +68,9 @@ int main(int argc, char *argv[])
     for (i = 0; i < req.num_lines/2; i++) {
         char desc[16];
         int n;
-        n = get_int(argv[i+2], 10, desc);
         snprintf(desc, 15, "inpin%d", n);
         desc[15] = '\0';
-        printf("%s\n", desc);
+        n = get_int(argv[i+2], 10, desc);
         req.offsets[i] = n;
 
         req.config.attrs[1].mask |= (0x1 << i);
@@ -86,10 +85,9 @@ int main(int argc, char *argv[])
     for (i = req.num_lines/2; i < req.num_lines; i++) {
         char desc[16];
         int n;
-        n = get_int(argv[i+2], 10, desc);
         snprintf(desc, 15, "outpin%d", n);
         desc[15] = '\0';
-        printf("%s\n", desc);
+        n = get_int(argv[i+2], 10, desc);
         req.offsets[i] = n;
 
         values.mask |= (0x1 << i);
