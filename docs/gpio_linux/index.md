@@ -210,19 +210,18 @@ Examinar el ejemplo [gpio_info](src/gpio_info.c) y comprobar su funcionamiento.
 
 ### Pines de entrada y salida
 
-El driver de GPIO nos permite definir *líneas de pines*, que representan grupos
-de pines con un nombre de usuario (por ejemplo sevenseg), y que comparten la
-misma configuración. Una vez creada la línea se obtiene un descriptor de fichero
-que la representa, con el que podremos manejar este grupo de pines.
-
-Para crear una de estas *líneas de pines*, una vez abierto el dispositivo,
-debemos hacer una petición ioctl de tipo *line_request*:
+El driver de GPIO nos permite agrupar pines en *líneas*, que pueden recibir un
+nombre lógico definido por el programador(por ejemplo sevenseg). Para crear una
+de estas *líneas de pines*, una vez abierto el dispositivo, debemos hacer una
+petición ioctl de tipo *line_request*:
 
 ```c 
+struct gpio_v2_line_request req;
+
 ioctl(fd, GPIO_V2_GET_LINE_IOCTL, &req);
 ```
 
-dónde *req* es un `struct gpio_v2_line_request`:
+El registro *req* tiene la siguiente estructura: 
 
 ```c 
 struct gpio_v2_line_request {
@@ -236,14 +235,14 @@ struct gpio_v2_line_request {
 };
 ```
 
-
 El campo *offsets* debe contener los números de los pines que pertenecen a la
-línea, indicando el número total de pines de la línea en *num_lines*. La
-configuración de los pines de la línea se indica en el campo *config*. A la
-salida, el campo *fd* es un nuevo descriptor de fichero que podemos usar para
-operar sobre los pines (leer/escribir).
+línea, indicando el número total de pines de la línea en *num_lines*. El campo
+*config* se utiliza para indicar la configuración de cada uno de los pines que
+pertenecen a la línea. El campo *fd* es de salida, en el retorno de la llamada
+ioctl contendrá un nuevo descriptor de fichero que podemos usar para operar
+sobre los pines de la línea (leer, escribir, etc).
 
-El campo *config* del es del tipo:
+El campo *config* tiene la siguiente estructura:
 
 ```c 
 struct gpio_v2_line_config {
@@ -255,9 +254,10 @@ struct gpio_v2_line_config {
 };
 ```
 
-El campo *flags* de esta estructura es una máscara de bits que permite
-seleccionar la configuración de los pines de la línea, combinando con una or las
-siguientes macros:
+El campo *flags* permite establecer una configuración por defecto para los pines
+de la línes. Se trata de una máscara de bits a la que se le debe asignar una
+combinación, con or a nivel de bit (operadores *bitwise*), de las siguientes
+macros:
 
 - `GPIO_V2_LINE_FLAG_USED`
 - `GPIO_V2_LINE_FLAG_ACTIVE_LOW`
@@ -271,4 +271,155 @@ siguientes macros:
 - `GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN`
 - `GPIO_V2_LINE_FLAG_BIAS_DISABLED`
 
+Los atributos de la línea nos permiten cambiar la configuración de un
+subconjunto de los pines de la línea o indicar información complementaria a los
+flags necesaria para completar su configuración (por ejemplo valor del pin en
+pines de salida). El campo *attrs* es un array de atributos definidos para la
+línea, indicando el número de atributos definidos en el campo *num_attrs*. Cada
+atributo se define con la siguiente estructura:
 
+```c 
+struct gpio_v2_line_config_attribute {
+	struct gpio_v2_line_attribute attr; //atributo
+	__aligned_u64 mask;                 //pines a los que aplica
+};
+```
+
+El campo *mask* indica los pines de la linea afectados por el atributo, dónde
+cada bit corresponde a un índice del array de offsets de la estructura 
+*struct gpio_v2_line_request*. El campo *attr* se representa con la siguiente
+estructura:
+
+```c 
+struct gpio_v2_line_attribute {
+    __u32 id; //GPIO_V2_LINE_ATTR_ID_{FLAGS,OUTPUT_VALUES,DEBOUNCE}
+    __u32 padding;
+    union {
+        __aligned_u64 flags;     // flag
+        __aligned_u64 values;    // valor ini. 1-activo, 0-inactivo
+        __u32 debounce_period_us;// tiempo de debounce
+    };
+};
+```
+
+El campo *id* indica el tipo de atributo, y su valor determina el campo de la
+unión que contiene la información correspondiente:
+
+- *GPIO_V2_LINE_ATTR_ID_FLAGS*: aplicable a cualquier grupo de pines. El campo
+  *flags* de la unión indica una configuración alternativa para este grupo de
+  pines.
+
+- *GPIO_V2_LINE_ATTR_ID_OUTPUT*: aplicable a grupos de pines configurados como
+  salida (por defecto o con atributos anteriores). El campo *values* de la unión
+  indica el valor que se asigna a los pines afectados.
+
+- *GPIO_V2_LINE_ATTR_ID_DEBOUNCE*: aplicable a pines configurados como entrada
+  (por defecto o con atributos anteriores). El campo *debounce_period_us* de la
+  unión indica el periodo en microsegundos con el que se muestrea el pin para
+  eliminar rebotes (cualquier cambio más rápido es filtrado).
+
+Para leer o escribir en los pines de la línea debemos realizaremos nuevas
+operaciones ioctl sobre el descriptor de fichero inicializado en la operación
+ioctl *line_request*.
+
+Para escribir un valor en pines configurados como salida usaremos la operación
+ioctl `GPIO_V2_LINE_SET_VALUES_IOCTL`:
+
+```c 
+struct gpio_v2_line_values values;
+...
+ioctl(req.fd, GPIO_V2_LINE_SET_VALUES_IOCTL, &values);
+```
+
+mientras que para leer utilizaremos la operación *GPIO_V2_LINE_GET_VALUES_IOCTL*:
+
+```c 
+struct gpio_v2_line_values values;
+...
+ioctl(req.fd, GPIO_V2_LINE_GET_VALUES_IOCTL, &values);
+```
+
+En ambos casos *values* tiene la siguiente estructura:
+
+```c 
+struct gpio_v2_line_values {
+	__aligned_u64 bits; //máscara de bits con el valor los pines
+	__aligned_u64 mask; //máscara de bits que leer/escribir
+};
+```
+
+Cada bit de ambos campos se refiere a una de las posiciones del campo
+*offsets* de la línea.
+
+Veamos un ejemplo. El programa [gpio_blink_v2.c](src/gpio_blink_v2.c) usa el
+driver de caracteres del GPIO para hacer parpadear los leds que se indican por
+la línea de comandos, con un periodo de 0.5Hz (1 s encendidos, 1 s apagados).
+Podemos probar este programa en la raspberry, conectando tres pines a los tres
+leds de la placa BEE.
+
+Como ejercicio, se propone al estudiante modificar el código del programa
+anterior para que de la sensación de que una luz va pasando de un led a otro,
+dando la vuelta cuando llegue a los extremos.
+
+### Eventos en pines de entrada
+
+El driver del GPIO convierte las interrupciones en los pines del GPIO en eventos
+software que se insertan en el descriptor de fichero (fd) asociado a la linea.
+Esto permite:
+
+- Usar programación multihilo, destiando un hilo a atender los eventos de
+  entrada de la línea.
+- Usar mecanismos de multiplexación de entrada/salida para monitorizar varios
+  descriptores/líneas (uando select, poll o epoll).
+
+La detección de eventos debe ser habilitada en los pines de entrada, añadiendo
+uno los flags `GPIO_V2_LINE_FLAG_EDGE_RISING` y/o
+`GPIO_V2_LINE_FLAG_EDGE_FALLING`. Además, se puede utilizar el atributo 
+`GPIO_V2_LINE_ATTR_ID_DEBOUNCE` para configurar en el pin una eliminación de
+rebotes.
+
+Por cada evento podremos leer del descriptor de fichero una estructura del tipo:
+
+```c 
+struct gpio_v2_line_event {
+	__aligned_u64 timestamp_ns; //Marca de tiempo del evento
+	__u32 id;                   //Tipo de evento
+	__u32 offset;               //offset del pin correspondiente
+	__u32 seqno;                //núm. de secuencia global
+	__u32 line_seqno;           //núm. de secuencia en este pin
+	__u32 padding[6];           //reservado
+};
+```
+dónde el campo id nos identifica el evento detectado mientras que *offset*
+identifica el pin en el que se producido el evento. El campo *seqno* nos indica
+el órden global en el que el evento se ha detectado, mientras que *line_seqno*
+nos indica el órden entre los eventos de la línea.
+
+El programa de ejemplo [gpio_toggle.c](src/gpio_toggle.c) usa el driver GPIO
+para controlar el estado de unos leds con unos pulsadores. El programa recibe
+como parámetros una lista con un número par de pines. La primera mitad se
+configuran como pines entradas, activando la detección de eventos por flancos de
+bajada, con un debounce de 10 ms. La segunda mitad se configuran como pines de
+salida, inicialmente activos (a 1). El programa se queda esperando por eventos
+de flanco de bajada en las entradas. Cuando se recibe un evento, se conmuta el
+estado del pin de salida correspondiente. El programa puede probarse conectando
+los 3 leds de la placa de expansión a 3 gpios (salidas) y los pulsadores a otros
+3 gpios (entradas).
+
+Como ejercicio se propone al estudiante modificar el programa para que los
+pulsadores determinen si los leds parpadean o no. Es decir, inicialmente estarán
+los 3 leds parpadeando a una frecuencia fija (por ejemplo 0.5 Hz), si se pulsa
+uno de los pulsadores el led correspondiente se quedará apagado. Si se vuelve a
+pulsar, el led volverá a parpadear síncronamente con el resto.
+
+
+El dispositivo de caracteres GPIO soporta algunas operaciones ioctl adicionales:
+
+- `GPIO_V2_GET_LINEINFO_WATCH_IOCTL`, monitorizar cambios en un línea:
+    - Se pasa un argumento `struct gpio_v2_line_info`
+    - Se indican las líneas que se desean monitorizar
+    - Los eventos de cambio se obtinen del *fd* del gpiochip correspondiente
+
+- `GPIO_V2_LINE_SET_CONFIG_IOCTL`, cambiar la configuración de una línea:
+    - Se pasa un argumento `struct gpio_v2_line_config`
+    - No es necesario liberar la línea antes
