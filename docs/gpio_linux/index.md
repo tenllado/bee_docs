@@ -423,3 +423,116 @@ El dispositivo de caracteres GPIO soporta algunas operaciones ioctl adicionales:
 - `GPIO_V2_LINE_SET_CONFIG_IOCTL`, cambiar la configuración de una línea:
     - Se pasa un argumento `struct gpio_v2_line_config`
     - No es necesario liberar la línea antes
+
+
+## GPIO mapeado en memoria
+
+Linux incorpora el dispositivo /dev/mem que permite acceder a la memoria física
+del computador. El offset en este fichero es interpretado como una dirección
+física y el driver controla los rangos accesibles (configurable con la opción de
+compilación del kernel *CONFIG_STRICT_DEVMEM*) en función de la arquitectura del
+computador. Sólo root tiene acceso a este dispositvo, ya que usarlo implica
+saltarse prácticamente todos los mecanismos de control y las abstracciones del
+sistema operativo.
+
+Raspbian incorpora también el dispositivo /dev/gpiomem, que es un dispositivo
+que permite el acceso al rango de direcciones físicas controlado por el GPIO.
+Todos los usuarios que pertenezcan al grupo gpio tienen acceso a este fichero,
+además de root. Este fichero permite acceder *en crudo* a los registros del gpio
+puenteando al driver gpio. Aunque no se recomienda su uso (mejor utilizar el
+driver gpio), puede ser útil usarlo para estudiar el funcionamiento del
+controlador gpio.
+
+Como ejemplo vamos a ver cómo podemos implementar el ejemplo gpio_blink
+utilizando este dispositivo. Para ello primero debemos revisar la documentación
+de Broadcom para ver cómo funciona el controlador GPIO. Resumimos aquí los
+aspectos más destacados.
+
+En el controlador GPIO la función de cada pin se configura en los registros de
+selección *GPFSELn*:
+
+| Registro | **Dir. Física** | **Pines GPI**   |
+| -------- | --------------- | --------------- |
+| GPFSEL0  | 0x3F200000      | GPIO0 - GPIO9   |
+| GPFSEL1  | 0x3F200004      | GPIO10 - GPIO19 |
+| GPFSEL2  | 0x3F200008      | GPIO20 - GPIO29 |
+| GPFSEL3  | 0x3F20000C      | GPIO30 - GPIO39 |
+| GPFSEL4  | 0x3F200010      | GPIO40 - GPIO49 |
+| GPFSEL5  | 0x3F200014      | GPIO50 - GPIO53 |
+
+Se utilizan tres bits por pin, con la codificación indicada en la siguiente
+tabla:
+
+|     | **Función (según doc. Broadcom**) |
+| --- | --------------------------------- |
+| 000 | Entrada                           |
+| 001 | Salida                            |
+| 100 | Función alternativa 0             |
+| 101 | Función alternativa 1             |
+| 110 | Función alternativa 2             |
+| 111 | Función alternativa 3             |
+| 011 | Función alternativa 4             |
+| 010 | Función alternativa 5             |
+
+Para operar sobre los pines de salida hay dos pares de registros:
+
+| Valor | Pin   | Registro | Dirección (ARM) |
+| ----- | ----- | -------- | --------------- |
+| 1     | 0-31  | GPFSET0  | 0x3F20001C      |
+| 1     | 32-53 | GPFSET1  | 0x3F200020      |
+| 0     | 0-31  | GPFCLR0  | 0x3F200028      |
+| 0     | 32-53 | GPFCLR1  | 0x3F20002C      |
+
+Así, para poner a 1 un pin de salida debemos escribir un 1 en la posición
+correspondiente del registro GPSET que corresponda. Y para poner dicho pin a 0
+deberemos escribir un 1 en el la misma posición del registro GPCLR
+correspondiente. Escribir un 0 no modifica el valor del pin.
+
+El programa [gpio_blink_mem](src/gpio_blink_mem.c) proyectan el dispositivo
+*/dev/gpiomem* en el mapa virtual de memoria del proceso utilizando mmap, con el
+fin de acceder diréctamente a los registros del controlador. Se utilizan unos
+arrays para almacenar los offsets de los registros:
+
+```c 
+uint32_t gpfsel_offset[] = {0x00,0x04,0x08,0x0C,0x10,0x14};
+uint32_t gpfset_offset[] = {0x1C, 0x20};
+uint32_t gpfclr_offset[] = {0x28, 0x2C};
+```
+
+Estos offsets se suman a la dirección base que es un puntero a byte,
+convirtiendo el resultado a un puntero a *uint32_t* por conveniencia:
+
+```c 
+	uint8_t *gpiomem;
+	volatile uint32_t * fpsel;
+  ...
+	gpiomem = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0x3f200000);
+  ...
+	n = get_int(argv[i+1], 10, desc);
+	fpsel = (uint32_t *)(gpiomem + gpfsel_offset[n / 10]);
+```
+
+Las escrituras en los registros se hacen desreferenciado los punteros, que se
+han declarado como volátiles:
+
+```c 
+	*fpsel |= (0x1 << (n % 10)*3);
+```
+
+Aunque este mecanismo permite controlar los gpios, debemos notar que el código
+es muy dependiente del hardware, utilizando offsets y selecciones de registros
+en función del número de pin o la operación a realizar; y escogiendo
+adecuadamente los códigos a escribir en los registros siguiendo la documentación
+del fabricante del SoC. Notemos además que el estado de los leds se mantiene
+cuando el programa termina, y puede entrar en conflicto con cualquier otro
+proceso que use el driver del sistema para el gpio. Este código es mucho más
+propenso a errores que no serán identificados por el sistema (no hay valor de
+retorno de error).
+
+La librería [bcm2835](https://www.airspayce.com/mikem/bcm2835/) usa entrada
+salida mapeada en memoria y ofrece un API más sencillo y práctico para el manejo
+de los controladores de la raspberry pi, pero sigue saltándose todos los
+controles del sistema operativo, por lo que resulta más adecuando aprender a
+utilizar el driver GPIO estudiado en la sección anterior.
+
+
