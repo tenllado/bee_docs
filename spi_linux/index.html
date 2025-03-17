@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Control de dispositivos SPI - BEE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Control de dispositivos SPI";
+        var mkdocs_page_input_path = "spi_linux/index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> BEE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Placa de expansión BEE</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Prácticas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../gpio_linux/">Control GPIO en Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pwm_linux/">Control PWM en Linux</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Control de dispositivos SPI</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#bus-spi">Bus SPI</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#driver-spi-en-linux">Driver SPI en Linux</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ejemplos-mcp3008-y-dac-mcp4911">Ejemplos: MCP3008 y DAC MCP4911</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../i2c_linux/">Control de dispositivos I2C</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../control_servomotores/">Control de servomotores con PWM</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">BEE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Prácticas &raquo;</li>
+      <li>Control de dispositivos SPI</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="control-de-dispositivos-spi">Control de dispositivos SPI</h1>
+<p>En esta práctica vamos a ver cómo podemos manejar dispositivos conectados al
+controlador spi utilizando el driver spi de Linux. Comenzaremos recordando
+brevemente el funcionamiento del bus spi, ya que es necesario entenrlo para
+manejar el driver y los dispositivos. Al final probaremos lo que hemos aprendido
+utilizando el ADC incluido en la placa BEE.</p>
+<h2 id="bus-spi">Bus SPI</h2>
+<p>El Serial Peripheral Interface (SPI) es un bus serie síncrono y bidirccional muy
+utilizado en sistemas empotrados para conectar un microcontrolador a sus
+periféricos. Puede trabajar con frecuencias de 1 a 20 MHz, pero sólo un
+dispositivo puede ser máster del bus. El bus utiliza 4 líneas más una tierra
+común:</p>
+<ul>
+<li>Master out/Slave in (<em>MOSI</em>, <em>SDI</em>)</li>
+<li>Master in/Slave out (<em>MISO</em>, <em>SDO</em>)</li>
+<li>Serial clock (<em>SCK</em>)</li>
+<li>Slave Select (<em>nSS</em>):  activo a baja</li>
+</ul>
+<p>Los dispositivos SPI pueden funcionar en dos modos</p>
+<ul>
+<li><strong>Master</strong>: es el que puede iniciar y controlar una transferencia</li>
+<li><strong>Slave</strong>: es el que se comunica con un master que le active</li>
+</ul>
+<p>El máster selecciona al slave con el que quiere comunicarse activando su señal
+SS (poniéndola a 0). Si un dispositivo puede hacer de máster o slave, puede
+configurar el pin <em>nSS</em> como entrada para ver si otro módulo está actuando como
+master. Si se detecta otro máster el dispositivo debe configurarse en modo
+slave. </p>
+<p><img alt="SPI conexiones" src="fig/SPI-slave.jpg" /></p>
+<p>En SPI el envío y la recepción suceden simultáneamente, el bus funciona como un
+registro de desplazamiento circular distribuido. Se suele utilizar un sistema de
+doble buffer. El master y el slave tienen un registro de datos de 8 bits
+utilizado por el software para escribir el dato a transmitir o leer el dato
+recibido. También disponen de un registro de desplazamiento de 8 bits. </p>
+<p>El procediminto de transmisión se ilustra en la figura de abajo. Pongamos por
+ejemplo que el master quiere envíar un byte a un esclavo. Para transmitir se
+empieza copiando el dato en el registro de datos, que después se copia en el
+registro de desplazamiento. Luego, en cada pulso de la señal <em>SCK</em> (generada por
+el máster) se desplaza una posición el contenido de éste registro, enviando así
+por la línea MOSI un bit. El esclavo hace el mismo desplazamiento, enviando a su
+vez un bit al master por la linea MISO. Ambos dispositivos usan el bit recibido
+como bit de relleno de su registro de desplazamiento. Este procedimiento
+continúa hasta que se hayan transmitido los 8 bits. Es configurable si se
+rellena por el bit más significativo (MSB) o menos significativo (LSB).</p>
+<p><img alt="SPI transmisión" src="fig/spi_master_slave.png" /></p>
+<p>SPI tiene esencialmente dos modos de transmisión, ilustrados en la figura de
+abajo, que son:</p>
+<ul>
+<li>
+<p>CPHA = 0: </p>
+<ul>
+<li>El slave puede poner el primer bit en <em>MISO</em> en cuanto es seleccionado</li>
+<li>Los bits son latcheados/capturados en flancos impares de <em>SCK</em> </li>
+<li>El shifter se desplaza en flancos pares de <em>SCK</em>, rellenando con el bit
+  capturado y transmitiendo así un nuevo bit</li>
+</ul>
+</li>
+<li>
+<p>CPHA = 1:</p>
+<ul>
+<li>El slave necesita un flanco en SCK para poner el primer bit en <em>MISO</em></li>
+<li>Los bits son latcheados/capturados en flancos pares de <em>SCK</em></li>
+<li>El shifter se desplaza en flancos impares de <em>SCK</em>, 
+  rellenando con el bit capturado y transmitiendo así un nuevo bit</li>
+</ul>
+</li>
+</ul>
+<p>Estos dos modos tienen a su vez dos variantes que determinan la polaridad de
+<em>SCK</em>:
+    - <em>CPOL = 0</em>: SCK activo a alta, inactivo a baja
+    - <em>CPOL = 1</em>: SCK activo a baja, inactivo a alta</p>
+<p><img alt="SPI timing" src="fig/SPI_timing.png" /></p>
+<h2 id="driver-spi-en-linux">Driver SPI en Linux</h2>
+<p>Linux proporciona un driver spi genérico, que expone controladores como
+dispositivos de caracteres (<em>/dev/spidev#.#</em>). Para realizar una transmisión, lo
+primero es abrir el fichero de dispositivo. Después usaremos una serie de
+operaciones <em>ioctl</em> para configurar el modo de transmisión requerido por el
+dispositivo:</p>
+<ul>
+<li><em>SPI_IOC_RD_MODE</em>, <em>SPI_IOC_WR_MODE</em>: recibe un puntero a byte para leer o
+  escribir el modo de transmisión básico. Los valores válidos son:
+  <em>SPI_MODE_{0,1,2,3}</em></li>
+<li><em>SPI_IOC_RD_LSB_FIRST</em>, <em>SPI_IOC_WR_LSB_FIRST</em>: recibe un puntero a byte para
+  leer o escribir el bit order. Un valor 0 es MSB first y cualquier otro valor
+  es LSB first.</li>
+<li><em>SPI_IOC_RD_BITS_PER_WORD</em>, <em>SPI_IOC_WR_BITS_PER_WORD</em>: recibe un puntero a
+  byte, para leer o escribir el número de bits en cada palabra spi transferida.
+  Un valor 0 significa 8 bits.</li>
+<li><em>PI_IOC_RD_MAX_SPEED_HZ</em>, <em>SPI_IOC_WR_MAX_SPEED_HZ</em>: recibe un puntero a
+  uint32 para leer o escribir la frecuencia de transmisión.</li>
+</ul>
+<p>Una vez configurado el modo de transmisión, usaremos una operación
+<em>SPI_IOC_MESSAGE(n)</em> para realizar envío y recepción simultáneos. Esta operación
+recibe un puntero a un array de <strong>n</strong> elementos del tipo <code>struct
+spi_ioc_transfer</code>:</p>
+<pre><code class="language-c">struct spi_ioc_transfer {
+    __u64 tx_buf;  // dirección del buffer para transmision
+    __u64 rx_buf;  // dirección del buffer para recepción
+
+    __u32 len;     // longitud de tx_buf y rx_buf
+    __u32 speed_hz;// velocidad para esta transferencia
+
+    __u16 delay_usecs;   // retardo para subir nCS
+    __u8  bits_per_word; // bits por palabra
+    __u8  cs_change;     // subir nCS entre medias
+    __u8  tx_nbits;      // num de bits a transmitir
+    __u8  rx_nbits;      // num de bits a recibir
+    __u8  word_delay_usecs; // retardo entre palabras
+    __u8  pad;
+};
+</code></pre>
+<h2 id="ejemplos-mcp3008-y-dac-mcp4911">Ejemplos: MCP3008 y DAC MCP4911</h2>
+<p>El MCP3008 es un ADC de 10 bits y 8 canales, que pueden ser utilizados en modo
+diferencial o en modo independiente. Este ADC tiene un interfaz SPI. La placa
+BEE tiene montado uno de estos ADCs, que podemos conectar a la Raspberry Pi a
+través de los jumpers en la tira de pines J2. La siguiente figura muestra un
+cronograma de una comunicación SPI entre un microcontrolador y el ADC, extraída
+de la <a href="http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf">hoja de características del
+MCP3008</a>
+(<em>datasheet</em>) proporcionada por el fabricante:</p>
+<p><img alt="MCP3008 crono" src="fig/mcp3008_crono.png" /></p>
+<p>El siguiente código es un ejemplo de cómo leer el ADC utilizando el driver SPI
+explicado arriba, siguiendo las directrices del cronograma:</p>
+<pre><code class="language-c">#define MCP3008_START 0x1
+#define MCP3008_SIGL_DIFF (0x1 &lt;&lt; 7)
+
+__u8 spi_mode = (__u8) SPI_MODE_0;
+int channel = 0;
+struct spi_ioc_transfer xfer[1];
+unsigned char buf[3];
+int adcval;
+
+fd = open(&quot;/dev/spidev0.0&quot;, O_RDWR);
+ioctl(fd, SPI_IOC_WR_MODE, &amp;spi_mode);
+
+memset(xfer, 0, sizeof xfer);
+memset(buf, 0, sizeof buf);
+
+buf[0] = MCP3008_START;
+buf[1] = MCP3008_SIGL_DIFF | ((channel &amp; 0x7) &lt;&lt; 4);
+xfer[0].tx_buf = (__u64) buf;
+xfer[0].rx_buf = (__u64) buf;
+xfer[0].len = sizeof buf;
+xfer[0].speed_hz = 1350000; //1.35 MHz
+ioctl(fd, SPI_IOC_MESSAGE(1), xfer);
+adcval = ((buf[1] &amp; 0x3) &lt;&lt; 8) | buf[2];
+</code></pre>
+<p>El programa <a href="src/adc_read.c">adc_read.c</a> lee una vez por segundo el valor de uno
+de los canales del adc de la placa BEE y muestra la tensión correspondiente a la 
+medida por la salida estándar. Para usarlo podemos ejecutar el programa con los
+siguientes parámetros:</p>
+<pre><code class="language-c">./adc_read /dev/spidev0.0 0 3300
+</code></pre>
+<ul>
+<li><em>/dev/spidev0.0</em>: es el controlador spi a usar</li>
+<li><em>0</em>: el canal del adc que leer</li>
+<li><em>3300</em>: la tensión vdd que alimenta al ADC en mV.</li>
+</ul>
+<p>El programa <a href="src/dac_follow_adc.c">dac_follow_adc.c</a> es similar al anterior,
+pero además copia en el dac el valor leído del adc, de modo que la salida del
+dac va siguiendo la entrada del adc.</p>
+<p>Para comprobar el funcionamiento de estos programas deben conectarse una serie
+de jumpers en la BEE:</p>
+<ul>
+<li>Jumpers en la tira de pines J2</li>
+<li>Jumpers para selección de VDD y VCC en J14 y J18 (escoger 3.3V)</li>
+<li>Jumper de tensión de referencia del ADC en J11.</li>
+<li>Jumper de tensión de referencia del DAC (no numerado).</li>
+<li>Jumper J9 de nLDAC.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../pwm_linux/" class="btn btn-neutral float-left" title="Control PWM en Linux"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../i2c_linux/" class="btn btn-neutral float-right" title="Control de dispositivos I2C">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../pwm_linux/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../i2c_linux/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

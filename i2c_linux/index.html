@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Control de dispositivos I2C - BEE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Control de dispositivos I2C";
+        var mkdocs_page_input_path = "i2c_linux/index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> BEE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Placa de expansión BEE</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Prácticas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../gpio_linux/">Control GPIO en Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pwm_linux/">Control PWM en Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../spi_linux/">Control de dispositivos SPI</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Control de dispositivos I2C</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#bus-i2c">Bus I2C</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#i2c-en-linux">I2C en Linux</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ejemplo-de-transacciones-i2c-estandar">Ejemplo de transacciones I2C estándar</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ejemplo-de-transaccion-i2c-encadenada">Ejemplo de transacción I2C encadenada</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ejemplo-de-transaccion-smbus">Ejemplo de transacción SMBus</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ejemplo-lectura-del-sensor-inertial-one">Ejemplo: lectura del sensor Inertial One</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ejercicio">Ejercicio</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../control_servomotores/">Control de servomotores con PWM</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">BEE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Prácticas &raquo;</li>
+      <li>Control de dispositivos I2C</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="control-de-dispositivos-i2c">Control de dispositivos I2C</h1>
+<p>Para probar los códigos utilizados en los ejemplos de esta práctica necesitamos
+disponer de una placa <a href="https://ww1.microchip.com/downloads/en/Appnotes/doc8354.pdf">Inertial One
+ATAVRSBIN1</a>.</p>
+<p>A lo largo de la práctica repasaremos los conceptos básicos del bus I2C y
+veremos cómo podemos comunicarnos con los dispositivos I2C utilizando las
+utilidades incluidas en Linux, así como el driver I2C genérico incluido.</p>
+<h2 id="bus-i2c">Bus I2C</h2>
+<p>El Inter-Integrated Circuit (IIC/\IIC{}/I2C) es un bus serie diseñado por
+Philips en década del 1980 para la interconexión de periféricos a un
+microcontrolador. Proporciona una conexión serie síncrona unidireccional
+(halfduplex). Los dispositivos pueden ser máster o slave, permitiéndose la
+presencia de varios másters en el bus. El protocolo de trasmisión incorpora un
+mecanismo de arbitraje que permite seleccionar el máster que toma el control del
+bus en caso de que varios quieran enviar simultáneamente.</p>
+<p>El máster es quien inicia y finaliza cada transferencia. Direcciona al esclavo
+con el que se quiere comunicar y genera la señal de reloj. El esclavo no puede
+enviar o recibir por su cuenta. El bus puede trabajar a varias velocidades:
+100Kb/s, 400Kb/s, 1Mb/s, 3.4Mb/s y 5Mb/s y sólo utiliza dos líneas, además de la
+tierra común: Serial Data (SDA), que lleva los datos, y Serial Clock (SCL), que
+lleva la señal de reloj generada por el master.</p>
+<p>En los últimos años se han popularizado algunas variantes de I2C utlizadas en
+los computadores personales para el control de algunos sensores, como son
+SMBus y PMBus. Estos protocolos pueden utilizarse igual con el driver I2C de
+Linux.</p>
+<p>Las conexiones a las línea van en colector/drenador abierto (<em>open
+drain/collector</em>). Se emplean resistencias de <em>pull-up</em> externas, de 4.7 K
+típicamente, que dejan la linea a Vdd en reposo. Los dispositivos pueden poner
+(forzar) las líneas a 0 (<em>OR</em> cableada).</p>
+<p><img alt="I2C open-drain" src="fig/I2C-open-drain.png" /></p>
+<p>La siguiente figura ilustra las sincronizaciones de comienzo y fin de una
+transacción I2C. Primero el máster envía comando <em>START</em>, una transición Alto a
+Bajo de SDA, con SCL en alto. A partir de ese momento el bus se considera
+ocupado y se procede al envío de datos (trama), generándose un pulso en <em>SCL</em>
+por cada bit transferido. El receptor puede mantener <em>SCL</em> baja en cualquier
+momento si quiere alargar el ciclo de reloj (forzar una espera del master).
+La señal SDA se debe mantener estable mientras SCL está alta. Cuando se han
+enviado todos los bits de la transacción el máster envía comando <em>STOP</em>, una
+transacción Bajo a Alto de SDA con SCL en alto. El bus queda libre tras este
+comando de <em>STOP</em>.</p>
+<p><img alt="I2C sincronización" src="fig/IIC_sinc.png" /></p>
+<p>La siguiente figura detalla la estructura de la trama. Como podemos ver, tras el
+comando <em>Start</em> hay un byte de dirección, que se compone de:</p>
+<ul>
+<li>7 bits de dirección del esclavo, empezando por el más significativo</li>
+<li>1 bit de tipo de operación: R/nW</li>
+<li>1 bit de ACK</li>
+</ul>
+<p>A continuación se envían uno o más bytes de datos, cada uno de ellos seguidos de
+un bit de ACK que debe poner a 0 el receptor. Los bytes de datos se envían
+también empezando por el bit más significativo. La transacción termina
+normalmente con el envío de un comando de <em>STOP</em>. Pero se quiere evitar perder
+el bus, el máster puede decidir envía un comando de <em>START</em> en lugar del <em>STOP</em>
+(que se llama <em>START</em> repetido), comenzando diréctamente una nueva transmisión.</p>
+<p><img alt="Trama I2C" src="fig/IIC_address_rw.png" /></p>
+<p>Así, una transmisión de escritura, en la que un máster envía un dato a un
+esclavo tendría la siguiente estructura:</p>
+<p><img alt="I2C escritura" src="fig/IIC_ejemplo_escritura.png" /></p>
+<p>El máster envía un primer byte de dirección del esclavo, indicado el que quiere
+escribir. Luego suele enviar un byte de comando, que direcciona el registro en
+el que quiere escribir, seguido del dato a escribir.</p>
+<p>La operación de lectura normalmente va precedida de una operación de escritura
+en la que se envía el comando de lectura, indicando el registro del que se
+quiere leer. Después se realiza la operación de lectura propiamente dicha, en la
+que el primer byte direcciona el dispositivo y se indique que se quiere hacer
+una lectura, y el máster luego genera los suficientes pulsos de reloj para leer
+los bytes que enviará el esclavo, activando como corresponda el bit de ACK en
+cada byte transferido.</p>
+<p><img alt="I2C lectura" src="fig/IIC_ejemplo_lectura.png" /></p>
+<p>I2C contempla la posibilidad de utilizar direcciones de 10 bits. Para ello, se
+reservan las direcciones <em>11110xy</em> para indicar que la dirección es de 10 bits:</p>
+<ul>
+<li>Los bits <em>xy</em> serán los dos bits más significativos de la dirección</li>
+<li>Los 8 bits restantes se envían en el siguiente byte</li>
+</ul>
+<p>No lo soportan todos los controladores I2C, ni es soportado por dispositivos
+SMBus. En transacciones escritura-lectura encadenadas sólo se repite el primer
+byte de la dirección. En este caso, el esquema de una operación de escritura
+es como indica la siguiente figura:</p>
+<p><a href="fig/IIC_write_10bitadd.png">I2C write 10 bit address</a></p>
+<p>La lectura con un dispositivo con dirección de 10 bits se ilustra en la
+siguiente figura:</p>
+<p><a href="fig/IIC_read_10bitadd.png">I2C read 10 bit address</a></p>
+<p>Existen otras extensiones al bus I2C, que pueden consultarse en la
+<a href="https://www.i2c-bus.org/specification/">especificación de I2C</a>.</p>
+<h2 id="i2c-en-linux">I2C en Linux</h2>
+<p>El driver I2C de Linux expone dispositivos de caracteres <em>/dev/i2c-#</em>. Para ello
+es necesario cargar el módulo i2c-dev. Por cada controlador I2C del SoC
+aparecerá un fichero en <em>/sys/class/i2c-dev/</em>.</p>
+<p>El paquete i2c-tools (puede instalarse con <code>apt-get install i2c-tools</code>) nos da
+algunas herramientas interesantes:</p>
+<ul>
+<li><em>i2cdetect -l</em>: nos da una lista de controladores i2c en el sistema</li>
+<li><em>i2cdetect -y #</em>: escanea el bus <em>i2c-#</em> y nos dice los dispositivos
+  detectados y sus direcciones</li>
+<li><em>i2cget</em>: permite leer registros de dispositivos conectados al bus. Por
+  ejemplo:</li>
+</ul>
+<pre><code class="language-sh">i2cget -y  1 0x68 0x1c b
+</code></pre>
+<ul>
+<li><em>i2cset</em>: permite escribir en registros de dispositivos conectados al bus.</li>
+<li><em>i2ctransfer</em>: nos permite hacer transferencias encadenadas con <em>slaves</em>
+  conectados al bus. Por ejemplo:</li>
+</ul>
+<pre><code class="language-sh">i2ctransfer -y 1 w1@0x68 0x1c r1
+</code></pre>
+<p>Hay tres tipos de transaccionees soportadas por el driver:</p>
+<ul>
+<li>
+<p>Transacciones I2C estándar:</p>
+<ul>
+<li>Operaciones <em>read/write</em> independientes</li>
+<li>Bit de stop detrás de cada una</li>
+<li>Para leer un registro primero hacemos una op de escritura con el número
+  del registro y luego una operación de lectura para leer el valor</li>
+</ul>
+</li>
+<li>
+<p>Transacciones I2C encadenadas con <em>ioctl</em></p>
+<ul>
+<li>Varias transacciones con una sola operación <em>ioctl</em> tipo <em>I2C_RDWR</em> </li>
+<li>Por defecto con repeated start</li>
+<li>Puede usarse para leer un registro, concatenando el write del comando con
+  el read siguiente</li>
+</ul>
+</li>
+<li>
+<p>Transacciones SMBus</p>
+<ul>
+<li>API específico y simplificado implementado en la libi2c</li>
+<li>Se prefiere su uso para dispositivos compatibles</li>
+</ul>
+</li>
+</ul>
+<p>El interfaz está documentado en
+<a href="https://www.kernel.org/doc/Documentation/i2c/">www.kernel.org</a> y en los
+ficheros de cabecera del driver: <a href="/usr/include/linux/i2c-dev.h">i2c-dev.h</a>,
+<a href="/usr/include/linux/i2c.h">i2c.h</a> y <a href="/usr/include/i2c/smbus.h">smbus.h</a>.</p>
+<p>Las operaciones <em>ioctl</em> soportadas por estos dispositivos son:</p>
+<ul>
+<li><em>I2C_SLAVE</em>: establece la dirección del esclavo, nos ahorramos tener que
+  ponerla en cada operación</li>
+<li><em>I2C_FUNCS</em>: nos permite consultar la funcionalidad disponible en el
+  controlador</li>
+<li><em>I2C_TENBIT</em>: selección del uso de direcciones de 10 bits. El controlador debe
+  tener la funcionalidad <em>I2C_FUNC_10BIT_ADDR</em></li>
+<li><em>I2C_RDWR</em>: Para realizar transacciones de lectura/escritura encadenadas, sin
+  bit de stop entre ellas. El controlador debe tener <em>I2C_FUNC_I2C</em>.</li>
+<li><em>I2C_PEC</em>: generación y verificación de Packet Error Checking para el
+  protocolo SMBus. El controlador debe tener <em>I2C_FUNC_SMBUS_PEC</em></li>
+<li><em>I2C_SMBUS</em>: Para transacciones SMBus.Se recomienda el uso de las funciones
+  <em>i2c_smbus_*</em>, proporcionadas por la librería <em>libi2c</em> (paquete <em>i2c-tools</em>),
+  que hacen de wrapper sobre la operación <em>ioctl</em></li>
+</ul>
+<p>SMBus es un subconjunto de I2C:</p>
+<ul>
+<li>Sólo admite direcciones de 7 bits</li>
+<li>Sólo hasta 100 KHz</li>
+<li>Timeout 35 ms, frecuencia mínima de 10 KHz</li>
+</ul>
+<p>El API implementado en libi2c opera sobre la operación ioctl <em>I2C_SMBUS</em>:</p>
+<pre><code class="language-c">__s32 i2c_smbus_write_quick(int file, __u8 value);
+__s32 i2c_smbus_read_byte(int file);
+__s32 i2c_smbus_write_byte(int file, __u8 value);
+__s32 i2c_smbus_read_byte_data(int file, __u8 command);
+__s32 i2c_smbus_write_byte_data(int file, __u8 command, __u8 value);
+__s32 i2c_smbus_read_word_data(int file, __u8 command);
+__s32 i2c_smbus_write_word_data(int file, __u8 command, __u16 value);
+/* Returns the number of read bytes */
+__s32 i2c_smbus_read_block_data(int file, __u8 command, __u8 *values);
+__s32 i2c_smbus_write_block_data(int file, __u8 command, __u8 length, 
+                                 const __u8 *values);
+</code></pre>
+<p>El API completo se documenta en <em>/usr/include/i2c/smbus.h</em>.</p>
+<h3 id="ejemplo-de-transacciones-i2c-estandar">Ejemplo de transacciones I2C estándar</h3>
+<p>El siguiente código es un ejemplo de lectura de un registro de tamaño byte de un
+sensor i2c, usando una transacción I2C estándar con el driver I2C de Linux:</p>
+<pre><code class="language-c">int addr = 0x68;              // Dirección del sensor I2C
+unsigned char regid = 0x1b;   // Id del registro a leer
+unsigned char buf;            // buffer para el valor leído
+int fd;
+
+fd = open(&quot;/dev/i2c-1&quot;, O_RDWR);
+ioctl(fd, I2C_SLAVE, addr);
+
+write(fd, &amp;regid, 1);  // Transacción de escritura/comando
+read(fd, &amp;buf, 1);     // Transacción de lectura
+</code></pre>
+<h3 id="ejemplo-de-transaccion-i2c-encadenada">Ejemplo de transacción I2C encadenada</h3>
+<p>El siguiente código es un ejemplo de una transacción encadenada con el driver de
+I2C de Linux en el que se hace la misma lectura que en el ejemplo anterior, pero
+encadenando la operación de escritura (que indica el registro a leer) y la
+operación de lectura posterior:</p>
+<pre><code class="language-c">int fd;                    // descriptor de fichero
+int addr = 0x68;           // Dirección del sensor I2C
+char wbuf[1] = {0x1b};     // Id del registro a leer
+char rbuf[1];              // buffer para el valor leído
+struct i2c_msg msgs[2];    // variables para la op ioctl
+struct i2c_rdwr_ioctl_data i2cdata;
+
+// Transacción de escritura / comando
+msgs[0].addr = addr;
+msgs[0].flags = 0;
+msgs[0].len = 1;
+msgs[0].buf = wbuf;
+// Transacción de lectura
+msgs[1].addr = addr;
+msgs[1].flags = I2C_M_RD;
+msgs[1].len = 1;
+msgs[1].buf = rbuf;
+
+fd = open(&quot;/dev/i2c-1&quot;, O_RDWR);
+// ioctl para realizar las dos transacciones
+i2cdata.msgs = msgs;
+i2cdata.nmsgs = 2;
+ioctl(fd, I2C_RDWR, &amp;i2cdata); // Operaciones encadenadas
+</code></pre>
+<h3 id="ejemplo-de-transaccion-smbus">Ejemplo de transacción SMBus</h3>
+<p>La misma lectura de un registro de tamaño byte usando el API SMBus se realizaría
+del siguiente modo:</p>
+<pre><code class="language-c">int addr = 0x68;              // Dirección del sensor I2C
+unsigned char regid = 0x1b;   // Id del registro a leer
+unsigned char buf;            // buffer para el valor leído
+int fd, ret;
+
+fd = open(&quot;/dev/i2c-1&quot;, O_RDWR);
+ioctl(fd, I2C_SLAVE, addr);
+
+ret = i2c_smbus_read_byte_data(fd, regid);
+buf = ret;
+</code></pre>
+<h2 id="ejemplo-lectura-del-sensor-inertial-one">Ejemplo: lectura del sensor Inertial One</h2>
+<p>La placa <a href="https://ww1.microchip.com/downloads/en/Appnotes/doc8354.pdf">Inertial One
+ATAVRSBIN1</a>
+contiene 3 dispositivos i2c:</p>
+<ul>
+<li>Acelerómetro de tres ejes Bosh Sensortech (BMA-150)</li>
+<li>Giróscopo de tres ejes InvenSense (ITG-3200)</li>
+<li>Brújula Electrónica de tres ejes AKM (AK8975)</li>
+</ul>
+<p>Podemos conectarla a la placa BEE del siguiente modo:</p>
+<ul>
+<li>Pin 1 del Jumper J2 a SDA</li>
+<li>Pin 2 del Jumper J2 a SCL</li>
+<li>Pin 9 del Jumper J2 a Gnd</li>
+<li>Pin 10 del Jumper J2 a Vdd</li>
+</ul>
+<p>Para comprobar que está bien conectada podemos usar el comando <em>i2cdetect -y 1</em>:</p>
+<pre><code class="language-sh">pi@raspberrypi:~/ejemplos $ i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- 0c -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- 38 -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- 68 -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+pi@raspberrypi:~/ejemplos $
+</code></pre>
+<p>El Giróscopo ITG-3200 del Inertial One tiene asignada la dirección 0x68, e
+integra cuatro sensores de 16 bits accesibles en los siguientes registros:</p>
+<p><img alt="ITG-3200" src="fig/itg-3200-sensor-regs.png" /></p>
+<p>Como puede verse, cada sensor tiene dos registros, uno con los 8 bits más
+significativos y otro con los 8 bits menos significativos. El programa de
+ejemplo <a href="src/itg3200_sensors.c">itg3200_sensors.c</a> lee estos sensores y muestra
+su valor por la salida estándar. Los flags de la línea de comandos permiten
+seleccionar los tres tipos de transacciones para leer estos valores. Examina el
+programa y prueba a utilizarlo leyendo cada uno de los registros. Comprueba que
+funcionan los tres tipos de transacciones.</p>
+<h3 id="ejercicio">Ejercicio</h3>
+<p>Diseñar un programa que lea los valores <em>acc_x</em>, <em>acc_y</em> y <em>acc_z</em> del
+acelerómetro BMA 150 incluido en la unidad inercial. Consultar el
+<a href="https://www.tomark.co.uk/wp-content/uploads/2021/05/BMA150.pdf">datasheet</a> del
+componente para:</p>
+<ul>
+<li>Determinar los registros que hay que leer</li>
+<li>Determinar el registro de configuración del:<ul>
+<li>rango de medida, seleccionar el rango [-2g, 2g)</li>
+<li>el ancho de banda, seleccionar 25 Hz</li>
+</ul>
+</li>
+<li>Determinar la sensibilidad de la medida</li>
+</ul>
+<p>Consultar el[Application Note de NXP <a href="https://www.nxp.com/files-static/sensors/doc/app_note/AN3461.pdf">Tilt Sensing Using a Three-Axis
+Accelerometer
+(AN3461)</a> para
+determinar cómo obtener los ángulos <em>roll</em> y <em>pitch</em> a partir de las medidas del
+acelerómetro.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../spi_linux/" class="btn btn-neutral float-left" title="Control de dispositivos SPI"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../control_servomotores/" class="btn btn-neutral float-right" title="Control de servomotores con PWM">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../spi_linux/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../control_servomotores/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
