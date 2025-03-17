@@ -123,12 +123,16 @@ struct spi_ioc_transfer {
 El MCP3008 es un ADC de 10 bits y 8 canales, que pueden ser utilizados en modo
 diferencial o en modo independiente. Este ADC tiene un interfaz SPI. La placa
 BEE tiene montado uno de estos ADCs, que podemos conectar a la Raspberry Pi a
-través de los jumpers en la tira de pines J2.
+través de los jumpers en la tira de pines J2. La siguiente figura muestra un
+cronograma de una comunicación SPI entre un microcontrolador y el ADC, extraída
+de la [hoja de características del
+MCP3008](http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf)
+(*datasheet*) proporcionada por el fabricante:
+
+![MCP3008 crono](fig/mcp3008_crono.png)
 
 El siguiente código es un ejemplo de cómo leer el ADC utilizando el driver SPI
-explicado arriba (consultar el [datasheet del
-MCP3008](http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf) para
-comprender la estructura de los bytes transmitidos):
+explicado arriba, siguiendo las directrices del cronograma:
 
 ```c 
 #define MCP3008_START 0x1
