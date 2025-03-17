@@ -95,15 +95,10 @@ dispositivo:
   uint32 para leer o escribir la frecuencia de transmisión.
 
 
-Una vez configurado el modo de transmisión tenemos que escoger la forma de
-enviar y recibir en función de cómo se comporte el dispositivo esclavo, para lo
-que hay que consultar su hoja de características (*datasheet*):
-
-- Trasmisión Semi-duplex: usaremos una operación *write* seguida de una
-  operación *read*.
-- Transmisión Full-duplex: usaremos una operación *SPI_IOC_MESSAGE(n)* para
-  realizar envío y recepción simultáneos. Esta operación recibe un puntero a un
-  array de n elementos del tipo `struct spi_ioc_transfer`:
+Una vez configurado el modo de transmisión, usaremos una operación
+*SPI_IOC_MESSAGE(n)* para realizar envío y recepción simultáneos. Esta operación
+recibe un puntero a un array de **n** elementos del tipo `struct
+spi_ioc_transfer`:
 
 ```c 
 struct spi_ioc_transfer {
