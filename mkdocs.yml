@@ -4,6 +4,7 @@ nav:
   - index.md
   - Prácticas: 
     - gpio_linux/index.md
+    - pwm_linux/index.md
     - control_servomotores/index.md
 
 theme: readthedocs
