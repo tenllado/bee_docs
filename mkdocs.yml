@@ -8,5 +8,6 @@ nav:
     - spi_linux/index.md
     - i2c_linux/index.md
     - control_servomotores/index.md
+    - robotica/index.md
 
 theme: readthedocs
