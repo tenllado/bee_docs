@@ -14,7 +14,7 @@ y de sencilla implementación. La información proporcionada por el fabricante s
 consultar en la hoja de referencia disponible online ([Aqui](https://docs.rs-online.com/870b/0900766b8123f8a1.pdf)).
 
 <p align="center">
-  <img src="img/servos.jpg" alt="drawing" width="300"/>
+  <img src="../img/servos.jpg" alt="drawing" width="300"/>
 </p>ejemplos-practicas.md
 
 ## Señal PWM
@@ -168,7 +168,7 @@ el cable de control (cable blanco) de cada motor. Siguiendo lo especificado en e
 código el motor izquierdo deberá conectarse al PWM0 y el derecho al PWM1.
 
 <p align="center">
-  <img src="img/bee_PWM.png" alt="drawing" width="600"/>
+  <img src="../img/bee_PWM.png" alt="drawing" width="600"/>
 </p>
 
 Una vez hecho esto solo nos quedaría alimentar los servomotores a 5V siguiendo
