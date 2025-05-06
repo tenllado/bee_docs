@@ -1,5 +1,5 @@
-# Práctica de Robótica: Motores 
-## Parte 1
+# Prácticas de Robótica
+## Motores. Parte 1
 
 ### Objetivos
 
@@ -37,18 +37,15 @@ Observa que se crea un ejecutable.
 
 El objetivo de esta tarea es programar el parpadeo de un LED. Para ello, en primer lugar, habrá que realizar el montaje indicado en la siguiente figura:
 
-<p align="center">
-  <img src="img/ConexionesLED.png" width="300"/>
-</p>
+
+![Conexiones LED](figs/ConexionesLED.png)
 
 Conecta el LED al Pin GPIO 17 (el Wiring Pin 0). La resistencia utilizada es de 220 Ω.
 
 Dependiendo de la biblioteca software que usemos para programar la Raspberry, la numeración de los pines cambia. En la siguiente figura pueden verse las distintas numeraciones según el conector físico de 40 pines. La placa de conexiones Bee 2.0 sigue la numeración BCM. De este modo, el pin serigrafiado en la placa como B17 corresponde al pin físico 11 o al WiringPi 0.
 
+![Pinout Raspberry Pi](figs/raspberrypi-gpio-wiringpi-pinout.png)
 
-<p align="center">
-  <img src="img/raspberrypi-gpio-wiringpi-pinout.png" width="300"/>
-</p>
 Si ahora ejecutamos el programa anterior:
 ~~~
 sudo ./blink
@@ -67,9 +64,7 @@ También puede conectarse el LED en otro Pin de la Raspberry, pero en ese caso h
 
 El servomotor no debe ser alimentado directamente por la Raspberry Pi porque en caso de que requiera realizar un esfuerzo grande puede requerir un consumo que no puede proporcionar la Raspberry. La alimentación del servo se realizará externamente y SOLO el pin de control del motor (PWM) se conectará a la Raspberry.
 
-<p align="center">
-  <img src="img/Servomotor.png" width="300"/>
-</p>
+![Servomotor](figs/Servomotor.png)
 
 
 #### Tarea 3: Control por pwm de servomotres usando C++}
@@ -143,3 +138,186 @@ A continuación realizaremos, utilizando las ecuaciones anteriores, un movimient
 
 ### Movimientos complejos
 El robot debería quedar en la misma posición que al principio. Estimar el error cometido. ¿Está dentro de una bola de error de radio 10 cm?
+
+
+## Sensores
+
+
+## 1. Objetivos
+
+1. Lectura de sensores digitales con la RaspberryPi. 
+2. Lectura de sensores analógicos con la RaspberryPi. 
+3. Integración de sensores en el robot 
+
+La finalidad de esta práctica es que el alumno utilice distintos sensores típicos en un robot móvil. Se utilizarán:
+
+- **Interruptor**: señal binaria (todo o nada) 
+- **LDR**: señal de voltaje variable (analógica, requiere conversor A/D) 
+- **Sensor de ultrasonidos**: señal procesada, salida digital
+
+> **Nota:** Antes de ejecutar un programa verifica con tu profesor que las conexiones están realizadas correctamente.
+
+---
+
+### 2. Desarrollo de la práctica
+
+#### 2.1 Lectura de sensores digitales
+
+##### 2.1.1 Botones
+
+Un sensor muy utilizado en los robots son los sensores de contacto. Estos pueden ser de distintos tipos siendo los más utilizados los de botón y los de palanca. Con ellos se reconoce la presencia de un objeto ubicado en la línea de recorrido de un dispositivo. También se pueden emplear (los botones) típicamente como interfaz con el usuario. Su simplicidad de construcción y uso los hace muy empleados en robótica.
+
+En esta práctica se van a usar los tres botones que están integrados en la placa Bee 2.0. 
+
+![Botones en la placa Bee](figs/Bee2BotonesLEDs.png)
+
+Los botones integrados en la placa Bee 2.0 tienen tres patillas: 
+- GND 
+- 3.3 V (a través de resistencia de 10kΩ) 
+- Pin del conector J4 
+
+Los LEDs están conectados a GND y al conector J4 a través de una resistencia de 220Ω.
+
+![Esquemático de la conexión leds y botones en la placa Bee](figs/ConexionBotonesLEDs.png)
+
+Para poder usar los botones simplemente tendremos que unir con un cable la patilla libre del
+botón (aquella que está conectada con uno de los pines del conector J4 a una de las entradas
+digitales de la RaspberryPi (por ejemplo la entrada BCM0)
+
+**Tarea 1:** 
+Conecta un botón y un LED a pines de entrada/salida digital de la RaspberryPi. 
+
+Programa: encender LED si el botón está pulsado, apagar si no.
+
+**Funciones WiringPi:**
+~~~
+c
+digitalRead(pinToRead);
+digitalWrite(pinToWrite, value); // value = 1 (alto), 0 (bajo)
+~~~
+Configura los pines como `INPUT` o `OUTPUT`.
+
+---
+
+##### 2.1.2 Sensor de infrarrojos CNY70
+
+El CNY70 es un sensor óptico reflexivo de infrarrojos de corto alcance (de 0, 3 a 10 mm.) basado en un diodo emisor de luz infrarroja y un receptor formado por un fototransistor, ambos apuntando en la misma dirección, y cuyo funcionamiento se basa en la capacidad de reflexión del objeto, y la detección del rayo reflectado por el receptor (sensor óptico de proximidad).
+
+![Sensor CNY70](figs/CNY70.png)
+
+Al tener un alcance tan corto, no se suele utilizar para detectar obstáculos, sino como sensor de
+proximidad, componente de lectura para un encoder, como elemento para detección y seguimiento
+de líneas u otras aplicaciones similares. Podemos usar el CNY70 de dos formas:
+
+1. Como un sensor digital que nos proporciona un 0 o un 1 en caso de que haya objeto o en para
+distancias de entre [0, 10] mm.
+
+2. Como un sensor analógico, midiendo la señal que proporciona el sensor dependiendo de la
+situación que se desee.
+
+Vamos a emplearlo en primer lugar como sensor de proximidad, lo que quiere decir que será un
+sensor digital que nos informará si hay objeto o no únicamente.
+Para poder usar este sensor hay que tener en cuenta dos cosas:
+
+- Polarizar LED emisor con resistencia a GND 
+- Usa divisor de tensión si trabajas con Raspberry Pi (3.3V)
+
+![Conexión del sensor CNY70](figs/ConexionCNY70.png)
+
+**Tarea 2:** 
+Conecta sensor a entrada digital. 
+Crea un `for` con `delay` (500 o 1000 ms) y muestra en pantalla la lectura.
+
+**Tarea 3:** 
+Prueba el rango de detección del sensor.
+
+**Tarea 4:** 
+Usa objetos de diferentes colores. ¿Detecta todos? ¿Por qué?
+
+---
+
+#### 2.2 Sensores analógicos
+
+Existen sensores que proporcionan una señal analógica (normalmente una señal de voltaje) que es
+proporcional a la medida que queremos leer. Este es el caso de muchos sensores de temperatura,
+de presión, de humedad, de luz, etc.
+
+Las RaspberryPi 3 no tiene entradas analógicas, de manera que necesitaremos usar un conversor
+AD para pasar la señal analógica a la digital. La placa Bee v2.0 tiene integrado un conversor AD, el MCP3008 que permite conectarle una señal analógica y transformarla en una digital que la
+Raspberry puede leer.
+
+---
+
+#### 2.2.1 LDR (Light-Dependent Resistor)
+
+Un LDR (Light-Dependent Resistor) es un material que varía su valor de resistencia eléctrica dependiendo de la cantidad de luz que incide sobre él. Se le llama, también, fotorresistor o fotorresistencia. El valor de resistencia eléctrica de un LDR es bajo cuando hay luz incidiendo en él (en algunos casos puede descender a tan bajo como 50Ω ) y muy alto cuando está a oscuras (puede ser de varios M Ω).
+
+Los LDR se fabrican con un cristal semiconductor fotosensible como el sulfuro de cadmio (CdS).
+Estas celdas son sensibles a un rango amplio de frecuencias lumínicas, desde la luz infrarroja,
+pasando por la luz visible, y hasta la ultravioleta.
+
+La variación de valor resistivo de un LDR tiene cierto retardo, que es diferente si se pasa de
+oscuro a iluminado o de iluminado a oscuro. Por esta razón un LDR no se puede utilizar en algunas aplicaciones, en especial en aquellas en que la señal luminosa varía con rapidez. El tiempo de respuesta típico de un LDR está en el orden de una décima de segundo. La lentitud relativa del cambio es una ventaja en algunos casos, porque así se filtran variaciones rápidas de iluminación que podrían hacer inestable un sensor (por ejemplo, cuando está iluminado por un tubo fluorescente alimentado por corriente alterna), En otras aplicaciones (como la detección de luminosidad para saber si es de día o es de noche) la lentitud de la detección no es importante.
+
+Para ver cómo cambia la resistencia con la luz, podemos hacer un circuito como el de la figura, donde el punto de lectura del voltaje se realiza en (1). Estos tipos de sensores son muy dependientes de la iluminación ambiente, por lo que es necesario protegerlos de la luz o realizar una calibración para tener en cuenta la iluminación actual que sería previa a su utilización, periódicamente, o cuando cambien las condiciones de trabajo.
+
+![LDR](figs/LDR.png)
+
+
+Para conectarlo a la Raspberry, utilizaremos como alimentación los 3.3 voltios del GPIO para
+Vdc. En cuanto a la lectura del voltaje en el punto (1), dado que es una señal analógica, necesitaremos un conversor A/D. Debido a que la Raspberry Pi no dispone de ninguno, en nuestro caso, utilizaremos el integrado MCP3008.
+
+El MCP3008 es un convertidor de analógico a digital, de 8 canales de 10 bits (conversor AD
+o ADC). Es barato, fácil de conectar y no requiere ningún componente adicional. Se utiliza el
+protocolo de bus SPI que está soportado por el GPIO de la Raspberry Pi y por tanto puede utilizarse también con la librería WiringPi.
+
+Como puede verse en la figura los pines del lado derecho del MCP3008 son las entradas
+analógicas (los 8 canales analógicos), AGND y DGND son la tierra analógica y digital, VDD la
+alimentación del integrado y VREF el voltaje de referencia de la entrada analógica. Los pines 10-14 (CS,Din,Dout,Clk) corresponden a los pines del protocolo serie SPI por donde se lee la conversión del voltaje. Para conocer el voltaje en un canal se utilizará la fórmula:
+
+**Fórmula:**
+```math
+V_{canal} = (LecturaSPI / 1024) * Vref
+```
+![Conversor](figs/Bee2-conversor.png)
+
+La placa Bee v2.0 tiene integrado el conversor MCP3008, figura 8. Para emplearlo hay que:
+
+- Unir con un jumper los pines MOSI, MISO, SCLK y CE0 ADC del conector J2 con los B10, B9
+B11 y B8 del mismo conector.
+
+- Unir con un jumper los dos pines del conector J11
+
+- Unir con un jumper los pines Vcc y 3.3 del conector J18
+- Unir con un jumper los pines Vdd y 3.3 del conector J14
+
+Una vez hecho esto, ya se puede conectar la salida analógica del sensor (con la resistencia R
+adecuada, que puede usarse de la red de polarización) a una de las entradas del conversor A/D
+
+
+**Cargar drivers SPI:**
+~~~
+bash
+gpio load spi
+~~~
+
+**Código base (conversor.c):** 
+[https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/](https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/)
+
+---
+
+**Tarea 5:** 
+Lee y muestra el voltaje del LDR.
+
+**Tarea 6:** 
+Observa efecto de luz ambiente. ¿Cómo afecta a la medida? 
+¿Cómo usarlo para encender una bombilla si baja la luz?
+
+**Tarea 7:** 
+Comprueba variación con distintas fuentes de luz.
+
+**Tarea 8:** 
+¿Cómo construirías un robot que siga una fuente de luz (como una linterna)?
+
+---
+
