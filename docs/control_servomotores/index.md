@@ -15,7 +15,7 @@ consultar en la hoja de referencia disponible online ([Aqui](https://docs.rs-onl
 
 <p align="center">
   <img src="../img/servos.jpg" alt="drawing" width="300"/>
-</p>ejemplos-practicas.md
+</p>
 
 ## Señal PWM
 
