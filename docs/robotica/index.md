@@ -1,5 +1,5 @@
-# PRÁCTICA 1. MOTORES Parte 1
-## Motores en robótica
+# Práctica de Robótica: Motores 
+## Parte 1
 
 ### Objetivos
 
@@ -37,14 +37,18 @@ Observa que se crea un ejecutable.
 
 El objetivo de esta tarea es programar el parpadeo de un LED. Para ello, en primer lugar, habrá que realizar el montaje indicado en la siguiente figura:
 
-![Esquema de conexión del LED](figuras\ConexionesLED.png)
+<p align="center">
+  <img src="img/ConexionesLED.png" width="300"/>
+</p>
 
 Conecta el LED al Pin GPIO 17 (el Wiring Pin 0). La resistencia utilizada es de 220 Ω.
 
 Dependiendo de la biblioteca software que usemos para programar la Raspberry, la numeración de los pines cambia. En la siguiente figura pueden verse las distintas numeraciones según el conector físico de 40 pines. La placa de conexiones Bee 2.0 sigue la numeración BCM. De este modo, el pin serigrafiado en la placa como B17 corresponde al pin físico 11 o al WiringPi 0.
 
-![Raspberry Pinout](figuras/raspberrypi-gpio-wiringpi-pinout.png)
 
+<p align="center">
+  <img src="img/raspberrypi-gpio-wiringpi-pinout.png" width="300"/>
+</p>
 Si ahora ejecutamos el programa anterior:
 ~~~
 sudo ./blink
@@ -63,22 +67,24 @@ También puede conectarse el LED en otro Pin de la Raspberry, pero en ese caso h
 
 El servomotor no debe ser alimentado directamente por la Raspberry Pi porque en caso de que requiera realizar un esfuerzo grande puede requerir un consumo que no puede proporcionar la Raspberry. La alimentación del servo se realizará externamente y SOLO el pin de control del motor (PWM) se conectará a la Raspberry.
 
-![Esquema de conexión del servomotor](figuras/Servomotor.png)
-
-
+<p align="center">
+  <img src="img/Servomotor.png" width="300"/>
+</p>
 
 
 #### Tarea 3: Control por pwm de servomotres usando C++}
 Para controlar los motores por pwm en C o C++ se puede usar la biblioteca WiringPi. Al igual que en python conviene tener en cuenta los siguientes aspectos:
 - Es necesario incluir la librería en el código:
-  ~~~
-         #include <wiringPi.h>
-   ~~~
+
+~~~
+#include <wiringPi.h>
+~~~
 - La biblioteca WiringPi usa otra numeración de pines, como se indicaba anteriormente. Los pines correspondientes según la numeración WiringPi a los *pwm_0* y *pwm_1* son:
-    ~~~
-        #define PinMotor0 23 //pwm_1
-        #define PinMotor1 26 //for pwm_0
-    ~~~
+
+~~~
+#define PinMotor0 23 //pwm_1
+#define PinMotor1 26 //for pwm_0
+~~~
 - Es necesario inicializar la librería
 - Hay que configurar el pin como un pin pwm de salida
 - Para dar un valor de pwm a la salida correspondiente basta con usar el comando
@@ -87,13 +93,12 @@ Para controlar los motores por pwm en C o C++ se puede usar la biblioteca Wiring
 
 
 ### Referencias útiles#
-\begin{itemize}
-    [Control de servomotor usando Python 1](https://www.digikey.es/en/maker/blogs/2021/how-to-control-servo-motors-with-a-raspberry-pi}{Control de servomotor usando Pyhton 1)
-    [Control de servomotor usando Python 2](https://www.learnrobotics.org/blog/raspberry-pi-servo-motor/}{Control de servomotor usando Pyhton 2)
-    [Referencia de WiringPi](http://wiringpi.com/reference/raspberry-pi-specifics/)
-    [ Utilidad gpio de Adafruit](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/software)
+- [Control de servomotor usando Python 1](https://www.digikey.es/en/maker/blogs/2021/how-to-control-servo-motors-with-a-raspberry-pi}{Control de servomotor usando Pyhton 1)
+- [Control de servomotor usando Python 2](https://www.learnrobotics.org/blog/raspberry-pi-servo-motor/}{Control de servomotor usando Pyhton 2)
+- [Referencia de WiringPi](http://wiringpi.com/reference/raspberry-pi-specifics/)
+- [ Utilidad gpio de Adafruit](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/software)
 
-# PRÁCTICA 2. MOTORES Parte 2
+## Parte 2
 
 La finalidad de esta práctica es aplicar una señal de PWM para
 controlar los actuadores (servomotores de rotación continua) de un robot móvil sencillo.
@@ -107,27 +112,32 @@ El robot utilizará dos servos de rotación contínua. Aseguraos de que están a
 1. Colocad sobre la plataforma el circuito anterior y la Rasp Pi para mover los motores a la vez. 
 2. Si el diseño y sujeción de los motores es el adecuado debe ser capaz de moverse en línea recta sin desviarse. Como mínimo debería recorrer un tramo de unos 2 m con una desviación máxima de un 10% hacia cualquiera de los dos lados.
 
-## Control en lazo abierto
+### Control en lazo abierto
 
 Una vez que se ha comprobado que sabe crear un programa utilizando la librería wiringPi, se ha configurado y calibrado los servos de las ruedas del robot y movido el robot de forma básica para verificar que la posición de los motores es la adecuada, el objetivo será crear un programa que mueva el robot una distancia y ángulo deseados. Como el robot no tiene realimentación de la posición cualquier error, deslizamiento o desviación no se detectará.
 
 Para mover el robot una distancia deseada, mediremos la velocidad con que se desplaza el robot (velocidad de las ruedas) y moveremos el robot (siempre a la misma velocidad) durante el tiempo que corresponda para la distancia deseada. Es decir:
+
 1. Poned las ruedas a girar y registrad el tiempo que tarda en dar 10 vueltas. Ese tiempo será T_i
-2. Para obtener la velocidad de cada rueda por segundo bastará con realizar $v_i=\frac{T_i}{10}$ vueltas por segundo.
-3. Es necesario medir el radio de las ruedas $R_i$ para poder calcular la longitud de su circunferencia $\Phi_i=2\cdot \pi \cdot R_i$ y así saber la distancia que recorre el robot en una vuelta.
-4. Con estos datos ya se puede pasar una distancia recorrida por una rueda $D_i$ a número de vueltas $N_{vi}=\frac{D_i}{\Phi_i}$. Con la velocidad de la rueda $v_i$ que ya se ha calculado se puede sabeer el tiempo que ha de estar girando la rueda $Tiempo_i=\frac{N_{vi}}{v_i}$.
-5. Este tiempo $Tiempo_i$ es que se debe esperar antes de parar los motores para que el robot mueva las ruedas la distancia deseada.
+
+2. Para obtener la velocidad de cada rueda por segundo bastará con realizar v_i=T_i/10 vueltas por segundo.
+
+3. Es necesario medir el radio de las ruedas para poder calcular la longitud de su circunferencia y así saber la distancia que recorre el robot en una vuelta.
+
+4. Con estos datos ya se puede pasar una distancia recorrida por una rueda  a número de vueltas. Con la velocidad de la rueda que ya se ha calculado se puede saber el tiempo que ha de estar girando la rueda.
+
+5. Este tiempo es que se debe esperar antes de parar los motores para que el robot mueva las ruedas la distancia deseada.
 
 
-Con los cálculos anteriores puede obtener el tiempo para que cada rueda gire la distancia $D_i$ deseada ($i$ es derecha, $r$, o izquierda, $l$). Esta distancia $D_i$ se obtendrá de las ecuaciones $D_r$ y $D_l$ del modelo de un robot diferencial, donde la distancia a desplazarse (o el ángulo que queremos que gire) es la proporcionada por el usuario.
+Con los cálculos anteriores puede obtener el tiempo para que cada rueda gire la distancia  deseada. Esta distancia se obtendrá de las ecuaciones y  del modelo de un robot diferencial, donde la distancia a desplazarse (o el ángulo que queremos que gire) es la proporcionada por el usuario.
 
 ### Movimiento en línea recta.
 Programad  el robot para que se mueva una distancia determinada a partir del tiempo que está en funcionamiento los motores (control en lazo abierto). Probadlo con la distancia del apartado anterior y ved si es capaz de parar a los 2 m.
 
 ### Giro en lazo abierto
-Programad el robot para que gire el número de ángulos determinado. Probadlo con $90$ grados.
+Programad el robot para que gire el número de ángulos determinado. Probadlo con 90 grados.
 
-## Movimiento complejo del robot
+### Movimiento complejo del robot
 
 A continuación realizaremos, utilizando las ecuaciones anteriores, un movimiento algo más complejo donde se combinen simultáneamente movimientos rectos y giros. El movimiento que el robot realizará será un rectángulo.
 
