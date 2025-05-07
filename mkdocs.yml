@@ -1,7 +1,28 @@
 site_name: BEE Docs
 
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+      title: On this page
+      toc_depth: 3
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
 nav:
-  - index.md
+  - Documentación Técnica:
+    - index.md
   - Prácticas: 
     - gpio_linux/index.md
     - pwm_linux/index.md
@@ -10,4 +31,7 @@ nav:
     - control_servomotores/index.md
     - robotica/index.md
 
-theme: readthedocs
+theme:
+  name: material
+  features:
+    - toc.integrate

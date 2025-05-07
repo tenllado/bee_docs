@@ -1,4 +1,6 @@
 # Prácticas de Robótica
+
+
 ## Motores. Parte 1
 
 ### Objetivos
@@ -9,15 +11,15 @@
 
 La finalidad de esta práctica es aprender a generar señales en el orden adecuado para mover un motor paso a paso y aplicar una señal de PWM para controlar un motor de continua (servomotor de rotación continua). Estos tipos de motores son muy utilizados en Robótica. En concreto, el servo de rotación continua se utilizará para controlar un robot móvil sencillo.
 
-> **Nota:** Antes de ejecutar un programa, verifique con su profesor que las conexiones están realizadas correctamente.
+!!! note "Nota"
 
----
+    Antes de ejecutar un programa, verifique con su profesor que las conexiones
+    están realizadas correctamente.
 
-## Desarrollo de la práctica
+### Desarrollo de la práctica
 
-### Primer contacto con la Raspberry
-
-Para familiarizarse con el entorno de programación de la Raspberry Pi, primero vamos a realizar dos tareas sencillas.
+Para familiarizarse con el entorno de programación de la Raspberry Pi, primero
+vamos a realizar dos tareas sencillas.
 
 #### Tarea 1: Conocer el entorno de la Raspberry
 
@@ -26,10 +28,9 @@ Alimenta la Raspberry Pi y conecta el portátil a ella (vea cómo conectar con l
 Lo que haremos será comprobar que está funcionando correctamente la Raspberry: compila el programa escribiendo:
 
 
-~~~
-bash
+``` bash 
 make blink
-~~~
+```
 
 Observa que se crea un ejecutable.
 
@@ -47,39 +48,40 @@ Dependiendo de la biblioteca software que usemos para programar la Raspberry, la
 ![Pinout Raspberry Pi](figs/raspberrypi-gpio-wiringpi-pinout.png)
 
 Si ahora ejecutamos el programa anterior:
-~~~
+
+```sh 
 sudo ./blink
-~~~
+```
 
 Se verá que el LED parpadea.
 
 **Edita el programa, cambia la frecuencia de parpadeo, vuelve a compilarlo y observa que su frecuencia cambia.**
 
 También puede conectarse el LED en otro Pin de la Raspberry, pero en ese caso hay que cambiar el pin asignado en el archivo blink.c:
-~~~
+``` c 
 #define 0 LED
-~~~
+```
 
-### Control de motores de rotación continua
+#### Control de motores de rotación continua
 
 El servomotor no debe ser alimentado directamente por la Raspberry Pi porque en caso de que requiera realizar un esfuerzo grande puede requerir un consumo que no puede proporcionar la Raspberry. La alimentación del servo se realizará externamente y SOLO el pin de control del motor (PWM) se conectará a la Raspberry.
 
 ![Servomotor](figs/Servomotor.png)
 
-
-#### Tarea 3: Control por pwm de servomotres usando C++}
+#### Tarea 3: Control por pwm de servomotres usando C++
 Para controlar los motores por pwm en C o C++ se puede usar la biblioteca WiringPi. Al igual que en python conviene tener en cuenta los siguientes aspectos:
 - Es necesario incluir la librería en el código:
 
-~~~
+``` c 
 #include <wiringPi.h>
-~~~
+```
 - La biblioteca WiringPi usa otra numeración de pines, como se indicaba anteriormente. Los pines correspondientes según la numeración WiringPi a los *pwm_0* y *pwm_1* son:
 
-~~~
+``` c
 #define PinMotor0 23 //pwm_1
 #define PinMotor1 26 //for pwm_0
-~~~
+```
+
 - Es necesario inicializar la librería
 - Hay que configurar el pin como un pin pwm de salida
 - Para dar un valor de pwm a la salida correspondiente basta con usar el comando
@@ -87,13 +89,13 @@ Para controlar los motores por pwm en C o C++ se puede usar la biblioteca Wiring
 **Establece el rango de valores de PWM sirven para girar en un sentido u otro. Con este rango podrás escoger un valor adecuado para usarlo en el futuro control del robot.**
 
 
-### Referencias útiles#
+### Referencias útiles
 - [Control de servomotor usando Python 1](https://www.digikey.es/en/maker/blogs/2021/how-to-control-servo-motors-with-a-raspberry-pi}{Control de servomotor usando Pyhton 1)
 - [Control de servomotor usando Python 2](https://www.learnrobotics.org/blog/raspberry-pi-servo-motor/}{Control de servomotor usando Pyhton 2)
 - [Referencia de WiringPi](http://wiringpi.com/reference/raspberry-pi-specifics/)
 - [ Utilidad gpio de Adafruit](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/software)
 
-## Parte 2
+## Motores. Parte 2
 
 La finalidad de esta práctica es aplicar una señal de PWM para
 controlar los actuadores (servomotores de rotación continua) de un robot móvil sencillo.
@@ -102,7 +104,6 @@ construido, se realizarán varios movimientos para mostrar que se es capaz de co
 adecuadamente el robot.
 
 El robot utilizará dos servos de rotación contínua. Aseguraos de que están alineados adecuadamente y las ruedas están fijadas para que el robot pueda moverse en línea recta. Si el robot tiene una deriva alta, su control será más complejo e impedirá un correcto funcionamiento en futuras prácticas en las que se utilizará.
-
 
 1. Colocad sobre la plataforma el circuito anterior y la Rasp Pi para mover los motores a la vez. 
 2. Si el diseño y sujeción de los motores es el adecuado debe ser capaz de moverse en línea recta sin desviarse. Como mínimo debería recorrer un tramo de unos 2 m con una desviación máxima de un 10% hacia cualquiera de los dos lados.
@@ -127,9 +128,11 @@ Para mover el robot una distancia deseada, mediremos la velocidad con que se des
 Con los cálculos anteriores puede obtener el tiempo para que cada rueda gire la distancia  deseada. Esta distancia se obtendrá de las ecuaciones y  del modelo de un robot diferencial, donde la distancia a desplazarse (o el ángulo que queremos que gire) es la proporcionada por el usuario.
 
 ### Movimiento en línea recta.
+
 Programad  el robot para que se mueva una distancia determinada a partir del tiempo que está en funcionamiento los motores (control en lazo abierto). Probadlo con la distancia del apartado anterior y ved si es capaz de parar a los 2 m.
 
 ### Giro en lazo abierto
+
 Programad el robot para que gire el número de ángulos determinado. Probadlo con 90 grados.
 
 ### Movimiento complejo del robot
@@ -137,13 +140,13 @@ Programad el robot para que gire el número de ángulos determinado. Probadlo co
 A continuación realizaremos, utilizando las ecuaciones anteriores, un movimiento algo más complejo donde se combinen simultáneamente movimientos rectos y giros. El movimiento que el robot realizará será un rectángulo.
 
 ### Movimientos complejos
+
 El robot debería quedar en la misma posición que al principio. Estimar el error cometido. ¿Está dentro de una bola de error de radio 10 cm?
 
 
 ## Sensores
 
-
-## 1. Objetivos
+### 1. Objetivos
 
 1. Lectura de sensores digitales con la RaspberryPi. 
 2. Lectura de sensores analógicos con la RaspberryPi. 
@@ -155,9 +158,10 @@ La finalidad de esta práctica es que el alumno utilice distintos sensores típi
 - **LDR**: señal de voltaje variable (analógica, requiere conversor A/D) 
 - **Sensor de ultrasonidos**: señal procesada, salida digital
 
-> **Nota:** Antes de ejecutar un programa verifica con tu profesor que las conexiones están realizadas correctamente.
+!!! note "Nota"
 
----
+    Antes de ejecutar un programa verifica con tu profesor que las conexiones
+    están realizadas correctamente.
 
 ### 2. Desarrollo de la práctica
 
@@ -172,6 +176,7 @@ En esta práctica se van a usar los tres botones que están integrados en la pla
 ![Botones en la placa Bee](figs/Bee2BotonesLEDs.png)
 
 Los botones integrados en la placa Bee 2.0 tienen tres patillas: 
+
 - GND 
 - 3.3 V (a través de resistencia de 10kΩ) 
 - Pin del conector J4 
@@ -190,14 +195,13 @@ Conecta un botón y un LED a pines de entrada/salida digital de la RaspberryPi.
 Programa: encender LED si el botón está pulsado, apagar si no.
 
 **Funciones WiringPi:**
-~~~
-c
+
+``` c 
 digitalRead(pinToRead);
 digitalWrite(pinToWrite, value); // value = 1 (alto), 0 (bajo)
-~~~
-Configura los pines como `INPUT` o `OUTPUT`.
+```
 
----
+Configura los pines como `INPUT` o `OUTPUT`.
 
 ##### 2.1.2 Sensor de infrarrojos CNY70
 
@@ -234,8 +238,6 @@ Prueba el rango de detección del sensor.
 **Tarea 4:** 
 Usa objetos de diferentes colores. ¿Detecta todos? ¿Por qué?
 
----
-
 #### 2.2 Sensores analógicos
 
 Existen sensores que proporcionan una señal analógica (normalmente una señal de voltaje) que es
@@ -245,8 +247,6 @@ de presión, de humedad, de luz, etc.
 Las RaspberryPi 3 no tiene entradas analógicas, de manera que necesitaremos usar un conversor
 AD para pasar la señal analógica a la digital. La placa Bee v2.0 tiene integrado un conversor AD, el MCP3008 que permite conectarle una señal analógica y transformarla en una digital que la
 Raspberry puede leer.
-
----
 
 #### 2.2.1 LDR (Light-Dependent Resistor)
 
@@ -263,7 +263,6 @@ Para ver cómo cambia la resistencia con la luz, podemos hacer un circuito como 
 
 ![LDR](figs/LDR.png)
 
-
 Para conectarlo a la Raspberry, utilizaremos como alimentación los 3.3 voltios del GPIO para
 Vdc. En cuanto a la lectura del voltaje en el punto (1), dado que es una señal analógica, necesitaremos un conversor A/D. Debido a que la Raspberry Pi no dispone de ninguno, en nuestro caso, utilizaremos el integrado MCP3008.
 
@@ -276,18 +275,16 @@ analógicas (los 8 canales analógicos), AGND y DGND son la tierra analógica y 
 alimentación del integrado y VREF el voltaje de referencia de la entrada analógica. Los pines 10-14 (CS,Din,Dout,Clk) corresponden a los pines del protocolo serie SPI por donde se lee la conversión del voltaje. Para conocer el voltaje en un canal se utilizará la fórmula:
 
 **Fórmula:**
-```math
-V_{canal} = (LecturaSPI / 1024) * Vref
-```
+
+$$ V_{canal} = (LecturaSPI / 1024) * Vref $$
+
 ![Conversor](figs/Bee2-conversor.png)
 
 La placa Bee v2.0 tiene integrado el conversor MCP3008, figura 8. Para emplearlo hay que:
 
 - Unir con un jumper los pines MOSI, MISO, SCLK y CE0 ADC del conector J2 con los B10, B9
 B11 y B8 del mismo conector.
-
 - Unir con un jumper los dos pines del conector J11
-
 - Unir con un jumper los pines Vcc y 3.3 del conector J18
 - Unir con un jumper los pines Vdd y 3.3 del conector J14
 
@@ -296,28 +293,30 @@ adecuada, que puede usarse de la red de polarización) a una de las entradas del
 
 
 **Cargar drivers SPI:**
-~~~
-bash
+``` bash 
 gpio load spi
-~~~
+```
 
 **Código base (conversor.c):** 
+
 [https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/](https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/)
 
----
 
 **Tarea 5:** 
+
 Lee y muestra el voltaje del LDR.
 
 **Tarea 6:** 
+
 Observa efecto de luz ambiente. ¿Cómo afecta a la medida? 
 ¿Cómo usarlo para encender una bombilla si baja la luz?
 
 **Tarea 7:** 
+
 Comprueba variación con distintas fuentes de luz.
 
 **Tarea 8:** 
-¿Cómo construirías un robot que siga una fuente de luz (como una linterna)?
 
----
+¿Cómo construirías un robot que siga una fuente de luz (como una linterna)?
+gg
 
