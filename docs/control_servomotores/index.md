@@ -13,9 +13,7 @@ Rotation Servo. Estos servomotores tienen una velocidad máxima de 50rpm son bid
 y de sencilla implementación. La información proporcionada por el fabricante se puede
 consultar en la hoja de referencia disponible online ([Aqui](https://docs.rs-online.com/870b/0900766b8123f8a1.pdf)).
 
-<p align="center">
-  <img src="../img/servos.jpg" alt="drawing" width="300"/>
-</p>
+![servos](../img/servos.jpg)
 
 ## Señal PWM
 
