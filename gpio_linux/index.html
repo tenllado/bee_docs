@@ -1,127 +1,511 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Control GPIO en Linux - BEE Docs</title>
-    <link rel="stylesheet" href="../css/theme.css" />
-    <link rel="stylesheet" href="../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
     
-      <script>
-        // Current page data
-        var mkdocs_page_name = "Control GPIO en Linux";
-        var mkdocs_page_input_path = "gpio_linux/index.md";
-        var mkdocs_page_url = null;
-      </script>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.5">
     
-    <!--[if lt IE 9]>
-      <script src="../js/html5shiv.min.js"></script>
-    <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-      <script>hljs.highlightAll();</script> 
-</head>
+    
+      
+        <title>Control GPIO en Linux - BEE Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
 
-<body class="wy-body-for-nav" role="document">
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#control-gpio-en-linux" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-    <div class="wy-side-scroll">
-      <div class="wy-side-nav-search">
-          <a href=".." class="icon icon-home"> BEE Docs
-        </a><div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
-  </form>
-</div>
-      </div>
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="BEE Docs" class="md-header__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="..">Placa de expansión BEE</a>
-                </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Prácticas</span></p>
-              <ul class="current">
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Control GPIO en Linux</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#introduccion">Introducción</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#utilidades-de-linea-de-comandos">Utilidades de línea de comandos</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#gpiodetect">gpiodetect</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#gpioinfo">gpioinfo</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#gpiofind">gpiofind</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#gpioset">gpioset</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#gpioget">gpioget</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#gpiomon">gpiomon</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#driver-gpio">Driver GPIO</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#operaciones-ioctl">Operaciones ioctl</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#obtener-informacion-del-controlador-gpio">Obtener información del controlador GPIO</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#pines-de-entrada-y-salida">Pines de entrada y salida</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#eventos-en-pines-de-entrada">Eventos en pines de entrada</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#gpio-mapeado-en-memoria">GPIO mapeado en memoria</a>
-    </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../pwm_linux/">Control PWM en Linux</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../spi_linux/">Control de dispositivos SPI</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../i2c_linux/">Control de dispositivos I2C</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../control_servomotores/">Control de servomotores con PWM</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../robotica/">Prácticas de Robótica</a>
-                  </li>
-              </ul>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BEE Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Control GPIO en Linux
+            
+          </span>
+        </div>
       </div>
     </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="..">BEE Docs</a>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
         
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
       </nav>
-      <div class="wy-nav-content">
-        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Prácticas</li>
-      <li class="breadcrumb-item active">Control GPIO en Linux</li>
-    <li class="wy-breadcrumbs-aside">
-    </li>
-  </ul>
-  <hr/>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-            <div class="section" itemprop="articleBody">
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
               
-                <h1 id="control-gpio-en-linux">Control GPIO en Linux</h1>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="BEE Docs" class="md-nav__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    BEE Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Documentación Técnica
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Documentación Técnica" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Documentación Técnica
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Placa de expansión BEE
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Prácticas
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prácticas" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Prácticas
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Control GPIO en Linux
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Control GPIO en Linux
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    Introducción
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#utilidades-de-linea-de-comandos" class="md-nav__link">
+    Utilidades de línea de comandos
+  </a>
+  
+    <nav class="md-nav" aria-label="Utilidades de línea de comandos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gpiodetect" class="md-nav__link">
+    gpiodetect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpioinfo" class="md-nav__link">
+    gpioinfo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpiofind" class="md-nav__link">
+    gpiofind
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpioset" class="md-nav__link">
+    gpioset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpioget" class="md-nav__link">
+    gpioget
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpiomon" class="md-nav__link">
+    gpiomon
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#driver-gpio" class="md-nav__link">
+    Driver GPIO
+  </a>
+  
+    <nav class="md-nav" aria-label="Driver GPIO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operaciones-ioctl" class="md-nav__link">
+    Operaciones ioctl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obtener-informacion-del-controlador-gpio" class="md-nav__link">
+    Obtener información del controlador GPIO
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pines-de-entrada-y-salida" class="md-nav__link">
+    Pines de entrada y salida
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos-en-pines-de-entrada" class="md-nav__link">
+    Eventos en pines de entrada
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio-mapeado-en-memoria" class="md-nav__link">
+    GPIO mapeado en memoria
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwm_linux/" class="md-nav__link">
+        Control PWM en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spi_linux/" class="md-nav__link">
+        Control de dispositivos SPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i2c_linux/" class="md-nav__link">
+        Control de dispositivos I2C
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../control_servomotores/" class="md-nav__link">
+        Control de servomotores con PWM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotica/" class="md-nav__link">
+        Prácticas de Robótica
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="control-gpio-en-linux">Control GPIO en Linux<a class="headerlink" href="#control-gpio-en-linux" title="Permanent link">&para;</a></h1>
 <p>En esta práctica utilizaremos los drivers que proporciona linux para controlar
 el GPIO. Puedes hacer esta práctica si tienes una raspberry-pi con Raspbian,
 consiguiendo manejar dispositivos sencillos, como los pulsadores y los leds que
 incorpora la placa BEE, desde un programa de usuario escrito en C.</p>
-<h2 id="introduccion">Introducción</h2>
+<h2 id="introduccion">Introducción<a class="headerlink" href="#introduccion" title="Permanent link">&para;</a></h2>
 <p>Linux expone los controladores del GPIO como dispositivos orientados a
 caracteres <em>/dev/gpiochip#</em>. Usar estos dispositivos ofrece las siguientes
 ventajas:</p>
@@ -138,40 +522,40 @@ un fichero, utilizando las llamadas al sistema <em>open()</em>, <em>read()</em>,
 <p>En esta práctica usaremos la versión 2 del ABI, la 1 se considera obsoleta
 (<em>deprecated</em>). La fuente más fiable de referencia/documentación es el propio
 fichero de cabecera <em>/usr/include/linux/gpio.h</em>.</p>
-<h2 id="utilidades-de-linea-de-comandos">Utilidades de línea de comandos</h2>
+<h2 id="utilidades-de-linea-de-comandos">Utilidades de línea de comandos<a class="headerlink" href="#utilidades-de-linea-de-comandos" title="Permanent link">&para;</a></h2>
 <p>La librería libgpiod nos ofrece unos programas de ejemplo que podemos utilizar
 como utilidades de línea de comandos para interactuar con los controladores de
 GPIO.</p>
 <p>Para disponer de estas herramientas debemos instalar algunos paquetes de
 raspbian:</p>
-<pre><code class="language-sh">sudo apt install gpiod libgpiod-dev libgpiod-doc
-</code></pre>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>gpiod<span class="w"> </span>libgpiod-dev<span class="w"> </span>libgpiod-doc
+</span></code></pre></div>
 <p>Una vez instalados estos paquetes tendremos disponibles las utilidades
 descritas en las siguientes secciones.</p>
-<h3 id="gpiodetect">gpiodetect</h3>
+<h3 id="gpiodetect">gpiodetect<a class="headerlink" href="#gpiodetect" title="Permanent link">&para;</a></h3>
 <p>Esta utilidad nos da una lista de los dispositivos de caracteres para control
 del gpio disponibles en nuestra plataforma:</p>
-<pre><code class="language-sh">pi@raspberrypi:~ $ gpiodetect
-gpiochip0 [pinctrl-bcm2835] (54 lines)
-gpiochip1 [brcmvirt-gpio] (2 lines)
-gpiochip2 [raspberrypi-exp-gpio] (8 lines)
-pi@raspberrypi:~ $
-</code></pre>
-<h3 id="gpioinfo">gpioinfo</h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>gpiodetect
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>gpiochip0<span class="w"> </span><span class="o">[</span>pinctrl-bcm2835<span class="o">]</span><span class="w"> </span><span class="o">(</span><span class="m">54</span><span class="w"> </span>lines<span class="o">)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>gpiochip1<span class="w"> </span><span class="o">[</span>brcmvirt-gpio<span class="o">]</span><span class="w"> </span><span class="o">(</span><span class="m">2</span><span class="w"> </span>lines<span class="o">)</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>gpiochip2<span class="w"> </span><span class="o">[</span>raspberrypi-exp-gpio<span class="o">]</span><span class="w"> </span><span class="o">(</span><span class="m">8</span><span class="w"> </span>lines<span class="o">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>pi@raspberrypi:~<span class="w"> </span>$
+</span></code></pre></div>
+<h3 id="gpioinfo">gpioinfo<a class="headerlink" href="#gpioinfo" title="Permanent link">&para;</a></h3>
 <p>Esta utilidad lista los pines controlados por uno de los controladores:</p>
-<pre><code class="language-sh">pi@raspberrypi:~ $ gpioinfo gpiochip0
-gpiochip0 - 54 lines:
-    line   0:      unnamed       unused   input  active-high
-    line   1:      unnamed       unused   input  active-high
-    line   2:      unnamed       unused   input  active-high
-    line   3:      unnamed       unused   input  active-high
-    ...
-pi@raspberrypi:~ $
-</code></pre>
-<h3 id="gpiofind">gpiofind</h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>gpioinfo<span class="w"> </span>gpiochip0
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>gpiochip0<span class="w"> </span>-<span class="w"> </span><span class="m">54</span><span class="w"> </span>lines:
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span>line<span class="w">   </span><span class="m">0</span>:<span class="w">      </span>unnamed<span class="w">       </span>unused<span class="w">   </span>input<span class="w">  </span>active-high
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span>line<span class="w">   </span><span class="m">1</span>:<span class="w">      </span>unnamed<span class="w">       </span>unused<span class="w">   </span>input<span class="w">  </span>active-high
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span>line<span class="w">   </span><span class="m">2</span>:<span class="w">      </span>unnamed<span class="w">       </span>unused<span class="w">   </span>input<span class="w">  </span>active-high
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span>line<span class="w">   </span><span class="m">3</span>:<span class="w">      </span>unnamed<span class="w">       </span>unused<span class="w">   </span>input<span class="w">  </span>active-high
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span>...
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>pi@raspberrypi:~<span class="w"> </span>$
+</span></code></pre></div>
+<h3 id="gpiofind">gpiofind<a class="headerlink" href="#gpiofind" title="Permanent link">&para;</a></h3>
 <p>Utilidad que nos da el número de línea de gpio para líneas identificadas con un
   nombre en el <em>device-tree</em></p>
-<h3 id="gpioset">gpioset</h3>
+<h3 id="gpioset">gpioset<a class="headerlink" href="#gpioset" title="Permanent link">&para;</a></h3>
 <p>Utilidad que permite asignar un valor a un conjunto de líneas del gpio mientras
 ejecuta el comando. Con <em>-m modo</em> podemos configurar lo que hace el comando tras
 dar el valor a las líneas. Los posibles modos son:</p>
@@ -183,36 +567,36 @@ dar el valor a las líneas. Los posibles modos son:</p>
 </ul>
 <p>Por ejemplo, para encender 3 leds conectados a los pines 20, 21 y 26, 
 hasta que el usuario pulse enter:</p>
-<pre><code class="language-sh">pi@raspberrypi:~ $ gpioset -m wait 0 20=1 21=1 26=1
-pi@raspberrypi:~ $
-</code></pre>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>gpioset<span class="w"> </span>-m<span class="w"> </span><span class="nb">wait</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="nv">20</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">21</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">26</span><span class="o">=</span><span class="m">1</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pi@raspberrypi:~<span class="w"> </span>$
+</span></code></pre></div>
 <p>El siguiente script es un ejemplo de uso de gpioset que hace oscilar una luz
 entre tres leds.</p>
-<pre><code class="language-bash">#!/bin/bash
-
-ini=0x01
-dir=0
-while true
-do
-    bit26=$(( (ini &amp; 0x4) &gt;&gt; 2 ))
-    bit21=$(( (ini &amp; 0x2) &gt;&gt; 1 ))
-    bit20=$((ini &amp; 0x1))
-    gpioset -m time -s 1 0 26=$bit26 21=$bit21 20=$bit20
-    if [ $dir -eq 0 ]; then
-        ini=$(((ini &lt;&lt; 1) &amp; 0x7))
-    else
-        ini=$(((ini &gt;&gt; 1) &amp; 0x7))
-    fi
-    if [ $ini -eq 0 ]; then
-        dir=$(((dir + 1) &amp; 1))
-        ini=0x2
-    fi
-done
-</code></pre>
-<h3 id="gpioget">gpioget</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nv">ini</span><span class="o">=</span>0x01
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nv">dir</span><span class="o">=</span><span class="m">0</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">while</span><span class="w"> </span><span class="nb">true</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="k">do</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nv">bit26</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="o">(</span>ini<span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="m">0</span>x4<span class="o">)</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="k">))</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nv">bit21</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="o">(</span>ini<span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="m">0</span>x2<span class="o">)</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">))</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nv">bit20</span><span class="o">=</span><span class="k">$((</span>ini<span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="m">0</span>x1<span class="k">))</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span>gpioset<span class="w"> </span>-m<span class="w"> </span><span class="nb">time</span><span class="w"> </span>-s<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="nv">26</span><span class="o">=</span><span class="nv">$bit26</span><span class="w"> </span><span class="nv">21</span><span class="o">=</span><span class="nv">$bit21</span><span class="w"> </span><span class="nv">20</span><span class="o">=</span><span class="nv">$bit20</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$dir</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="nv">ini</span><span class="o">=</span><span class="k">$((</span><span class="o">(</span>ini<span class="w"> </span><span class="s">&lt;&lt; 1) &amp; 0x7))</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s">    else</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s">        ini=$(((ini &gt;&gt; 1</span><span class="o">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="m">0</span>x7<span class="k">))</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="k">fi</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$ini</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">        </span><span class="nv">dir</span><span class="o">=</span><span class="k">$((</span><span class="o">(</span>dir<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="o">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">        </span><span class="nv">ini</span><span class="o">=</span>0x2
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">    </span><span class="k">fi</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="k">done</span>
+</span></code></pre></div>
+<h3 id="gpioget">gpioget<a class="headerlink" href="#gpioget" title="Permanent link">&para;</a></h3>
 <p>Esta utilidad nos da el estado actual de las líneas solicitadas en el chip de
 control indicado en la linea de comandos</p>
-<h3 id="gpiomon">gpiomon</h3>
+<h3 id="gpiomon">gpiomon<a class="headerlink" href="#gpiomon" title="Permanent link">&para;</a></h3>
 <p>Esta utilidad nos permite monitorizar el estado de unos pines. Usa la llamada al
 sistema <em>poll</em>, con las siguientes opciones:</p>
 <ul>
@@ -223,23 +607,23 @@ sistema <em>poll</em>, con las siguientes opciones:</p>
 <li>-F FMT: especifica el formato de salida (consulta la página de manual)</li>
 </ul>
 <p>Por ejemplo, para monitorizar tres pulsadores conectados a las líneas 19, 6 y 5:</p>
-<pre><code class="language-bash">pi@raspberrypi:~ $ gpiomon -f 0 19 6 5
-event: FALLING EDGE offset: 19 timestamp: [ 2740.887807571]
-event: FALLING EDGE offset: 6 timestamp: [  2742.291116096]
-event: FALLING EDGE offset: 5 timestamp: [  2744.609921761]
-^Cpi@raspberrypi:~ $
-</code></pre>
-<h2 id="driver-gpio">Driver GPIO</h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>gpiomon<span class="w"> </span>-f<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="m">5</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>event:<span class="w"> </span>FALLING<span class="w"> </span>EDGE<span class="w"> </span>offset:<span class="w"> </span><span class="m">19</span><span class="w"> </span>timestamp:<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="m">2740</span>.887807571<span class="o">]</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>event:<span class="w"> </span>FALLING<span class="w"> </span>EDGE<span class="w"> </span>offset:<span class="w"> </span><span class="m">6</span><span class="w"> </span>timestamp:<span class="w"> </span><span class="o">[</span><span class="w">  </span><span class="m">2742</span>.291116096<span class="o">]</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>event:<span class="w"> </span>FALLING<span class="w"> </span>EDGE<span class="w"> </span>offset:<span class="w"> </span><span class="m">5</span><span class="w"> </span>timestamp:<span class="w"> </span><span class="o">[</span><span class="w">  </span><span class="m">2744</span>.609921761<span class="o">]</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>^Cpi@raspberrypi:~<span class="w"> </span>$
+</span></code></pre></div>
+<h2 id="driver-gpio">Driver GPIO<a class="headerlink" href="#driver-gpio" title="Permanent link">&para;</a></h2>
 <p>Vamos a ver cómo podemos manejar los pines del GPIO desde un programa de usuario
 escrito en C utilizando el driver de GPIO proporcionado por Linux. Para ello
 debemos comprender qué son las operaciones ioctl en el estándar POSIX, que serán
 vitales para la comunicación con el driver. Luego iremos viendo como podemos
 utilizar estas operaciones para interactuar con el controlador GPIO.</p>
-<h3 id="operaciones-ioctl">Operaciones ioctl</h3>
+<h3 id="operaciones-ioctl">Operaciones ioctl<a class="headerlink" href="#operaciones-ioctl" title="Permanent link">&para;</a></h3>
 <p>En los sistemas POSIX las operaciones sobre un dispositivo que no sean read o 
 write se realizan con la llamada al sistema <em>ioctl</em>, cuyo prototipo es:</p>
-<pre><code class="language-c">int ioctl(int fd, unsigned long request, void *argp);
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">ioctl</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">argp</span><span class="p">);</span>
+</span></code></pre></div>
 <p>dónde:</p>
 <ul>
 <li><em>fd</em>: descriptor de fichero devuelto por open</li>
@@ -257,47 +641,47 @@ ampliamente usado es el siguiente:</p>
 </ul>
 <p>El sistema define unas macros para ayudar a la codificación de estas peticiones:
 _IOR(type, nr, arg), _IOW(type, nr, arg), _IOWR(type, nr, arg) e _IO(type, nr).</p>
-<h3 id="obtener-informacion-del-controlador-gpio">Obtener información del controlador GPIO</h3>
+<h3 id="obtener-informacion-del-controlador-gpio">Obtener información del controlador GPIO<a class="headerlink" href="#obtener-informacion-del-controlador-gpio" title="Permanent link">&para;</a></h3>
 <p>Para obtener información del controlador podemos utilizar la petición <em>ioctl</em>
 GPIO_GET_CHIP_INFO, que requiere como parámetro adicional la dirección de una
 estructura del siguiente tipo:</p>
-<pre><code class="language-c">struct gpiochip_info {
-  char name[32];    /* Nombre del controlador en el kernel */
-  char label[32];   /* Nombre funcional, de producto */
-  __u32 lines;      /* número de líneas que maneja */
-};
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpiochip_info</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span><span class="w">    </span><span class="cm">/* Nombre del controlador en el kernel */</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">label</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span><span class="w">   </span><span class="cm">/* Nombre funcional, de producto */</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="n">__u32</span><span class="w"> </span><span class="n">lines</span><span class="p">;</span><span class="w">      </span><span class="cm">/* número de líneas que maneja */</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">};</span>
+</span></code></pre></div>
 <p>Un ejemplo de uso sería el siguiente:</p>
-<pre><code class="language-c">int fd;
-struct gpiochip_info info;
-fd = open(&quot;/dev/gpiochip0&quot;, O_RDONLY);
-ioctl(fd, GPIO_GET_CHIPINFO_IOCTL, &amp;info);
-close(fd);
-printf(&quot;label: %s\n&quot;, info.label);
-printf(&quot;name: %s\n&quot;, info.name);
-printf(&quot;number of lines: %u\n&quot;, info.lines);
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpiochip_info</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">&quot;/dev/gpiochip0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_GET_CHIPINFO_IOCTL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">info</span><span class="p">);</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;label: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">label</span><span class="p">);</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;name: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;number of lines: %u</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">lines</span><span class="p">);</span>
+</span></code></pre></div>
 <p>Examinar el ejemplo <a href="src/gpio_info.c">gpio_info</a> y comprobar su funcionamiento.</p>
-<h3 id="pines-de-entrada-y-salida">Pines de entrada y salida</h3>
+<h3 id="pines-de-entrada-y-salida">Pines de entrada y salida<a class="headerlink" href="#pines-de-entrada-y-salida" title="Permanent link">&para;</a></h3>
 <p>El driver de GPIO nos permite agrupar pines en <em>líneas</em>, que pueden recibir un
 nombre lógico definido por el programador(por ejemplo sevenseg). Para crear una
 de estas <em>líneas de pines</em>, una vez abierto el dispositivo, debemos hacer una
 petición ioctl de tipo <em>line_request</em>:</p>
-<pre><code class="language-c">struct gpio_v2_line_request req;
-
-ioctl(fd, GPIO_V2_GET_LINE_IOCTL, &amp;req);
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_request</span><span class="w"> </span><span class="n">req</span><span class="p">;</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_V2_GET_LINE_IOCTL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req</span><span class="p">);</span>
+</span></code></pre></div>
 <p>El registro <em>req</em> tiene la siguiente estructura: </p>
-<pre><code class="language-c">struct gpio_v2_line_request {
-    __u32 offsets[GPIO_V2_LINES_MAX];  //pines a manejar      (in)
-    char consumer[GPIO_MAX_NAME_SIZE]; //nombre por usuario   (in)
-    struct gpio_v2_line_config config; //configuración        (in)
-    __u32 num_lines;                   //num pines en offsets (in)
-    __u32 event_buffer_size;           //para eventos         (in)
-    __u32 padding[5];                  //no usado
-    __s32 fd;                          //fd de salida         (out)
-};
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_request</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">offsets</span><span class="p">[</span><span class="n">GPIO_V2_LINES_MAX</span><span class="p">];</span><span class="w">  </span><span class="c1">//pines a manejar      (in)</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">consumer</span><span class="p">[</span><span class="n">GPIO_MAX_NAME_SIZE</span><span class="p">];</span><span class="w"> </span><span class="c1">//nombre por usuario   (in)</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_config</span><span class="w"> </span><span class="n">config</span><span class="p">;</span><span class="w"> </span><span class="c1">//configuración        (in)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">num_lines</span><span class="p">;</span><span class="w">                   </span><span class="c1">//num pines en offsets (in)</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">event_buffer_size</span><span class="p">;</span><span class="w">           </span><span class="c1">//para eventos         (in)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">padding</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span><span class="w">                  </span><span class="c1">//no usado</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="n">__s32</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span><span class="w">                          </span><span class="c1">//fd de salida         (out)</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="p">};</span>
+</span></code></pre></div>
 <p>El campo <em>offsets</em> debe contener los números de los pines que pertenecen a la
 línea, indicando el número total de pines de la línea en <em>num_lines</em>. El campo
 <em>config</em> se utiliza para indicar la configuración de cada uno de los pines que
@@ -305,14 +689,14 @@ pertenecen a la línea. El campo <em>fd</em> es de salida, en el retorno de la l
 ioctl contendrá un nuevo descriptor de fichero que podemos usar para operar
 sobre los pines de la línea (leer, escribir, etc).</p>
 <p>El campo <em>config</em> tiene la siguiente estructura:</p>
-<pre><code class="language-c">struct gpio_v2_line_config {
-    __aligned_u64 flags; // flags por defecto para los pines
-    __u32 num_attrs;     // número de atributos en attrs
-    __u32 padding[5];    // no usado
-    struct gpio_v2_line_config_attribute
-     attrs[GPIO_V2_LINE_NUM_ATTRS_MAX]; // array de atributos
-};
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_config</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">__aligned_u64</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w"> </span><span class="c1">// flags por defecto para los pines</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">num_attrs</span><span class="p">;</span><span class="w">     </span><span class="c1">// número de atributos en attrs</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">padding</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span><span class="w">    </span><span class="c1">// no usado</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_config_attribute</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">     </span><span class="n">attrs</span><span class="p">[</span><span class="n">GPIO_V2_LINE_NUM_ATTRS_MAX</span><span class="p">];</span><span class="w"> </span><span class="c1">// array de atributos</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="p">};</span>
+</span></code></pre></div>
 <p>El campo <em>flags</em> permite establecer una configuración por defecto para los pines
 de la línes. Se trata de una máscara de bits a la que se le debe asignar una
 combinación, con or a nivel de bit (operadores <em>bitwise</em>), de las siguientes
@@ -336,25 +720,25 @@ flags necesaria para completar su configuración (por ejemplo valor del pin en
 pines de salida). El campo <em>attrs</em> es un array de atributos definidos para la
 línea, indicando el número de atributos definidos en el campo <em>num_attrs</em>. Cada
 atributo se define con la siguiente estructura:</p>
-<pre><code class="language-c">struct gpio_v2_line_config_attribute {
-    struct gpio_v2_line_attribute attr; //atributo
-    __aligned_u64 mask;                 //pines a los que aplica
-};
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_config_attribute</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_attribute</span><span class="w"> </span><span class="n">attr</span><span class="p">;</span><span class="w"> </span><span class="c1">//atributo</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">__aligned_u64</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span><span class="w">                 </span><span class="c1">//pines a los que aplica</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="p">};</span>
+</span></code></pre></div>
 <p>El campo <em>mask</em> indica los pines de la linea afectados por el atributo, dónde
 cada bit corresponde a un índice del array de offsets de la estructura 
 <em>struct gpio_v2_line_request</em>. El campo <em>attr</em> se representa con la siguiente
 estructura:</p>
-<pre><code class="language-c">struct gpio_v2_line_attribute {
-    __u32 id; //GPIO_V2_LINE_ATTR_ID_{FLAGS,OUTPUT_VALUES,DEBOUNCE}
-    __u32 padding;
-    union {
-        __aligned_u64 flags;     // flag
-        __aligned_u64 values;    // valor ini. 1-activo, 0-inactivo
-        __u32 debounce_period_us;// tiempo de debounce
-    };
-};
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_attribute</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">//GPIO_V2_LINE_ATTR_ID_{FLAGS,OUTPUT_VALUES,DEBOUNCE}</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">padding</span><span class="p">;</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="k">union</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="n">__aligned_u64</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w">     </span><span class="c1">// flag</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">        </span><span class="n">__aligned_u64</span><span class="w"> </span><span class="n">values</span><span class="p">;</span><span class="w">    </span><span class="c1">// valor ini. 1-activo, 0-inactivo</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">        </span><span class="n">__u32</span><span class="w"> </span><span class="n">debounce_period_us</span><span class="p">;</span><span class="c1">// tiempo de debounce</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="p">};</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">};</span>
+</span></code></pre></div>
 <p>El campo <em>id</em> indica el tipo de atributo, y su valor determina el campo de la
 unión que contiene la información correspondiente:</p>
 <ul>
@@ -380,21 +764,21 @@ operaciones ioctl sobre el descriptor de fichero inicializado en la operación
 ioctl <em>line_request</em>.</p>
 <p>Para escribir un valor en pines configurados como salida usaremos la operación
 ioctl <code>GPIO_V2_LINE_SET_VALUES_IOCTL</code>:</p>
-<pre><code class="language-c">struct gpio_v2_line_values values;
-...
-ioctl(req.fd, GPIO_V2_LINE_SET_VALUES_IOCTL, &amp;values);
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_values</span><span class="w"> </span><span class="n">values</span><span class="p">;</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="p">...</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">ioctl</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_V2_LINE_SET_VALUES_IOCTL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">values</span><span class="p">);</span>
+</span></code></pre></div>
 <p>mientras que para leer utilizaremos la operación <em>GPIO_V2_LINE_GET_VALUES_IOCTL</em>:</p>
-<pre><code class="language-c">struct gpio_v2_line_values values;
-...
-ioctl(req.fd, GPIO_V2_LINE_GET_VALUES_IOCTL, &amp;values);
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_values</span><span class="w"> </span><span class="n">values</span><span class="p">;</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="p">...</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">ioctl</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_V2_LINE_GET_VALUES_IOCTL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">values</span><span class="p">);</span>
+</span></code></pre></div>
 <p>En ambos casos <em>values</em> tiene la siguiente estructura:</p>
-<pre><code class="language-c">struct gpio_v2_line_values {
-    __aligned_u64 bits; //máscara de bits con el valor los pines
-    __aligned_u64 mask; //máscara de bits que leer/escribir
-};
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_values</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="n">__aligned_u64</span><span class="w"> </span><span class="n">bits</span><span class="p">;</span><span class="w"> </span><span class="c1">//máscara de bits con el valor los pines</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="n">__aligned_u64</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span><span class="w"> </span><span class="c1">//máscara de bits que leer/escribir</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="p">};</span>
+</span></code></pre></div>
 <p>Cada bit de ambos campos se refiere a una de las posiciones del campo
 <em>offsets</em> de la línea.</p>
 <p>Veamos un ejemplo. El programa <a href="src/gpio_blink_v2.c">gpio_blink_v2.c</a> usa el
@@ -405,7 +789,7 @@ leds de la placa BEE.</p>
 <p>Como ejercicio, se propone al estudiante modificar el código del programa
 anterior para que de la sensación de que una luz va pasando de un led a otro,
 dando la vuelta cuando llegue a los extremos.</p>
-<h3 id="eventos-en-pines-de-entrada">Eventos en pines de entrada</h3>
+<h3 id="eventos-en-pines-de-entrada">Eventos en pines de entrada<a class="headerlink" href="#eventos-en-pines-de-entrada" title="Permanent link">&para;</a></h3>
 <p>El driver del GPIO convierte las interrupciones en los pines del GPIO en eventos
 software que se insertan en el descriptor de fichero (fd) asociado a la linea.
 Esto permite:</p>
@@ -421,16 +805,16 @@ uno los flags <code>GPIO_V2_LINE_FLAG_EDGE_RISING</code> y/o
 <code>GPIO_V2_LINE_ATTR_ID_DEBOUNCE</code> para configurar en el pin una eliminación de
 rebotes.</p>
 <p>Por cada evento podremos leer del descriptor de fichero una estructura del tipo:</p>
-<pre><code class="language-c">struct gpio_v2_line_event {
-    __aligned_u64 timestamp_ns; //Marca de tiempo del evento
-    __u32 id;                   //Tipo de evento
-    __u32 offset;               //offset del pin correspondiente
-    __u32 seqno;                //núm. de secuencia global
-    __u32 line_seqno;           //núm. de secuencia en este pin
-    __u32 padding[6];           //reservado
-};
-</code></pre>
-<p>dónde el campo id nos identifica el evento detectado mientras que <em>offset</em>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">gpio_v2_line_event</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="n">__aligned_u64</span><span class="w"> </span><span class="n">timestamp_ns</span><span class="p">;</span><span class="w"> </span><span class="c1">//Marca de tiempo del evento</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w">                   </span><span class="c1">//Tipo de evento</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">offset</span><span class="p">;</span><span class="w">               </span><span class="c1">//offset del pin correspondiente</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">seqno</span><span class="p">;</span><span class="w">                </span><span class="c1">//núm. de secuencia global</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">line_seqno</span><span class="p">;</span><span class="w">           </span><span class="c1">//núm. de secuencia en este pin</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">padding</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span><span class="w">           </span><span class="c1">//reservado</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="p">};</span>
+</span></code></pre></div>
+dónde el campo id nos identifica el evento detectado mientras que <em>offset</em>
 identifica el pin en el que se producido el evento. El campo <em>seqno</em> nos indica
 el órden global en el que el evento se ha detectado, mientras que <em>line_seqno</em>
 nos indica el órden entre los eventos de la línea.</p>
@@ -467,7 +851,7 @@ pulsar, el led volverá a parpadear síncronamente con el resto.</p>
 </ul>
 </li>
 </ul>
-<h2 id="gpio-mapeado-en-memoria">GPIO mapeado en memoria</h2>
+<h2 id="gpio-mapeado-en-memoria">GPIO mapeado en memoria<a class="headerlink" href="#gpio-mapeado-en-memoria" title="Permanent link">&para;</a></h2>
 <p>Linux incorpora el dispositivo /dev/mem que permite acceder a la memoria física
 del computador. El offset en este fichero es interpretado como una dirección
 física y el driver controla los rangos accesibles (configurable con la opción de
@@ -618,24 +1002,24 @@ correspondiente. Escribir un 0 no modifica el valor del pin.</p>
 <em>/dev/gpiomem</em> en el mapa virtual de memoria del proceso utilizando mmap, con el
 fin de acceder diréctamente a los registros del controlador. Se utilizan unos
 arrays para almacenar los offsets de los registros:</p>
-<pre><code class="language-c">uint32_t gpfsel_offset[] = {0x00,0x04,0x08,0x0C,0x10,0x14};
-uint32_t gpfset_offset[] = {0x1C, 0x20};
-uint32_t gpfclr_offset[] = {0x28, 0x2C};
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="n">gpfsel_offset</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x04</span><span class="p">,</span><span class="mh">0x08</span><span class="p">,</span><span class="mh">0x0C</span><span class="p">,</span><span class="mh">0x10</span><span class="p">,</span><span class="mh">0x14</span><span class="p">};</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="n">gpfset_offset</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0x1C</span><span class="p">,</span><span class="w"> </span><span class="mh">0x20</span><span class="p">};</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kt">uint32_t</span><span class="w"> </span><span class="n">gpfclr_offset</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0x28</span><span class="p">,</span><span class="w"> </span><span class="mh">0x2C</span><span class="p">};</span>
+</span></code></pre></div>
 <p>Estos offsets se suman a la dirección base que es un puntero a byte,
 convirtiendo el resultado a un puntero a <em>uint32_t</em> por conveniencia:</p>
-<pre><code class="language-c">    uint8_t *gpiomem;
-    volatile uint32_t * fpsel;
-  ...
-    gpiomem = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0x3f200000);
-  ...
-    n = get_int(argv[i+1], 10, desc);
-    fpsel = (uint32_t *)(gpiomem + gpfsel_offset[n / 10]);
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">gpiomem</span><span class="p">;</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fpsel</span><span class="p">;</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="p">...</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="n">gpiomem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w"> </span><span class="n">PROT_READ</span><span class="o">|</span><span class="n">PROT_WRITE</span><span class="p">,</span><span class="w"> </span><span class="n">MAP_SHARED</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mh">0x3f200000</span><span class="p">);</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span><span class="p">...</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">desc</span><span class="p">);</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="n">fpsel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">gpiomem</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gpfsel_offset</span><span class="p">[</span><span class="n">n</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="p">]);</span>
+</span></code></pre></div>
 <p>Las escrituras en los registros se hacen desreferenciado los punteros, que se
 han declarado como volátiles:</p>
-<pre><code class="language-c">    *fpsel |= (0x1 &lt;&lt; (n % 10)*3);
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="w">    </span><span class="o">*</span><span class="n">fpsel</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="mh">0x1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">);</span>
+</span></code></pre></div>
 <p>Aunque este mecanismo permite controlar los gpios, debemos notar que el código
 es muy dependiente del hardware, utilizando offsets y selecciones de registros
 en función del número de pin o la operación a realizar; y escogiendo
@@ -650,51 +1034,80 @@ salida mapeada en memoria y ofrece un API más sencillo y práctico para el mane
 de los controladores de la raspberry pi, pero sigue saltándose todos los
 controles del sistema operativo, por lo que resulta más adecuando aprender a
 utilizar el driver GPIO estudiado en la sección anterior.</p>
+
               
-            </div>
-          </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href=".." class="btn btn-neutral float-left" title="Placa de expansión BEE"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../pwm_linux/" class="btn btn-neutral float-right" title="Control PWM en Linux">Next <span class="icon icon-circle-arrow-right"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <!-- Copyright etc -->
-  </div>
-
-  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
-          
+            </article>
+          </div>
         </div>
-      </div>
-
-    </section>
-
-  </div>
-
-  <div class="rst-versions" role="note" aria-label="Versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-    
-      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-      <span><a href="../pwm_linux/" style="color: #fcfcfc">Next &raquo;</a></span>
-    
-  </span>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Placa de expansión BEE" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Placa de expansión BEE
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../pwm_linux/" class="md-footer__link md-footer__link--next" aria-label="Next: Control PWM en Linux" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Control PWM en Linux
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
 </div>
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script>var base_url = "..";</script>
-    <script src="../js/theme_extra.js"></script>
-    <script src="../js/theme.js"></script>
-      <script src="../search/main.js"></script>
-    <script>
-        jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
-        });
-    </script>
-
-</body>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate"], "search": "../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
 </html>

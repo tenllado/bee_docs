@@ -1,210 +1,567 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Prácticas de Robótica - BEE Docs</title>
-    <link rel="stylesheet" href="../css/theme.css" />
-    <link rel="stylesheet" href="../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
     
-      <script>
-        // Current page data
-        var mkdocs_page_name = "Pr\u00e1cticas de Rob\u00f3tica";
-        var mkdocs_page_input_path = "robotica/index.md";
-        var mkdocs_page_url = null;
-      </script>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.5">
     
-    <!--[if lt IE 9]>
-      <script src="../js/html5shiv.min.js"></script>
-    <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-      <script>hljs.highlightAll();</script> 
-</head>
+    
+      
+        <title>Prácticas de Robótica - BEE Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
 
-<body class="wy-body-for-nav" role="document">
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#practicas-de-robotica" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-    <div class="wy-side-scroll">
-      <div class="wy-side-nav-search">
-          <a href=".." class="icon icon-home"> BEE Docs
-        </a><div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
-  </form>
-</div>
-      </div>
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="BEE Docs" class="md-header__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="..">Placa de expansión BEE</a>
-                </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Prácticas</span></p>
-              <ul class="current">
-                  <li class="toctree-l1"><a class="reference internal" href="../gpio_linux/">Control GPIO en Linux</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../pwm_linux/">Control PWM en Linux</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../spi_linux/">Control de dispositivos SPI</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../i2c_linux/">Control de dispositivos I2C</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../control_servomotores/">Control de servomotores con PWM</a>
-                  </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Prácticas de Robótica</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#motores-parte-1">Motores. Parte 1</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#objetivos">Objetivos</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#desarrollo-de-la-practica">Desarrollo de la práctica</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#primer-contacto-con-la-raspberry">Primer contacto con la Raspberry</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#tarea-1-conocer-el-entorno-de-la-raspberry">Tarea 1: Conocer el entorno de la Raspberry</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#tarea-2-hola-mundo-hardware">Tarea 2: "Hola Mundo" hardware</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#control-de-motores-de-rotacion-continua">Control de motores de rotación continua</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#tarea-3-control-por-pwm-de-servomotres-usando-c">Tarea 3: Control por pwm de servomotres usando C++}</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#referencias-utiles">Referencias útiles</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#parte-2">Parte 2</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#control-en-lazo-abierto">Control en lazo abierto</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#movimiento-en-linea-recta">Movimiento en línea recta.</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#giro-en-lazo-abierto">Giro en lazo abierto</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#movimiento-complejo-del-robot">Movimiento complejo del robot</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#movimientos-complejos">Movimientos complejos</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#sensores">Sensores</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#1-objetivos">1. Objetivos</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#2-desarrollo-de-la-practica">2. Desarrollo de la práctica</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#21-lectura-de-sensores-digitales">2.1 Lectura de sensores digitales</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#22-sensores-analogicos">2.2 Sensores analógicos</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#221-ldr-light-dependent-resistor">2.2.1 LDR (Light-Dependent Resistor)</a>
-    </li>
-        </ul>
-    </li>
-        </ul>
-    </li>
-    </ul>
-                  </li>
-              </ul>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BEE Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Prácticas de Robótica
+            
+          </span>
+        </div>
       </div>
     </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="..">BEE Docs</a>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
         
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
       </nav>
-      <div class="wy-nav-content">
-        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Prácticas</li>
-      <li class="breadcrumb-item active">Prácticas de Robótica</li>
-    <li class="wy-breadcrumbs-aside">
-    </li>
-  </ul>
-  <hr/>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-            <div class="section" itemprop="articleBody">
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
               
-                <h1 id="practicas-de-robotica">Prácticas de Robótica</h1>
-<h2 id="motores-parte-1">Motores. Parte 1</h2>
-<h3 id="objetivos">Objetivos</h3>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="BEE Docs" class="md-nav__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    BEE Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Documentación Técnica
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Documentación Técnica" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Documentación Técnica
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Placa de expansión BEE
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Prácticas
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prácticas" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Prácticas
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpio_linux/" class="md-nav__link">
+        Control GPIO en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwm_linux/" class="md-nav__link">
+        Control PWM en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spi_linux/" class="md-nav__link">
+        Control de dispositivos SPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i2c_linux/" class="md-nav__link">
+        Control de dispositivos I2C
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../control_servomotores/" class="md-nav__link">
+        Control de servomotores con PWM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Prácticas de Robótica
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Prácticas de Robótica
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motores-parte-1" class="md-nav__link">
+    Motores. Parte 1
+  </a>
+  
+    <nav class="md-nav" aria-label="Motores. Parte 1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivos" class="md-nav__link">
+    Objetivos
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desarrollo-de-la-practica" class="md-nav__link">
+    Desarrollo de la práctica
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias-utiles" class="md-nav__link">
+    Referencias útiles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motores-parte-2" class="md-nav__link">
+    Motores. Parte 2
+  </a>
+  
+    <nav class="md-nav" aria-label="Motores. Parte 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-en-lazo-abierto" class="md-nav__link">
+    Control en lazo abierto
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#movimiento-en-linea-recta" class="md-nav__link">
+    Movimiento en línea recta.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#giro-en-lazo-abierto" class="md-nav__link">
+    Giro en lazo abierto
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#movimiento-complejo-del-robot" class="md-nav__link">
+    Movimiento complejo del robot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#movimientos-complejos" class="md-nav__link">
+    Movimientos complejos
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensores" class="md-nav__link">
+    Sensores
+  </a>
+  
+    <nav class="md-nav" aria-label="Sensores">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-objetivos" class="md-nav__link">
+    1. Objetivos
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-desarrollo-de-la-practica" class="md-nav__link">
+    2. Desarrollo de la práctica
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="practicas-de-robotica">Prácticas de Robótica<a class="headerlink" href="#practicas-de-robotica" title="Permanent link">&para;</a></h1>
+<h2 id="motores-parte-1">Motores. Parte 1<a class="headerlink" href="#motores-parte-1" title="Permanent link">&para;</a></h2>
+<h3 id="objetivos">Objetivos<a class="headerlink" href="#objetivos" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Familiarizarse con la Raspberry Pi y su entorno.</li>
 <li>Generación de una señal para control de un motor paso a paso.</li>
 <li>Generación de una señal (PWM) para control de un servomotor.</li>
 </ol>
 <p>La finalidad de esta práctica es aprender a generar señales en el orden adecuado para mover un motor paso a paso y aplicar una señal de PWM para controlar un motor de continua (servomotor de rotación continua). Estos tipos de motores son muy utilizados en Robótica. En concreto, el servo de rotación continua se utilizará para controlar un robot móvil sencillo.</p>
-<blockquote>
-<p><strong>Nota:</strong> Antes de ejecutar un programa, verifique con su profesor que las conexiones están realizadas correctamente.</p>
-</blockquote>
-<hr />
-<h2 id="desarrollo-de-la-practica">Desarrollo de la práctica</h2>
-<h3 id="primer-contacto-con-la-raspberry">Primer contacto con la Raspberry</h3>
-<p>Para familiarizarse con el entorno de programación de la Raspberry Pi, primero vamos a realizar dos tareas sencillas.</p>
-<h4 id="tarea-1-conocer-el-entorno-de-la-raspberry">Tarea 1: Conocer el entorno de la Raspberry</h4>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Antes de ejecutar un programa, verifique con su profesor que las conexiones
+están realizadas correctamente.</p>
+</div>
+<h3 id="desarrollo-de-la-practica">Desarrollo de la práctica<a class="headerlink" href="#desarrollo-de-la-practica" title="Permanent link">&para;</a></h3>
+<p>Para familiarizarse con el entorno de programación de la Raspberry Pi, primero
+vamos a realizar dos tareas sencillas.</p>
+<h4 id="tarea-1-conocer-el-entorno-de-la-raspberry">Tarea 1: Conocer el entorno de la Raspberry<a class="headerlink" href="#tarea-1-conocer-el-entorno-de-la-raspberry" title="Permanent link">&para;</a></h4>
 <p>Alimenta la Raspberry Pi y conecta el portátil a ella (vea cómo conectar con la Raspberry Pi). Una vez conectado, cambia al directorio <code>wiringPi/examples</code>. Allí hay un archivo denominado <code>blink.c</code>.</p>
 <p>Lo que haremos será comprobar que está funcionando correctamente la Raspberry: compila el programa escribiendo:</p>
-<pre><code>bash
-make blink
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>make<span class="w"> </span>blink
+</span></code></pre></div>
 <p>Observa que se crea un ejecutable.</p>
-<h4 id="tarea-2-hola-mundo-hardware">Tarea 2: "Hola Mundo" hardware</h4>
+<h4 id="tarea-2-hola-mundo-hardware">Tarea 2: "Hola Mundo" hardware<a class="headerlink" href="#tarea-2-hola-mundo-hardware" title="Permanent link">&para;</a></h4>
 <p>El objetivo de esta tarea es programar el parpadeo de un LED. Para ello, en primer lugar, habrá que realizar el montaje indicado en la siguiente figura:</p>
 <p><img alt="Conexiones LED" src="figs/ConexionesLED.png" /></p>
 <p>Conecta el LED al Pin GPIO 17 (el Wiring Pin 0). La resistencia utilizada es de 220 Ω.</p>
 <p>Dependiendo de la biblioteca software que usemos para programar la Raspberry, la numeración de los pines cambia. En la siguiente figura pueden verse las distintas numeraciones según el conector físico de 40 pines. La placa de conexiones Bee 2.0 sigue la numeración BCM. De este modo, el pin serigrafiado en la placa como B17 corresponde al pin físico 11 o al WiringPi 0.</p>
 <p><img alt="Pinout Raspberry Pi" src="figs/raspberrypi-gpio-wiringpi-pinout.png" /></p>
 <p>Si ahora ejecutamos el programa anterior:</p>
-<pre><code>sudo ./blink
-</code></pre>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>./blink
+</span></code></pre></div>
 <p>Se verá que el LED parpadea.</p>
 <p><strong>Edita el programa, cambia la frecuencia de parpadeo, vuelve a compilarlo y observa que su frecuencia cambia.</strong></p>
-<p>También puede conectarse el LED en otro Pin de la Raspberry, pero en ese caso hay que cambiar el pin asignado en el archivo blink.c:</p>
-<pre><code>#define 0 LED
-</code></pre>
-<h3 id="control-de-motores-de-rotacion-continua">Control de motores de rotación continua</h3>
+<p>También puede conectarse el LED en otro Pin de la Raspberry, pero en ese caso hay que cambiar el pin asignado en el archivo blink.c:
+<div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cp">#define 0 LED</span>
+</span></code></pre></div></p>
+<h4 id="control-de-motores-de-rotacion-continua">Control de motores de rotación continua<a class="headerlink" href="#control-de-motores-de-rotacion-continua" title="Permanent link">&para;</a></h4>
 <p>El servomotor no debe ser alimentado directamente por la Raspberry Pi porque en caso de que requiera realizar un esfuerzo grande puede requerir un consumo que no puede proporcionar la Raspberry. La alimentación del servo se realizará externamente y SOLO el pin de control del motor (PWM) se conectará a la Raspberry.</p>
 <p><img alt="Servomotor" src="figs/Servomotor.png" /></p>
-<h4 id="tarea-3-control-por-pwm-de-servomotres-usando-c">Tarea 3: Control por pwm de servomotres usando C++}</h4>
+<h4 id="tarea-3-control-por-pwm-de-servomotres-usando-c">Tarea 3: Control por pwm de servomotres usando C++<a class="headerlink" href="#tarea-3-control-por-pwm-de-servomotres-usando-c" title="Permanent link">&para;</a></h4>
 <p>Para controlar los motores por pwm en C o C++ se puede usar la biblioteca WiringPi. Al igual que en python conviene tener en cuenta los siguientes aspectos:
 - Es necesario incluir la librería en el código:</p>
-<pre><code>#include &lt;wiringPi.h&gt;
-</code></pre>
-<ul>
-<li>La biblioteca WiringPi usa otra numeración de pines, como se indicaba anteriormente. Los pines correspondientes según la numeración WiringPi a los <em>pwm_0</em> y <em>pwm_1</em> son:</li>
-</ul>
-<pre><code>#define PinMotor0 23 //pwm_1
-#define PinMotor1 26 //for pwm_0
-</code></pre>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;wiringPi.h&gt;</span>
+</span></code></pre></div>
+- La biblioteca WiringPi usa otra numeración de pines, como se indicaba anteriormente. Los pines correspondientes según la numeración WiringPi a los <em>pwm_0</em> y <em>pwm_1</em> son:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cp">#define PinMotor0 23 </span><span class="c1">//pwm_1</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="cp">#define PinMotor1 26 </span><span class="c1">//for pwm_0</span>
+</span></code></pre></div>
 <ul>
 <li>Es necesario inicializar la librería</li>
 <li>Hay que configurar el pin como un pin pwm de salida</li>
 <li>Para dar un valor de pwm a la salida correspondiente basta con usar el comando</li>
 </ul>
 <p><strong>Establece el rango de valores de PWM sirven para girar en un sentido u otro. Con este rango podrás escoger un valor adecuado para usarlo en el futuro control del robot.</strong></p>
-<h3 id="referencias-utiles">Referencias útiles</h3>
+<h3 id="referencias-utiles">Referencias útiles<a class="headerlink" href="#referencias-utiles" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://www.digikey.es/en/maker/blogs/2021/how-to-control-servo-motors-with-a-raspberry-pi}{Control de servomotor usando Pyhton 1">Control de servomotor usando Python 1</a></li>
 <li><a href="https://www.learnrobotics.org/blog/raspberry-pi-servo-motor/}{Control de servomotor usando Pyhton 2">Control de servomotor usando Python 2</a></li>
 <li><a href="http://wiringpi.com/reference/raspberry-pi-specifics/">Referencia de WiringPi</a></li>
 <li><a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/software"> Utilidad gpio de Adafruit</a></li>
 </ul>
-<h2 id="parte-2">Parte 2</h2>
+<h2 id="motores-parte-2">Motores. Parte 2<a class="headerlink" href="#motores-parte-2" title="Permanent link">&para;</a></h2>
 <p>La finalidad de esta práctica es aplicar una señal de PWM para
 controlar los actuadores (servomotores de rotación continua) de un robot móvil sencillo.
 Una vez que se mueven adecuadamente los dos motores del robot de tipo diferencial
@@ -215,7 +572,7 @@ adecuadamente el robot.</p>
 <li>Colocad sobre la plataforma el circuito anterior y la Rasp Pi para mover los motores a la vez. </li>
 <li>Si el diseño y sujeción de los motores es el adecuado debe ser capaz de moverse en línea recta sin desviarse. Como mínimo debería recorrer un tramo de unos 2 m con una desviación máxima de un 10% hacia cualquiera de los dos lados.</li>
 </ol>
-<h3 id="control-en-lazo-abierto">Control en lazo abierto</h3>
+<h3 id="control-en-lazo-abierto">Control en lazo abierto<a class="headerlink" href="#control-en-lazo-abierto" title="Permanent link">&para;</a></h3>
 <p>Una vez que se ha comprobado que sabe crear un programa utilizando la librería wiringPi, se ha configurado y calibrado los servos de las ruedas del robot y movido el robot de forma básica para verificar que la posición de los motores es la adecuada, el objetivo será crear un programa que mueva el robot una distancia y ángulo deseados. Como el robot no tiene realimentación de la posición cualquier error, deslizamiento o desviación no se detectará.</p>
 <p>Para mover el robot una distancia deseada, mediremos la velocidad con que se desplaza el robot (velocidad de las ruedas) y moveremos el robot (siempre a la misma velocidad) durante el tiempo que corresponda para la distancia deseada. Es decir:</p>
 <ol>
@@ -236,16 +593,16 @@ adecuadamente el robot.</p>
 </li>
 </ol>
 <p>Con los cálculos anteriores puede obtener el tiempo para que cada rueda gire la distancia  deseada. Esta distancia se obtendrá de las ecuaciones y  del modelo de un robot diferencial, donde la distancia a desplazarse (o el ángulo que queremos que gire) es la proporcionada por el usuario.</p>
-<h3 id="movimiento-en-linea-recta">Movimiento en línea recta.</h3>
+<h3 id="movimiento-en-linea-recta">Movimiento en línea recta.<a class="headerlink" href="#movimiento-en-linea-recta" title="Permanent link">&para;</a></h3>
 <p>Programad  el robot para que se mueva una distancia determinada a partir del tiempo que está en funcionamiento los motores (control en lazo abierto). Probadlo con la distancia del apartado anterior y ved si es capaz de parar a los 2 m.</p>
-<h3 id="giro-en-lazo-abierto">Giro en lazo abierto</h3>
+<h3 id="giro-en-lazo-abierto">Giro en lazo abierto<a class="headerlink" href="#giro-en-lazo-abierto" title="Permanent link">&para;</a></h3>
 <p>Programad el robot para que gire el número de ángulos determinado. Probadlo con 90 grados.</p>
-<h3 id="movimiento-complejo-del-robot">Movimiento complejo del robot</h3>
+<h3 id="movimiento-complejo-del-robot">Movimiento complejo del robot<a class="headerlink" href="#movimiento-complejo-del-robot" title="Permanent link">&para;</a></h3>
 <p>A continuación realizaremos, utilizando las ecuaciones anteriores, un movimiento algo más complejo donde se combinen simultáneamente movimientos rectos y giros. El movimiento que el robot realizará será un rectángulo.</p>
-<h3 id="movimientos-complejos">Movimientos complejos</h3>
+<h3 id="movimientos-complejos">Movimientos complejos<a class="headerlink" href="#movimientos-complejos" title="Permanent link">&para;</a></h3>
 <p>El robot debería quedar en la misma posición que al principio. Estimar el error cometido. ¿Está dentro de una bola de error de radio 10 cm?</p>
-<h2 id="sensores">Sensores</h2>
-<h2 id="1-objetivos">1. Objetivos</h2>
+<h2 id="sensores">Sensores<a class="headerlink" href="#sensores" title="Permanent link">&para;</a></h2>
+<h3 id="1-objetivos">1. Objetivos<a class="headerlink" href="#1-objetivos" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Lectura de sensores digitales con la RaspberryPi. </li>
 <li>Lectura de sensores analógicos con la RaspberryPi. </li>
@@ -257,20 +614,23 @@ adecuadamente el robot.</p>
 <li><strong>LDR</strong>: señal de voltaje variable (analógica, requiere conversor A/D) </li>
 <li><strong>Sensor de ultrasonidos</strong>: señal procesada, salida digital</li>
 </ul>
-<blockquote>
-<p><strong>Nota:</strong> Antes de ejecutar un programa verifica con tu profesor que las conexiones están realizadas correctamente.</p>
-</blockquote>
-<hr />
-<h3 id="2-desarrollo-de-la-practica">2. Desarrollo de la práctica</h3>
-<h4 id="21-lectura-de-sensores-digitales">2.1 Lectura de sensores digitales</h4>
-<h5 id="211-botones">2.1.1 Botones</h5>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Antes de ejecutar un programa verifica con tu profesor que las conexiones
+están realizadas correctamente.</p>
+</div>
+<h3 id="2-desarrollo-de-la-practica">2. Desarrollo de la práctica<a class="headerlink" href="#2-desarrollo-de-la-practica" title="Permanent link">&para;</a></h3>
+<h4 id="21-lectura-de-sensores-digitales">2.1 Lectura de sensores digitales<a class="headerlink" href="#21-lectura-de-sensores-digitales" title="Permanent link">&para;</a></h4>
+<h5 id="211-botones">2.1.1 Botones<a class="headerlink" href="#211-botones" title="Permanent link">&para;</a></h5>
 <p>Un sensor muy utilizado en los robots son los sensores de contacto. Estos pueden ser de distintos tipos siendo los más utilizados los de botón y los de palanca. Con ellos se reconoce la presencia de un objeto ubicado en la línea de recorrido de un dispositivo. También se pueden emplear (los botones) típicamente como interfaz con el usuario. Su simplicidad de construcción y uso los hace muy empleados en robótica.</p>
 <p>En esta práctica se van a usar los tres botones que están integrados en la placa Bee 2.0. </p>
 <p><img alt="Botones en la placa Bee" src="figs/Bee2BotonesLEDs.png" /></p>
-<p>Los botones integrados en la placa Bee 2.0 tienen tres patillas: 
-- GND 
-- 3.3 V (a través de resistencia de 10kΩ) 
-- Pin del conector J4 </p>
+<p>Los botones integrados en la placa Bee 2.0 tienen tres patillas: </p>
+<ul>
+<li>GND </li>
+<li>3.3 V (a través de resistencia de 10kΩ) </li>
+<li>Pin del conector J4 </li>
+</ul>
 <p>Los LEDs están conectados a GND y al conector J4 a través de una resistencia de 220Ω.</p>
 <p><img alt="Esquemático de la conexión leds y botones en la placa Bee" src="figs/ConexionBotonesLEDs.png" /></p>
 <p>Para poder usar los botones simplemente tendremos que unir con un cable la patilla libre del
@@ -280,13 +640,11 @@ digitales de la RaspberryPi (por ejemplo la entrada BCM0)</p>
 Conecta un botón y un LED a pines de entrada/salida digital de la RaspberryPi. </p>
 <p>Programa: encender LED si el botón está pulsado, apagar si no.</p>
 <p><strong>Funciones WiringPi:</strong></p>
-<pre><code>c
-digitalRead(pinToRead);
-digitalWrite(pinToWrite, value); // value = 1 (alto), 0 (bajo)
-</code></pre>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">digitalRead</span><span class="p">(</span><span class="n">pinToRead</span><span class="p">);</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinToWrite</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"> </span><span class="c1">// value = 1 (alto), 0 (bajo)</span>
+</span></code></pre></div>
 <p>Configura los pines como <code>INPUT</code> o <code>OUTPUT</code>.</p>
-<hr />
-<h5 id="212-sensor-de-infrarrojos-cny70">2.1.2 Sensor de infrarrojos CNY70</h5>
+<h5 id="212-sensor-de-infrarrojos-cny70">2.1.2 Sensor de infrarrojos CNY70<a class="headerlink" href="#212-sensor-de-infrarrojos-cny70" title="Permanent link">&para;</a></h5>
 <p>El CNY70 es un sensor óptico reflexivo de infrarrojos de corto alcance (de 0, 3 a 10 mm.) basado en un diodo emisor de luz infrarroja y un receptor formado por un fototransistor, ambos apuntando en la misma dirección, y cuyo funcionamiento se basa en la capacidad de reflexión del objeto, y la detección del rayo reflectado por el receptor (sensor óptico de proximidad).</p>
 <p><img alt="Sensor CNY70" src="figs/CNY70.png" /></p>
 <p>Al tener un alcance tan corto, no se suele utilizar para detectar obstáculos, sino como sensor de
@@ -317,16 +675,14 @@ Crea un <code>for</code> con <code>delay</code> (500 o 1000 ms) y muestra en pan
 Prueba el rango de detección del sensor.</p>
 <p><strong>Tarea 4:</strong> 
 Usa objetos de diferentes colores. ¿Detecta todos? ¿Por qué?</p>
-<hr />
-<h4 id="22-sensores-analogicos">2.2 Sensores analógicos</h4>
+<h4 id="22-sensores-analogicos">2.2 Sensores analógicos<a class="headerlink" href="#22-sensores-analogicos" title="Permanent link">&para;</a></h4>
 <p>Existen sensores que proporcionan una señal analógica (normalmente una señal de voltaje) que es
 proporcional a la medida que queremos leer. Este es el caso de muchos sensores de temperatura,
 de presión, de humedad, de luz, etc.</p>
 <p>Las RaspberryPi 3 no tiene entradas analógicas, de manera que necesitaremos usar un conversor
 AD para pasar la señal analógica a la digital. La placa Bee v2.0 tiene integrado un conversor AD, el MCP3008 que permite conectarle una señal analógica y transformarla en una digital que la
 Raspberry puede leer.</p>
-<hr />
-<h4 id="221-ldr-light-dependent-resistor">2.2.1 LDR (Light-Dependent Resistor)</h4>
+<h4 id="221-ldr-light-dependent-resistor">2.2.1 LDR (Light-Dependent Resistor)<a class="headerlink" href="#221-ldr-light-dependent-resistor" title="Permanent link">&para;</a></h4>
 <p>Un LDR (Light-Dependent Resistor) es un material que varía su valor de resistencia eléctrica dependiendo de la cantidad de luz que incide sobre él. Se le llama, también, fotorresistor o fotorresistencia. El valor de resistencia eléctrica de un LDR es bajo cuando hay luz incidiendo en él (en algunos casos puede descender a tan bajo como 50Ω ) y muy alto cuando está a oscuras (puede ser de varios M Ω).</p>
 <p>Los LDR se fabrican con un cristal semiconductor fotosensible como el sulfuro de cadmio (CdS).
 Estas celdas son sensibles a un rango amplio de frecuencias lumínicas, desde la luz infrarroja,
@@ -344,84 +700,92 @@ protocolo de bus SPI que está soportado por el GPIO de la Raspberry Pi y por ta
 analógicas (los 8 canales analógicos), AGND y DGND son la tierra analógica y digital, VDD la
 alimentación del integrado y VREF el voltaje de referencia de la entrada analógica. Los pines 10-14 (CS,Din,Dout,Clk) corresponden a los pines del protocolo serie SPI por donde se lee la conversión del voltaje. Para conocer el voltaje en un canal se utilizará la fórmula:</p>
 <p><strong>Fórmula:</strong></p>
-<pre><code class="language-math">V_{canal} = (LecturaSPI / 1024) * Vref
-</code></pre>
+<div class="arithmatex">\[ V_{canal} = (LecturaSPI / 1024) * Vref \]</div>
 <p><img alt="Conversor" src="figs/Bee2-conversor.png" /></p>
 <p>La placa Bee v2.0 tiene integrado el conversor MCP3008, figura 8. Para emplearlo hay que:</p>
 <ul>
-<li>
-<p>Unir con un jumper los pines MOSI, MISO, SCLK y CE0 ADC del conector J2 con los B10, B9
-B11 y B8 del mismo conector.</p>
-</li>
-<li>
-<p>Unir con un jumper los dos pines del conector J11</p>
-</li>
-<li>
-<p>Unir con un jumper los pines Vcc y 3.3 del conector J18</p>
-</li>
+<li>Unir con un jumper los pines MOSI, MISO, SCLK y CE0 ADC del conector J2 con los B10, B9
+B11 y B8 del mismo conector.</li>
+<li>Unir con un jumper los dos pines del conector J11</li>
+<li>Unir con un jumper los pines Vcc y 3.3 del conector J18</li>
 <li>Unir con un jumper los pines Vdd y 3.3 del conector J14</li>
 </ul>
 <p>Una vez hecho esto, ya se puede conectar la salida analógica del sensor (con la resistencia R
 adecuada, que puede usarse de la red de polarización) a una de las entradas del conversor A/D</p>
-<p><strong>Cargar drivers SPI:</strong></p>
-<pre><code>bash
-gpio load spi
-</code></pre>
-<p><strong>Código base (conversor.c):</strong> 
-<a href="https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/">https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/</a></p>
-<hr />
-<p><strong>Tarea 5:</strong> 
-Lee y muestra el voltaje del LDR.</p>
-<p><strong>Tarea 6:</strong> 
-Observa efecto de luz ambiente. ¿Cómo afecta a la medida? 
+<p><strong>Cargar drivers SPI:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>gpio<span class="w"> </span>load<span class="w"> </span>spi
+</span></code></pre></div></p>
+<p><strong>Código base (conversor.c):</strong> </p>
+<p><a href="https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/">https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/</a></p>
+<p><strong>Tarea 5:</strong> </p>
+<p>Lee y muestra el voltaje del LDR.</p>
+<p><strong>Tarea 6:</strong> </p>
+<p>Observa efecto de luz ambiente. ¿Cómo afecta a la medida? 
 ¿Cómo usarlo para encender una bombilla si baja la luz?</p>
-<p><strong>Tarea 7:</strong> 
-Comprueba variación con distintas fuentes de luz.</p>
-<p><strong>Tarea 8:</strong> 
-¿Cómo construirías un robot que siga una fuente de luz (como una linterna)?</p>
-<hr />
+<p><strong>Tarea 7:</strong> </p>
+<p>Comprueba variación con distintas fuentes de luz.</p>
+<p><strong>Tarea 8:</strong> </p>
+<p>¿Cómo construirías un robot que siga una fuente de luz (como una linterna)?
+gg</p>
+
               
-            </div>
-          </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../control_servomotores/" class="btn btn-neutral float-left" title="Control de servomotores con PWM"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <!-- Copyright etc -->
-  </div>
-
-  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
-          
+            </article>
+          </div>
         </div>
-      </div>
-
-    </section>
-
-  </div>
-
-  <div class="rst-versions" role="note" aria-label="Versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-    
-      <span><a href="../control_servomotores/" style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-  </span>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../control_servomotores/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Control de servomotores con PWM" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Control de servomotores con PWM
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
 </div>
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script>var base_url = "..";</script>
-    <script src="../js/theme_extra.js"></script>
-    <script src="../js/theme.js"></script>
-      <script src="../search/main.js"></script>
-    <script>
-        jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
-        });
-    </script>
-
-</body>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate"], "search": "../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
 </html>
