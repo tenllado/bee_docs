@@ -273,7 +273,7 @@ Las RaspberryPi 3 no tiene entradas analógicas, de manera que necesitaremos usa
 AD para pasar la señal analógica a la digital. La placa Bee v2.0 tiene integrado un conversor AD, el MCP3008 que permite conectarle una señal analógica y transformarla en una digital que la
 Raspberry puede leer.
 
-##### (Light-Dependent Resistor)
+##### Light-Dependent Resistor
 
 Un LDR (Light-Dependent Resistor) es un material que varía su valor de resistencia eléctrica dependiendo de la cantidad de luz que incide sobre él. Se le llama, también, fotorresistor o fotorresistencia. El valor de resistencia eléctrica de un LDR es bajo cuando hay luz incidiendo en él (en algunos casos puede descender a tan bajo como 50Ω ) y muy alto cuando está a oscuras (puede ser de varios M Ω).
 
