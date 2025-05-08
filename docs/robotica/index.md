@@ -21,7 +21,7 @@ La finalidad de esta práctica es aprender a generar señales en el orden adecua
 Para familiarizarse con el entorno de programación de la Raspberry Pi, primero
 vamos a realizar dos tareas sencillas.
 
-#### Tarea 1: Conocer el entorno de la Raspberry
+**Tarea 1: Conocer el entorno de la Raspberry**
 
 Alimenta la Raspberry Pi y conecta el portátil a ella (vea cómo conectar con la Raspberry Pi). Una vez conectado, cambia al directorio `wiringPi/examples`. Allí hay un archivo denominado `blink.c`.
 
@@ -34,7 +34,7 @@ make blink
 
 Observa que se crea un ejecutable.
 
-#### Tarea 2: "Hola Mundo" hardware
+**Tarea 2: "Hola Mundo" hardware**
 
 El objetivo de esta tarea es programar el parpadeo de un LED. Para ello, en primer lugar, habrá que realizar el montaje indicado en la siguiente figura:
 
@@ -68,8 +68,10 @@ El servomotor no debe ser alimentado directamente por la Raspberry Pi porque en 
 
 ![Servomotor](figs/Servomotor.png)
 
-#### Tarea 3: Control por pwm de servomotres usando C++
+**Tarea 3: Control por pwm de servomotres usando C++**
+
 Para controlar los motores por pwm en C o C++ se puede usar la biblioteca WiringPi. Al igual que en python conviene tener en cuenta los siguientes aspectos:
+
 - Es necesario incluir la librería en el código:
 
 ``` c 
@@ -83,7 +85,9 @@ Para controlar los motores por pwm en C o C++ se puede usar la biblioteca Wiring
 ```
 
 - Es necesario inicializar la librería
+
 - Hay que configurar el pin como un pin pwm de salida
+
 - Para dar un valor de pwm a la salida correspondiente basta con usar el comando
 
 **Establece el rango de valores de PWM sirven para girar en un sentido u otro. Con este rango podrás escoger un valor adecuado para usarlo en el futuro control del robot.**
@@ -95,7 +99,11 @@ Para controlar los motores por pwm en C o C++ se puede usar la biblioteca Wiring
 - [Referencia de WiringPi](http://wiringpi.com/reference/raspberry-pi-specifics/)
 - [ Utilidad gpio de Adafruit](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/software)
 
+---
+
 ## Motores. Parte 2
+
+### Objetivos
 
 La finalidad de esta práctica es aplicar una señal de PWM para
 controlar los actuadores (servomotores de rotación continua) de un robot móvil sencillo.
@@ -103,12 +111,17 @@ Una vez que se mueven adecuadamente los dos motores del robot de tipo diferencia
 construido, se realizarán varios movimientos para mostrar que se es capaz de controlar
 adecuadamente el robot.
 
+### Desarrollo de la práctica
+
+#### Preparación
+
 El robot utilizará dos servos de rotación contínua. Aseguraos de que están alineados adecuadamente y las ruedas están fijadas para que el robot pueda moverse en línea recta. Si el robot tiene una deriva alta, su control será más complejo e impedirá un correcto funcionamiento en futuras prácticas en las que se utilizará.
 
 1. Colocad sobre la plataforma el circuito anterior y la Rasp Pi para mover los motores a la vez. 
+
 2. Si el diseño y sujeción de los motores es el adecuado debe ser capaz de moverse en línea recta sin desviarse. Como mínimo debería recorrer un tramo de unos 2 m con una desviación máxima de un 10% hacia cualquiera de los dos lados.
 
-### Control en lazo abierto
+#### Control en lazo abierto
 
 Una vez que se ha comprobado que sabe crear un programa utilizando la librería wiringPi, se ha configurado y calibrado los servos de las ruedas del robot y movido el robot de forma básica para verificar que la posición de los motores es la adecuada, el objetivo será crear un programa que mueva el robot una distancia y ángulo deseados. Como el robot no tiene realimentación de la posición cualquier error, deslizamiento o desviación no se detectará.
 
@@ -127,35 +140,40 @@ Para mover el robot una distancia deseada, mediremos la velocidad con que se des
 
 Con los cálculos anteriores puede obtener el tiempo para que cada rueda gire la distancia  deseada. Esta distancia se obtendrá de las ecuaciones y  del modelo de un robot diferencial, donde la distancia a desplazarse (o el ángulo que queremos que gire) es la proporcionada por el usuario.
 
-### Movimiento en línea recta.
+**Tarea 1: Movimiento en línea recta.**
 
 Programad  el robot para que se mueva una distancia determinada a partir del tiempo que está en funcionamiento los motores (control en lazo abierto). Probadlo con la distancia del apartado anterior y ved si es capaz de parar a los 2 m.
 
-### Giro en lazo abierto
+**Tarea 2: Giro en lazo abierto**
 
 Programad el robot para que gire el número de ángulos determinado. Probadlo con 90 grados.
 
-### Movimiento complejo del robot
+**Tarea 3: Movimiento complejo del robot**
 
 A continuación realizaremos, utilizando las ecuaciones anteriores, un movimiento algo más complejo donde se combinen simultáneamente movimientos rectos y giros. El movimiento que el robot realizará será un rectángulo.
 
-### Movimientos complejos
+**Tarea 4: Movimientos complejos**
 
 El robot debería quedar en la misma posición que al principio. Estimar el error cometido. ¿Está dentro de una bola de error de radio 10 cm?
 
+---
 
 ## Sensores
 
-### 1. Objetivos
+### Objetivos
 
 1. Lectura de sensores digitales con la RaspberryPi. 
+
 2. Lectura de sensores analógicos con la RaspberryPi. 
+
 3. Integración de sensores en el robot 
 
 La finalidad de esta práctica es que el alumno utilice distintos sensores típicos en un robot móvil. Se utilizarán:
 
 - **Interruptor**: señal binaria (todo o nada) 
+
 - **LDR**: señal de voltaje variable (analógica, requiere conversor A/D) 
+
 - **Sensor de ultrasonidos**: señal procesada, salida digital
 
 !!! note "Nota"
@@ -163,11 +181,11 @@ La finalidad de esta práctica es que el alumno utilice distintos sensores típi
     Antes de ejecutar un programa verifica con tu profesor que las conexiones
     están realizadas correctamente.
 
-### 2. Desarrollo de la práctica
+### Desarrollo de la práctica
 
-#### 2.1 Lectura de sensores digitales
+#### Lectura de sensores digitales
 
-##### 2.1.1 Botones
+##### Botones
 
 Un sensor muy utilizado en los robots son los sensores de contacto. Estos pueden ser de distintos tipos siendo los más utilizados los de botón y los de palanca. Con ellos se reconoce la presencia de un objeto ubicado en la línea de recorrido de un dispositivo. También se pueden emplear (los botones) típicamente como interfaz con el usuario. Su simplicidad de construcción y uso los hace muy empleados en robótica.
 
@@ -178,7 +196,9 @@ En esta práctica se van a usar los tres botones que están integrados en la pla
 Los botones integrados en la placa Bee 2.0 tienen tres patillas: 
 
 - GND 
+
 - 3.3 V (a través de resistencia de 10kΩ) 
+
 - Pin del conector J4 
 
 Los LEDs están conectados a GND y al conector J4 a través de una resistencia de 220Ω.
@@ -189,7 +209,8 @@ Para poder usar los botones simplemente tendremos que unir con un cable la patil
 botón (aquella que está conectada con uno de los pines del conector J4 a una de las entradas
 digitales de la RaspberryPi (por ejemplo la entrada BCM0)
 
-**Tarea 1:** 
+**Tarea 1: Activar el LED con el botón**
+ 
 Conecta un botón y un LED a pines de entrada/salida digital de la RaspberryPi. 
 
 Programa: encender LED si el botón está pulsado, apagar si no.
@@ -203,7 +224,7 @@ digitalWrite(pinToWrite, value); // value = 1 (alto), 0 (bajo)
 
 Configura los pines como `INPUT` o `OUTPUT`.
 
-##### 2.1.2 Sensor de infrarrojos CNY70
+##### Sensor de infrarrojos CNY70
 
 El CNY70 es un sensor óptico reflexivo de infrarrojos de corto alcance (de 0, 3 a 10 mm.) basado en un diodo emisor de luz infrarroja y un receptor formado por un fototransistor, ambos apuntando en la misma dirección, y cuyo funcionamiento se basa en la capacidad de reflexión del objeto, y la detección del rayo reflectado por el receptor (sensor óptico de proximidad).
 
@@ -224,21 +245,25 @@ sensor digital que nos informará si hay objeto o no únicamente.
 Para poder usar este sensor hay que tener en cuenta dos cosas:
 
 - Polarizar LED emisor con resistencia a GND 
+
 - Usa divisor de tensión si trabajas con Raspberry Pi (3.3V)
 
 ![Conexión del sensor CNY70](figs/ConexionCNY70.png)
 
-**Tarea 2:** 
+**Tarea 2: Lectura del sensor CNY70** 
+
 Conecta sensor a entrada digital. 
 Crea un `for` con `delay` (500 o 1000 ms) y muestra en pantalla la lectura.
 
-**Tarea 3:** 
+**Tarea 3: Rango del sensor** 
+
 Prueba el rango de detección del sensor.
 
-**Tarea 4:** 
+**Tarea 4: Comportamiento con diferentes colores** 
+
 Usa objetos de diferentes colores. ¿Detecta todos? ¿Por qué?
 
-#### 2.2 Sensores analógicos
+#### Sensores analógicos
 
 Existen sensores que proporcionan una señal analógica (normalmente una señal de voltaje) que es
 proporcional a la medida que queremos leer. Este es el caso de muchos sensores de temperatura,
@@ -248,7 +273,7 @@ Las RaspberryPi 3 no tiene entradas analógicas, de manera que necesitaremos usa
 AD para pasar la señal analógica a la digital. La placa Bee v2.0 tiene integrado un conversor AD, el MCP3008 que permite conectarle una señal analógica y transformarla en una digital que la
 Raspberry puede leer.
 
-#### 2.2.1 LDR (Light-Dependent Resistor)
+##### (Light-Dependent Resistor)
 
 Un LDR (Light-Dependent Resistor) es un material que varía su valor de resistencia eléctrica dependiendo de la cantidad de luz que incide sobre él. Se le llama, también, fotorresistor o fotorresistencia. El valor de resistencia eléctrica de un LDR es bajo cuando hay luz incidiendo en él (en algunos casos puede descender a tan bajo como 50Ω ) y muy alto cuando está a oscuras (puede ser de varios M Ω).
 
@@ -284,8 +309,11 @@ La placa Bee v2.0 tiene integrado el conversor MCP3008, figura 8. Para emplearlo
 
 - Unir con un jumper los pines MOSI, MISO, SCLK y CE0 ADC del conector J2 con los B10, B9
 B11 y B8 del mismo conector.
+
 - Unir con un jumper los dos pines del conector J11
+
 - Unir con un jumper los pines Vcc y 3.3 del conector J18
+
 - Unir con un jumper los pines Vdd y 3.3 del conector J14
 
 Una vez hecho esto, ya se puede conectar la salida analógica del sensor (con la resistencia R
@@ -302,21 +330,21 @@ gpio load spi
 [https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/](https://osoyoo.com/2017/06/29/raspberry-pi-mcp3008/)
 
 
-**Tarea 5:** 
+**Tarea 5: Lectura sensor LDR** 
 
 Lee y muestra el voltaje del LDR.
 
-**Tarea 6:** 
+**Tarea 6: Efecto de la luz ambien** 
 
 Observa efecto de luz ambiente. ¿Cómo afecta a la medida? 
 ¿Cómo usarlo para encender una bombilla si baja la luz?
 
-**Tarea 7:** 
+**Tarea 7: Comportamiento ante distintas fuentes de luz** 
 
 Comprueba variación con distintas fuentes de luz.
 
-**Tarea 8:** 
+**Tarea 8: Robot sigue-luz** 
 
 ¿Cómo construirías un robot que siga una fuente de luz (como una linterna)?
-gg
+
 
