@@ -110,43 +110,41 @@ kernel@debian:~$ ip a
 
 Llegados a este punto es crucial anotar el nombre asignado por Linux para la interfaz USB Ethernet conectada a nuestro equipo, ya que este nombre deberá almacenarse en dos ficheros que editaremos a continuación. Esto es preciso para configurar correctamente la red interna, por donde estableceremos comunicación con la Raspberry Pi. En particular, es preciso realizar lo siguiente:
 
-- Reemplazar los ficheros `/usr/local/bin/setup-network.sh` y `/etc/hosts` con la versión de los mismos que se encuentra [aquí](https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz). Para ello se pueden ejecutar los siguientes comandos:
+1. Reemplazar los ficheros `/usr/local/bin/setup-network.sh` y `/etc/hosts` con la versión de los mismos que se encuentra [aquí](https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz). Para ello se pueden ejecutar los siguientes comandos:
 
-   ```bash
-   # Crear directorio temporal para almacenar los ficheros
-   kernel@debian:~$ mkdir /tmp/new
-   kernel@debian:~$ cd /tmp/new
-   
-   # Descargar ficheros en directorio temporal con wget
-   kernel@debian:/tmp/new$ wget https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz
-    wget https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz
-   --2024-10-25 16:08:19--  https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz
-   Resolviendo jcsaezal.github.io (jcsaezal.github.io)... 185.199.111.153, 185.199.109.153, 185.199.108.153, ...
-   Conectando con jcsaezal.github.io (jcsaezal.github.io)[185.199.111.153]:443... conectado.
-   Petición HTTP enviada, esperando respuesta... 200 OK
-   Longitud: 1293 (1,3K) [application/octet-stream]
-   Grabando a: «fixed-files.tgz»
-   
-   fixed-files.tgz     100%[===================>]   1,26K  --.-KB/s    en 0s      
-   
-   2024-10-25 16:08:19 (97,2 MB/s) - «fixed-files.tgz» guardado [1293/1293]
-   
-   kernel@debian:/tmp/new$ tar xzvf fixed-files.tgz
-   ./._copy_files.sh
-   copy_files.sh
-   ./._hosts
-   hosts
-   ./._setup-network.sh
-   setup-network.sh
-   
-   # Reemplazar ficheros necesarios usando el script que se proporciona (Introducir contraseña usuario kernel si la solicita)
-   
-   kernel@debian:/tmp/new$ ./copy_files.sh
-   
-   
-   ```
+	```bash
+	# Crear directorio temporal para almacenar los ficheros
+	kernel@debian:~$ mkdir /tmp/new
+	kernel@debian:~$ cd /tmp/new
+	
+	# Descargar ficheros en directorio temporal con wget
+	kernel@debian:/tmp/new$ wget https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz
+	 wget https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz
+	--2024-10-25 16:08:19--  https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz
+	Resolviendo jcsaezal.github.io (jcsaezal.github.io)... 185.199.111.153, 185.199.109.153, 185.199.108.153, ...
+	Conectando con jcsaezal.github.io (jcsaezal.github.io)[185.199.111.153]:443... conectado.
+	Petición HTTP enviada, esperando respuesta... 200 OK
+	Longitud: 1293 (1,3K) [application/octet-stream]
+	Grabando a: «fixed-files.tgz»
+	
+	fixed-files.tgz     100%[===================>]   1,26K  --.-KB/s    en 0s      
+	
+	2024-10-25 16:08:19 (97,2 MB/s) - «fixed-files.tgz» guardado [1293/1293]
+	
+	kernel@debian:/tmp/new$ tar xzvf fixed-files.tgz
+	./._copy_files.sh
+	copy_files.sh
+	./._hosts
+	hosts
+	./._setup-network.sh
+	setup-network.sh
+	
+	# Reemplazar ficheros necesarios usando el script que se proporciona (Introducir contraseña usuario kernel si la solicita)
+	
+	kernel@debian:/tmp/new$ ./copy_files.sh
+	```
 
-- Efectuar las siguientes modificaciones en el  fichero `/etc/network/interfaces` como *root* (p.ej.: `sudo nano /etc/network/interfaces` )
+2. Efectuar las siguientes modificaciones en el  fichero `/etc/network/interfaces` como *root* (p.ej.: `sudo nano /etc/network/interfaces` )
 
   * Descomentar las 4 últimas líneas del fichero, eliminando el símbolo "#" al principio de las 4 líneas:
 
@@ -166,7 +164,7 @@ Llegados a este punto es crucial anotar el nombre asignado por Linux para la int
   	netmask 255.255.255.0
   	```
 
-- Editar el script ` /usr/local/bin/setup-network.sh` como *root* (p.ej.: `sudo nano /usr/local/bin/setup-network.sh` ) 
+3. Editar el script ` /usr/local/bin/setup-network.sh` como *root* (p.ej.: `sudo nano /usr/local/bin/setup-network.sh` ) 
 
   * Modificar la primera línea del fichero (definición de variable `ifname`) para establecer correctamente el nombre de la interfaz USB Ethernet de nuestro equipo. Así por ejemplo, si  el nombre de la interfaz USB Ethernet fuese "enx00001b3c7740", el contenido del fichero ` /usr/local/bin/setup-network.sh` debería quedar de la siguiente forma:
 
