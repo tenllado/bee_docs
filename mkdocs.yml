@@ -30,7 +30,10 @@ nav:
     - i2c_linux/index.md
     - control_servomotores/index.md
     - robotica/index.md
-
+    - linux-kernel/config.md
+    - linux-kernel/drivers.md    
+    - linux-kernel/sincronizacion.md    
+    - linux-kernel/interrupt-timers-pwm.md
 theme:
   name: material
   features:
