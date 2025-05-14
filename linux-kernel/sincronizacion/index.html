@@ -1,0 +1,797 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.5">
+    
+    
+      
+        <title>Drivers en Linux. Sincronización en el kernel - BEE Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#drivers-en-linux-sincronizacion-en-el-kernel" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BEE Docs" class="md-header__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BEE Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Drivers en Linux. Sincronización en el kernel
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BEE Docs" class="md-nav__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    BEE Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Documentación Técnica
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Documentación Técnica" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Documentación Técnica
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Placa de expansión BEE
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Prácticas
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prácticas" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Prácticas
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gpio_linux/" class="md-nav__link">
+        Control GPIO en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwm_linux/" class="md-nav__link">
+        Control PWM en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spi_linux/" class="md-nav__link">
+        Control de dispositivos SPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../i2c_linux/" class="md-nav__link">
+        Control de dispositivos I2C
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../control_servomotores/" class="md-nav__link">
+        Control de servomotores con PWM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robotica/" class="md-nav__link">
+        Prácticas de Robótica
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        Drivers en Linux. Preparación del entorno de trabajo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../drivers/" class="md-nav__link">
+        Drivers en Linux. Aspectos básicos y GPIO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Drivers en Linux. Sincronización en el kernel
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Drivers en Linux. Sincronización en el kernel
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos" class="md-nav__link">
+    Objetivos
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    Ejercicios
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    Ejercicio 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    Ejercicio 2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    Ejercicio 3
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#desarrollo-de-la-practica" class="md-nav__link">
+    Desarrollo de la práctica
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-a" class="md-nav__link">
+    Parte A
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-b" class="md-nav__link">
+    Parte B
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte B">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parte-opcional-de-la-practica" class="md-nav__link">
+    Parte opcional de la práctica
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interrupt-timers-pwm/" class="md-nav__link">
+        Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="drivers-en-linux-sincronizacion-en-el-kernel">Drivers en Linux. Sincronización en el kernel<a class="headerlink" href="#drivers-en-linux-sincronizacion-en-el-kernel" title="Permanent link">&para;</a></h1>
+<h2 id="objetivos">Objetivos<a class="headerlink" href="#objetivos" title="Permanent link">&para;</a></h2>
+<p>El objetivo de esta práctica es familiarizarse con las siguientes abstracciones de Linux:</p>
+<ul>
+<li>Spinlocks</li>
+<li>Semáforos</li>
+<li>Wait queues</li>
+<li>Kernel threads</li>
+<li>Buffers circulares del kernel (<code>struct kfifo</code>)</li>
+</ul>
+<p>El código para esta práctica puede descargarse <a href="/linux-kernel/src/sincro.tgz">aquí</a>.</p>
+<p><strong>Teoría de la práctica</strong></p>
+<p>La teoría asociada a esta práctica se imparte en la asignatura "Arquitectura Interna de Linux y Android", ofertada en las distintas titulaciones de grado en la Facultad de Informática de la Universidad Complutense de Madrid. Para más información sobre la asignatura consultad a <a href="mailto:jcsaezal@ucm.es">Juan Carlos Sáez Alcaide</a>.</p>
+<p>Para documentarse sobre la temática de forma autónoma se proporcionan las siguientes referencias:</p>
+<ul>
+<li>Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang. <em>Linux Kernel Module Programming Guide</em>. 2025. <a href="https://sysprog21.github.io/lkmpg/">Disponible online</a>. Versión en <a href="Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang">PDF</a></li>
+<li>Kaiwan N. Billimoria. <em>Linux Kernel Programming</em>. Packt Publishing. 1st edition. 2021</li>
+<li>Kaiwan N. Billimoria. <em>Linux Kernel Programming. Part 2 - Char Device Drivers and Kernel Synchronization</em>. Packt Publishing. 1st edition. 2021</li>
+<li>Robert Love; <em>Linux Kernel Development</em>. Addison Wesley, 3rd Edition. Julio 2010</li>
+</ul>
+<h2 id="ejercicios">Ejercicios<a class="headerlink" href="#ejercicios" title="Permanent link">&para;</a></h2>
+<h3 id="ejercicio-1">Ejercicio 1<a class="headerlink" href="#ejercicio-1" title="Permanent link">&para;</a></h3>
+<p>El módulo de ejemplo <code>refmod.c</code> ilustra la importancia del contador de referencia asociado a un módulo del kernel. Este módulo, al cargarse, expone al usuario un fichero especial de caracteres <code>/dev/refmod</code>. Al leer de dicho fichero especial con <code>cat</code>, el proceso lector se bloquea durante unos segundos, y a continuación retorna devolviendo 0 bytes en la operación de lectura. El periodo de bloqueo durante la lectura --especificado en milisegundos-- es configurable, gracias al parámetro  <code>stime_ms</code> que exporta el módulo, y que puede establecerse en tiempo de carga en el kernel.</p>
+<p>Consultar la implementación de la operación de lectura del fichero especial de caracteres (función <code>refmod_read()</code> del módulo). Como puede observarse, el bloqueo se lleva a cabo llamando a la función <code>msleep()</code> vista en clase. Responder de forma razonada a las siguientes preguntas:</p>
+<ol>
+<li>¿Cuánto dura el periodo de bloqueo si el módulo del kernel se carga sin establecer el valor del parámetro configurable <code>stime_ms</code>?</li>
+<li>Ejecutar el comando <code>cat /proc/refmod</code> en un terminal. ¿Qué sucede al intentar interrumpir la ejecución de <code>cat</code> con <code>CTRL + C</code>? ¿Termina la ejecución de <code>cat</code> si se envía una señal SIGTERM o SIGKILL con <code>kill</code> a este proceso (usar otra terminal para ello, e incrementar el periodo de bloqueo  para tener más tiempo para comprobarlo)? ¿En qué estado se bloquea un proceso cuando la llamada al sistema invocada hace uso de <code>msleep()</code>?</li>
+<li>¿Cuál es el valor del contador de referencia del módulo del kernel mientras NO se esté accediendo al fichero de dispositivo? Usar el comando <code>lsmod</code> para consultar el valor de este contador. ¿Sigue siendo  el valor del contador de referencias el mismo mientras ejecutamos <code>cat /proc/refmod</code> en otra terminal (y antes de que ese comando termine)? </li>
+<li>¿Es posible descargar satisfactoriamente el módulo del kernel mientras éste está en uso? Para comprobarlo pueden abrirse 2 terminales, usando el primero de ellos para ejecutar  <code>cat /proc/refmod</code>, y el segundo para descargar el módulo (<code>sudo rmmod refmod</code>). En caso de que el comando de descarga funcione, comprobar si la ejecución del comando  <code>cat /proc/refmod</code> termina correctamente, y si se muestran o no mensajes de error en el fichero de <em>log</em> del kernel a raíz de haber tratado de descargar el módulo cuando está en uso. ¿Cuál es la causa de este comportamiento?</li>
+</ol>
+<p>Modificar el código de <code>refmod.c</code> para que el contador de referencia del módulo del kernel se incremente al hacer <code>open()</code> en el fichero especial de dispositivo, y se decremente al hacer <code>close()</code> del mismo. Recordad que las funciones que permiten incrementar y decrementar el contador de referencia son <a href="https://elixir.bootlin.com/linux/v5.10.92/source/include/linux/module.h#L627"><code>try_module_get()</code></a> y <a href="https://elixir.bootlin.com/linux/v5.10.92/source/include/linux/module.h#L629"><code>module_put()</code></a>, respectivamente. Para más información se aconseja consultar cualquiera de las variantes del módulo <code>chardev</code> proporcionadas en la práctica anterior, donde se usan estas funciones. Tras llevar a cabo las modificaciones propuestas, comprobar ahora el valor del contador de referencia del módulo del kernel mientras haya un "cat" en curso sobre el fichero de dispositivo. ¿Es posible descargar ahora el módulo mientras un proceso esté leyendo del fichero especial de dispositivo? </p>
+<h3 id="ejercicio-2">Ejercicio 2<a class="headerlink" href="#ejercicio-2" title="Permanent link">&para;</a></h3>
+<p>Probar el funcionamiento del módulo de ejemplo <code>kthread-mod.c</code> , que al cargarse con <code>insmod</code> crea un <em>kernel thread</em>. Este kernel thread pasa casi todo el tiempo bloqueado, y se despierta cada segundo para imprimir un mensaje en el fichero de <em>log</em> del kernel.  </p>
+<p>Para poder percibir esta impresión periódica del mensaje (tras cargar el módulo) se recomienda abrir una ventana de terminal adicional y ejecutar el siguiente comando: <code>sudo dmesg -w</code>. Este comando permite mostrar en tiempo real los mensajes que se van imprimiendo en el fichero de log del kernel:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kernel@debian:~$<span class="w"> </span>sudo<span class="w"> </span>dmesg<span class="w"> </span>-w
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="o">[</span>sudo<span class="o">]</span><span class="w"> </span>password<span class="w"> </span><span class="k">for</span><span class="w"> </span>kernel:<span class="w"> </span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>...
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:22<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233644</span>.504010<span class="o">]</span><span class="w"> </span>Tic
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:23<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233645</span>.524021<span class="o">]</span><span class="w"> </span>Tac
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:24<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233646</span>.544028<span class="o">]</span><span class="w"> </span>Tic
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:25<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233647</span>.564029<span class="o">]</span><span class="w"> </span>Tac
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:26<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233648</span>.584021<span class="o">]</span><span class="w"> </span>Tic
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:27<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233649</span>.604031<span class="o">]</span><span class="w"> </span>Tac
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>...
+</span></code></pre></div>
+<h3 id="ejercicio-3">Ejercicio 3<a class="headerlink" href="#ejercicio-3" title="Permanent link">&para;</a></h3>
+<p>Analizar el código del módulo de ejemplo <code>Clipboard-update</code>  que hace uso de <em>wait queues</em> para dotar de semántica bloqueante al dispositivo especial de caracteres que el módulo gestiona. </p>
+<p>Al cargar el módulo  <code>Clibpoard-update</code>   en el núcleo, se crea automáticamente el fichero de dispositivo <code>/dev/clipboard_update</code>. A pesar de que la lectura y escritura en este fichero especial de caracteres tiene un comportamiento similar a la entrada <code>/dev/clipboard</code> del módulo en el que se basa (consulta y modificación, respectivamente del "clipboard")  el fichero especial implementado en este caso tiene semántica bloqueante. Todo proceso que lee de la entrada  <code>/dev/clipboard_update</code> se queda bloqueado en la operacion <code>clipboard_read()</code> hasta que se produce una actualización (escritura) del contenido del "clipboard". El proceso escritor, que invoca <code>clipboard_write()</code> es el encargado de despertar a los procesos lectores tras realizar una operación de actualización. </p>
+<p>Para probar la funcionalidad de este ejemplo se han de abrir tantas ventanas de terminal como procesos acceden al "clipboard". A continuación se muestra un ejemplo con cuatro terminales. Para observar los bloqueos se aconseja hacer primero tres lecturas con <code>cat</code> y a continuación la escritura con <code>echo</code>:</p>
+<p><strong>Terminal 1</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/clipboard_update<span class="w"> </span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>new<span class="w"> </span>clipboard
+</span></code></pre></div>
+<p><strong>Terminal 2</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/clipboard_update<span class="w"> </span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>new<span class="w"> </span>clipboard
+</span></code></pre></div>
+<p><strong>Terminal 3</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/clipboard_update<span class="w"> </span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>new<span class="w"> </span>clipboard
+</span></code></pre></div>
+<p><strong>Terminal 4</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;new clipboard&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/clipboard_update
+</span></code></pre></div>
+<p>Tras estudiar el código fuente, se ha de proporcionar una respuesta a las siguientes preguntas:</p>
+<ol>
+<li>
+<p>¿Qué sucede si, mientras un proceso está bloqueado en <code>clipboard_read()</code>, tecleamos <code>CTRL + C</code> en la misma terminal (enviando la señal SIGINT al proceso que ejecuta <code>cat</code>)? ¿Podría conseguirse el mismo comportamiento si se hubiera usado <code>wait_event()</code>  en lugar de <code>wait_event_interruptible()</code> en la implementación? Justifica la respuesta.</p>
+</li>
+<li>
+<p>¿Garantiza la implementación exclusión mutua en el acceso a la variable clipboard? En caso de que no sea así propón una solución que garantice que la implementación sea <em>SMP-safe</em>.</p>
+</li>
+</ol>
+<h2 id="desarrollo-de-la-practica">Desarrollo de la práctica<a class="headerlink" href="#desarrollo-de-la-practica" title="Permanent link">&para;</a></h2>
+<p>Esta práctica consta de dos partes: A y B </p>
+<h2 id="parte-a">Parte A<a class="headerlink" href="#parte-a" title="Permanent link">&para;</a></h2>
+<p>Implementar el módulo <code>ProdCons</code> descrito en clase, que  gestiona un buffer circular acotado de enteros, y permite a los procesos de usuario insertar y eliminar números en ese buffer realizando escrituras y lecturas en un fichero especial de caracteres (<code>/dev/prodcons</code>). Estas operaciones de lectura (eliminación) y escritura (inserción) han de tener semántica productor consumidor:</p>
+<ul>
+<li>Para insertar un número (por ejemplo 7) al final del buffer se debe ejecutar el siguiente comando: <code>$ echo 7 &gt; /dev/prodcons</code><ul>
+<li>Si el buffer circular está lleno, esta operación debe bloquear al proceso, hasta que haya de nuevo hueco para realizar la operación.</li>
+</ul>
+</li>
+<li>Para extraer el primer elemento del buffer debe realizarse una lectura del fichero especial de caracteres: <code>$ cat /dev/prodcons</code><ul>
+<li>Esta operación bloqueará al proceso lector hasta que haya elementos que consumir del buffer. En dicho instante se debería mostrar el valor extraído del buffer por pantalla (esto requiere rellenar adecuadamente el buffer pasado como parámetro a la operación <code>read()</code> del driver).</li>
+</ul>
+</li>
+</ul>
+<p><strong>Ejemplo de ejecución</strong> (se asume que buffer puede alojar como mucho 4 enteros)   </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kernel@debian:~/ProdCons$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">4</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/prodcons<span class="w"> </span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>kernel@debian:~/ProdCons$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">5</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/prodcons<span class="w"> </span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>kernel@debian:~/ProdCons$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">6</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/prodcons<span class="w"> </span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>kernel@debian:~/ProdCons$<span class="w"> </span>cat<span class="w"> </span>/dev/prodcons<span class="w"> </span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="m">4</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>kernel@debian:~/ProdCons$<span class="w"> </span>cat<span class="w"> </span>/dev/prodcons<span class="w"> </span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="m">5</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>kernel@debian:~/ProdCons$<span class="w"> </span>cat<span class="w"> </span>/dev/prodcons<span class="w"> </span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="m">6</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>kernel@debian:~/ProdCons$<span class="w"> </span>cat<span class="w"> </span>/dev/prodcons<span class="w"> </span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>&lt;&lt;proceso<span class="w"> </span>se<span class="w"> </span>queda<span class="w"> </span>bloqueado&gt;&gt;
+</span></code></pre></div>
+<p>Al igual que en el código a desarrollar en la parte A, se debe garantizar que el módulo NO pueda descargarse si algún proceso de usuario está utilizando sus servicios.</p>
+<h4 id="recursos-para-la-implementacion">Recursos para la implementación<a class="headerlink" href="#recursos-para-la-implementacion" title="Permanent link">&para;</a></h4>
+<h5 id="buffer-circular">Buffer circular<a class="headerlink" href="#buffer-circular" title="Permanent link">&para;</a></h5>
+<p>El buffer circular de enteros gestionado por el módulo se implementará utilizando la estructura de datos <code>struct kfifo</code> del kernel, que representa un buffer circular de bytes. Para utilizar esta estructura de datos genérica del kernel ha de incluirse el fichero de cabecera <code>&lt;linux/kfifo.h&gt;</code>. Aunque existen varias formas para inicializar la estructura, se recomienda definir una variable global del tipo adecuado:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">kfifo</span><span class="w"> </span><span class="n">nombre_variable</span><span class="p">;</span>
+</span></code></pre></div>
+<p>y a continuación inicializar la estructura con <code>kfifo_alloc()</code>. La memoria debe liberarse con <code>kfifo_free()</code> preferentemente en la función de <em>cleanup</em> del módulo. </p>
+<p>En la práctica se reservará espacio para alojar hasta 4 u 8 enteros en el buffer. El tamaño máximo del buffer circular se podrá establecer mediante un parámetro configurable del módulo, a fijar en tiempo de carga.</p>
+<p>Como un entero ocupa 4 bytes, las inserciones y eliminaciones de números se realizarán mediante las operaciones de inserción y eliminación múltiple de esta estructura de datos: <code>kfifo_in()</code> y <code>kfifo_out()</code>. </p>
+<p><strong>Ejemplo inserción y eliminación (extración) de entero en <code>struct kfifo</code></strong></p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/kfifo.h&gt;</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">insertar_entero</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">kfifo</span><span class="o">*</span><span class="w"> </span><span class="n">cbuf</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">){</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="n">kfifo_in</span><span class="p">(</span><span class="n">cbuf</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">}</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="kt">int</span><span class="w"> </span><span class="nf">extraer_entero</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">kfifo</span><span class="o">*</span><span class="w"> </span><span class="n">cbuf</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">){</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span><span class="n">kfifo_out</span><span class="p">(</span><span class="n">cbuf</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>Breve descripción de operaciones de <code>struct kfifo</code></strong> (<code>pk</code> denota un parámetro puntero a <code>struct kfifo</code>)</p>
+<table>
+<thead>
+<tr>
+<th>Función/Macro</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kfifo_alloc(pk,size,mask)</code></td>
+<td>Inicializa kfifo y reserva memoria para almacenamiento interno. <code>size</code> ha de ser potencia de 2. <code>mask</code> es el parámetro que se pasa a la llamada subyacente a <code>kmalloc()</code> (opciones de reserva de memoria). Pasar <code>GFP_KERNEL</code> como tercer parámetro.</td>
+</tr>
+<tr>
+<td><code>kfifo_free(pk)</code></td>
+<td>Libera memoria asociada al kfifo</td>
+</tr>
+<tr>
+<td><code>kfifo_len(pk)</code></td>
+<td>Devuelve número de elementos en kfifo</td>
+</tr>
+<tr>
+<td><code>kfifo_avail(pk)</code></td>
+<td>Devuelve número de huecos libres en kfifo</td>
+</tr>
+<tr>
+<td><code>kfifo_size(pk)</code></td>
+<td>Devuelve capacidad máxima de kfifo</td>
+</tr>
+<tr>
+<td><code>kfifo_is_full(pk)</code></td>
+<td>Devuelve !=0 si kfifo lleno, y 0 en caso contrario</td>
+</tr>
+<tr>
+<td><code>kfifo_is_empty(pk)</code></td>
+<td>Devuelve !=0 si kfifo vacío,  y 0 en caso contrario</td>
+</tr>
+<tr>
+<td><code>kfifo_in(pk,from,n)</code></td>
+<td>Inserta <code>n</code> elementos (bytes) en kfifo. Los bytes se leen del buffer pasado como parámetro (<code>void* from</code>)</td>
+</tr>
+<tr>
+<td><code>kfifo_out(pk,to,n)</code></td>
+<td>Elimina <code>n</code>  elementos (bytes) del kfifo. Los bytes eliminados se copian en el buffer pasado como parámetro (<code>void* to</code>)</td>
+</tr>
+<tr>
+<td><code>kfifo_reset(pk)</code></td>
+<td>Elimina todos los elementos de kfifo (vacía buffer) sin liberar la memoria.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Para más información:<ol>
+<li>Consultar la <a href="https://www.kernel.org/doc/htmldocs/kernel-api/kfifo.html">documentación del kernel sobre esta estructura de datos</a></li>
+<li>Consultar código fuente del kernel (<code>&lt;linux/kfifo.h&gt;</code>)</li>
+<li>Capítulo 6 <em>"Kernel Data Structures"</em> de Linux Kernel Development</li>
+</ol>
+</li>
+</ul>
+<h5 id="semaforos">Semáforos<a class="headerlink" href="#semaforos" title="Permanent link">&para;</a></h5>
+<p>Para implementar las operaciones de bloqueo en esta práctica se emplearán tres semáforos del kernel:</p>
+<ul>
+<li><code>mtx</code>: debe inicializarse a 1, y se usará a modo de <em>mutex</em> para garantizar exclusión mutua en el acceso al buffer circular.</li>
+<li><code>huecos</code>: debe inicializarse a 0. Se utilizará para bloquear al productor (proceso que escribe en <code>/dev/prodcons</code>) cuando no haya hueco para insertar nuevos elementos en el buffer circular.</li>
+<li><code>elementos</code>:  debe inicializarse a la capacidad máxima del buffer (en elementos, no bytes) establecida por el usuario (4 u 8). Se utilizará para bloquear al consumidor (proceso que lee de <code>/dev/prodcons</code>) cuando no haya elementos que consumir en el buffer circular.</li>
+</ul>
+<h2 id="parte-b">Parte B<a class="headerlink" href="#parte-b" title="Permanent link">&para;</a></h2>
+<p>Crear una variante <em>SMP-safe</em> y <em>thread-safe</em> del <em>driver</em> desarrollado en la práctica  anterior ParteB -- driver que gestiona el display 7 segmentos de la placa Bee v2.0. Para ello se creará una variante de dicho driver que asegure lo siguiente:</p>
+<ol>
+<li>El <em>driver</em> no debe poder descargarse si algún proceso de usuario está utilizando sus servicios.</li>
+<li>La implementación debe garantizar que solo un proceso debe poder estar accediendo al fichero de dispositivo <code>/dev/display7s</code> en un instante determinado. Para ello, debe mantenerse un contador que lleve la cuenta del número de procesos que están accediendo al dispositivo (a incrementar en <code>open()</code>, y decrementar en <code>release()</code>). Si un proceso intenta abrir el dispositivo cuando está ya en uso, la operación <code>open()</code> devolverá un error (<code>-EBUSY</code>). El contador del número de procesos que están usando el fichero especial de dispositivo (valor 0 o 1) debe actualizarse de forma segura usando un recurso de sincronización del kernel. El estudiante puede escoger el tipo de recurso que considere oportuno para permitir la actualización segura del contador.</li>
+<li>La implementación de la operación <code>write()</code> sobre el fichero especial de dispositivo debe ser <em>thread-safe</em>; es decir, en caso de que varios hilos de un mismo proceso (con el descriptor compartido) quisieran hacer escrituras simultáneas sobre el fichero especial de dispositivo, debe serializarse la invocación de la función <code>display7s_write()</code>, que es la que realiza la modificación del estado del display 7 segmentos.  Se deja a elección del estudiante el mecanismo o mecanismos de sincronización a utilizar para imponer esta restricción (que solo un hilo pueda ejecutar <code>display7s_write()</code> ). <strong>Nota importante</strong>: Se ha de tener en cuenta que la función <code>msleep()</code>, que se invoca desde <code>display7s_write()</code>,  es bloqueante. </li>
+</ol>
+<h3 id="parte-opcional-de-la-practica">Parte opcional de la práctica<a class="headerlink" href="#parte-opcional-de-la-practica" title="Permanent link">&para;</a></h3>
+<p>Crear una variante del ejemplo <code>Clipboard-update</code> donde se utilicen semáforos del kernel en lugar de <em>wait queues</em> para dotar de semántica bloqueante a la operación de lectura en <code>/dev/clipboard_update</code>. <strong>Pista</strong>: Se aconseja la utilización de dos semáforos, uno de ellos a utilizar como cerrojo (contador inicializado a 1), y el otro como cola de espera (contador inicializado a 0) para bloquear a los procesos que lean de  <code>/dev/clipboard_update</code>. Asimismo debe mantenerse un contador global para llevar la cuenta de los procesos esperando en el segundo semáforo.</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../drivers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Drivers en Linux. Aspectos básicos y GPIO" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Drivers en Linux. Aspectos básicos y GPIO
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../interrupt-timers-pwm/" class="md-footer__link md-footer__link--next" aria-label="Next: Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

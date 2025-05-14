@@ -1,0 +1,910 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.5">
+    
+    
+      
+        <title>Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos - BEE Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#drivers-en-linux-gestion-de-interrupciones-temporizadores-y-trabajos-diferidos" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BEE Docs" class="md-header__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BEE Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BEE Docs" class="md-nav__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    BEE Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Documentación Técnica
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Documentación Técnica" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Documentación Técnica
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Placa de expansión BEE
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Prácticas
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prácticas" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Prácticas
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gpio_linux/" class="md-nav__link">
+        Control GPIO en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwm_linux/" class="md-nav__link">
+        Control PWM en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spi_linux/" class="md-nav__link">
+        Control de dispositivos SPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../i2c_linux/" class="md-nav__link">
+        Control de dispositivos I2C
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../control_servomotores/" class="md-nav__link">
+        Control de servomotores con PWM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robotica/" class="md-nav__link">
+        Prácticas de Robótica
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        Drivers en Linux. Preparación del entorno de trabajo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../drivers/" class="md-nav__link">
+        Drivers en Linux. Aspectos básicos y GPIO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sincronizacion/" class="md-nav__link">
+        Drivers en Linux. Sincronización en el kernel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos" class="md-nav__link">
+    Objetivos
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pwm-por-hardware-en-linux" class="md-nav__link">
+    PWM por hardware en Linux
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    Ejercicios
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    Ejercicio 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    Ejercicio 2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    Ejercicio 3
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    Ejercicio 4
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#desarrollo-de-la-practica" class="md-nav__link">
+    Desarrollo de la práctica
+  </a>
+  
+    <nav class="md-nav" aria-label="Desarrollo de la práctica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parte-a" class="md-nav__link">
+    Parte A
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parte-b" class="md-nav__link">
+    Parte B
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partes-opcionales" class="md-nav__link">
+    Partes opcionales
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="drivers-en-linux-gestion-de-interrupciones-temporizadores-y-trabajos-diferidos">Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos<a class="headerlink" href="#drivers-en-linux-gestion-de-interrupciones-temporizadores-y-trabajos-diferidos" title="Permanent link">&para;</a></h1>
+<h2 id="objetivos">Objetivos<a class="headerlink" href="#objetivos" title="Permanent link">&para;</a></h2>
+<p>El principal objetivo de esta práctica es familiarizarse con la gestión de interrupciones en el kernel Linux, los temporizadores del kernel, y la creación y planificación de tareas diferidas mediante <em>workqueues</em>. Como objetivo secundario, se estudiarán los fundamentos sobre generación de señales PWM por hardware en Linux.</p>
+<p>El código para esta práctica puede descargarse <a href="/linux-kernel/src/interrupts.tgz">aquí</a>.</p>
+<p>Antes de comenzar con los ejercicios de esta práctica es preciso consultar la introducción al uso de PWM por hardware en Linux, que se encuentra en la siguiente sección.</p>
+<p><strong>Teoría de la práctica</strong></p>
+<p>La teoría asociada a esta práctica se imparte en la asignatura "Arquitectura Interna de Linux y Android", ofertada en las distintas titulaciones de grado en la Facultad de Informática de la Universidad Complutense de Madrid. Para más información sobre la asignatura consultad a <a href="mailto:jcsaezal@ucm.es">Juan Carlos Sáez Alcaide</a>.</p>
+<p>Para documentarse sobre la temática de forma autónoma se proporcionan las siguientes referencias:</p>
+<ul>
+<li>
+<p>Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang. <em>Linux Kernel Module Programming Guide</em>. 2025. <a href="https://sysprog21.github.io/lkmpg/">Disponible online</a>. Versión en <a href="Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang">PDF</a></p>
+</li>
+<li>
+<p>Kaiwan N. Billimoria. <em>Linux Kernel Programming</em>. Packt Publishing. 1st edition. 2021</p>
+</li>
+<li>
+<p>Kaiwan N. Billimoria. <em>Linux Kernel Programming. Part 2 - Char Device Drivers and Kernel Synchronization</em>. Packt Publishing. 1st edition. 2021</p>
+</li>
+<li>
+<p>Robert Love; <em>Linux Kernel Development</em>. Addison Wesley, 3rd Edition. Julio 2010</p>
+</li>
+</ul>
+<h2 id="pwm-por-hardware-en-linux">PWM por hardware en Linux<a class="headerlink" href="#pwm-por-hardware-en-linux" title="Permanent link">&para;</a></h2>
+<p>Una señal PWM (<em>Pulse Width Modulation</em>) es una señal digital caracterizada por dos parámetros: el periodo (<em>period</em>) y el ciclo de trabajo (<em>duty cycle</em>), que pueden ajustarse a lo largo del tiempo. Como se muestra en la siguiente figura, el periodo es el intervalo de tiempo transcurrido entre dos flancos consecutivos de subida (o de bajada), y el <em>duty cycle</em> es la fracción de tiempo dentro de un periodo en la que la señal está a "1" .</p>
+<p><img alt="" src="../img/pwm_simple.png" /></p>
+<p>Este tipo de señales tienen un amplio espectro de aplicaciones, como el control de servomotores y ventiladores, o el ajuste de intensidad de los distintos componentes de color de LEDs RGB. Las señales PWM se pueden generar por software en dispositivos equipados con pines GPIO, mediante <em>bit banging</em>, es decir ajustando manualmente la señal de salida de un pin a lo largo del tiempo. Por ejemplo, en el módulo <em>Misc7seg</em>  que se distribuye con el material de la Práctica 3 de la asignatura, las señales que gobiernan el display 7 segmentos de la placa --que no son PWM-- se controlan mediante <em>bit banging</em>. </p>
+<p>Generar señales PWM mediante <em>bit banging</em> tiene asociado un alto consumo de CPU; un <em>flujo de ejecución</em> debe dedicarse a generar cada señal a grano fino y controlar de forma precisa el tiempo entre flancos. Además, esta técnica no resulta adecuada para sistemas que no tienen garantías de tiempo real, como la versión <em>vanilla</em> del kernel Linux. En este tipo de sistemas nada impide que el código generador de la señal PWM que se ejecuta en una CPU o núcleo específico de la máquina (incluso siendo parte del sistema operativo) pueda ser interrumpido por código más prioritario (p.ej., manejador de una interrupción no enmascarable); en tal caso no es posible garantizar suficiente precisión para imponer un periodo o un duty cycle específico, lo cual puede desencadenar un mal funcionamiento del sistema gobernado por la señal PWM. </p>
+<p>Para solventar este problema existen dispositivos hardware específicos dedicados a la generación de señales PWM, que no requieren la intervención continuada de la CPU. El estudio de la API de Linux para el uso de estos dispositivos es el foco principal de esta introducción.</p>
+<p>En Linux hay dos agentes involucrados en el uso del hardware PWM: los <em>drivers PWM</em> y los <em>usuarios PMW</em> (también llamados PWM <em>consumers</em>). Los <strong>drivers PWM</strong> implementan el soporte necesario en Linux para interactuar directamente con el hardware PWM. Para la implementación de estos drivers se emplean las funciones <a href="https://elixir.bootlin.com/linux/latest/source/drivers/pwm/core.c#L268"><code>pwmchip_add()</code></a> y <a href="https://elixir.bootlin.com/linux/latest/source/drivers/pwm/core.c#L333"><code>pwmchip_remove()</code></a>, que registran y desregistran respectivamente una estructura <a href="https://elixir.bootlin.com/linux/latest/source/include/linux/pwm.h#L300"><code>struct pwm_chip</code></a>. Esta estructura --adecuadamente inicializada por el driver-- describe al kernel las caracteristicas del chip PWM específico (incluyendo el número de canales PWM que soporta), y proporciona una implementación específica del driver para interactuar con el chip PWM en cuestión. Los <strong>usuarios o <em>consumers</em> PWM</strong> hacen uso de una interfaz de programación de Linux que garantiza portabilidad, abstrayendo los detalles de bajo nivel asociados a la configuración de un chip PWM específico. Numerosos drivers en Linux actuan como <em>consumers</em> de PWM. A continuación se describe la interfaz de programación usada por los consumers PWM, que será necesario utilizar en la práctica.  </p>
+<h4 id="pulse-width-modulation-pwm-consumer-interface">Pulse Width Modulation (PWM) Consumer Interface<a class="headerlink" href="#pulse-width-modulation-pwm-consumer-interface" title="Permanent link">&para;</a></h4>
+<p>Para poder usar uno de los canales PWM disponibles en la plataforma es necesario obtener primero un descriptor del dispositivo PWM, representado por el tipo de datos <code>struct pwm_device*</code>. Una de las formas más directas para obtener tal descriptor es mediante la función <code>pwm_request()</code> declarada en <code>&lt;linux/pwm.h&gt;</code>:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_device</span><span class="o">*</span><span class="w"> </span><span class="n">pwm_request</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">pwm</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">label</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Parámetros:</p>
+<ul>
+<li><code>pwm</code>: Índice global del dispositivo PWM en el sistema</li>
+<li><code>label</code>: Etiqueta descriptiva del dispositivo PWM<ul>
+<li><strong>Nota:</strong> En la Raspberry Pi, puede usarse cualquier cadena de caracteres arbitraria para este parámetro.</li>
+</ul>
+</li>
+</ul>
+<p>El dispositivo PWM solicitado mediante <code>pwm_request()</code> queda reservado  para uso exclusivo del driver (<em>consumer</em>) que invocó la llamada. Cuando el dispositivo deje de estar en uso (p.ej., en la función <code>cleanup()</code> del módulo del kernel correspondiente), el driver debe liberarlo usando la función <code>pwm_free()</code>, que acepta como parámetro el descriptor retornado por <code>pwm_request()</code>:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">pwm_free</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_device</span><span class="w"> </span><span class="o">*</span><span class="n">pwm</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Para configurar una señal PWM con el dispositivo, el driver ha de crear una variable (local) de tipo <code>struct pwm_state</code>, que representa el estado de un canal PWM. La definición y documentación sobre esta estructura se encuentra en <code>&lt;linux/pwm.h&gt;</code>:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cm">/*</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cm"> * struct pwm_state - state of a PWM channel</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="cm"> * @period: PWM period (in nanoseconds)</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="cm"> * @duty_cycle: PWM duty cycle (in nanoseconds)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="cm"> * @polarity: PWM polarity</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="cm"> * @enabled: PWM enabled status</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="cm"> * @usage_power: If set, the PWM driver is only required to maintain the power</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="cm"> *               output but has more freedom regarding signal form.</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="cm"> *               If supported, the signal can be optimized, for example to</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="cm"> *               improve EMI by phase shifting individual channels.</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="cm"> */</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_state</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="n">u64</span><span class="w"> </span><span class="n">period</span><span class="p">;</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="n">u64</span><span class="w"> </span><span class="n">duty_cycle</span><span class="p">;</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="n">pwm_polarity</span><span class="w"> </span><span class="n">polarity</span><span class="p">;</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">;</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">usage_power</span><span class="p">;</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">};</span>
+</span></code></pre></div>
+<p>El procedimiento de configuración de un canal PWM mediante esta estructura estado conlleva la realización de los siguientes pasos:</p>
+<ol>
+<li>
+<p>Almacenamiento del estado actual del canal PWM en la estructura mediante la función <code>pwm_init_state()</code>. Esta función acepta como parámetro el descriptor del dispositivo PWM y la estructura cuyos campos se rellenarán con la información actual del estado del canal:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">pwm_init_state</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_device</span><span class="w"> </span><span class="o">*</span><span class="n">pwm</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_state</span><span class="w"> </span><span class="o">*</span><span class="n">state</span><span class="p">)</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Modificación manual de los campos de la estructura de estado, según las propiedades de la señal PWM que se desee generar. Habitualmente se modifican los campos <code>period</code> (periodo de la señal, especificado en nanosegundos), <code>duty_cycle</code> (longitud del pulso del "1" lógico dentro del periodo), y <code>enabled</code> (indicador de canal PWM activado). Alternativamente, el valor del campo <code>duty_cycle</code> puede establecerse de forma indirecta como fracción sobre el periodo. Para ello ha de emplearse la siguiente función:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">pwm_set_relative_duty_cycle</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_state</span><span class="w"> </span><span class="o">*</span><span class="n">state</span><span class="p">,</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">            </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">duty_cycle</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">scale</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Los parámetros <code>duty_cycle</code> y <code>scale</code> permiten especificar la fracción de <em>duty cycle</em> deseada, como cociente de ambos parámetros. Así, por ejemplo, para establecer un <em>duty cycle</em> del 70%, los valores de los citados parámetros pueden establecerse a 70 y 100 respectivamente.</p>
+</li>
+<li>
+<p>Una vez se han establecido los valores deseados en la estructura de estado, se ha de aplicar la configuración al canal PWM usando la función <code>pwm_apply_state()</code>:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">pwm_apply_state</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_device</span><span class="w"> </span><span class="o">*</span><span class="n">pwm</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_state</span><span class="w"> </span><span class="o">*</span><span class="n">state</span><span class="p">);</span>
+</span></code></pre></div>
+</li>
+</ol>
+<p>Finalmente merece la pena mencionar la existencia de las funciones <code>pwm_enable()</code> y <code>pwm_disable()</code> que permiten respectivamente activar y desactivar la salida emitida por el canal PWM asociado al dispositivo pasado como parámetro:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">pwm_enable</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_device</span><span class="w"> </span><span class="o">*</span><span class="n">pwm</span><span class="p">);</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kt">int</span><span class="w"> </span><span class="nf">pwm_disable</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pwm_device</span><span class="w"> </span><span class="o">*</span><span class="n">pwm</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Las funciones PWM descritas en esta sección son las únicas que han de utilizarse para la implementación de la práctica. Para obtener información más extensa sobre éstas u otras llamadas de la API PWM, se puede consultar <a href="https://www.kernel.org/doc/html/latest/driver-api/pwm.html">la documentación oficial del kernel Linux</a>.</p>
+<h2 id="ejercicios">Ejercicios<a class="headerlink" href="#ejercicios" title="Permanent link">&para;</a></h2>
+<h3 id="ejercicio-1">Ejercicio 1<a class="headerlink" href="#ejercicio-1" title="Permanent link">&para;</a></h3>
+<p>Estudiar la implementación del módulo de ejemplo <em>GPIODInterrupt</em> analizado en clase. Este módulo del kernel instala un manejador de interrupción que se ejecuta tras pulsar el botón SW1 de la placa Bee.   Cuando se pulsa SW1, se genera una interrupción (controlada por flanco de subida). En respuesta a esta interrupción, el módulo del kernel conmuta el estado de los LEDs D1-D3 de la placa (ON/OFF).</p>
+<h3 id="ejercicio-2">Ejercicio 2<a class="headerlink" href="#ejercicio-2" title="Permanent link">&para;</a></h3>
+<p>Estudiar la implementación de los módulos de ejemplo <code>workqueue1.c</code>, <code>workqueue2.c</code> y <code>workqueue3.c</code> (en directorio <em>Workqueues</em>), que ilustran el proceso de creación de tareas diferidas mediante el mecanismo de <em>workqueues</em>. Conteste a las siguientes preguntas:</p>
+<ol>
+<li>
+<p>¿Qué diferencias existen entre el módulo del kernel  <code>workqueue1.c</code> y  <code>workqueue1.c</code> en lo que respecta a la <em>workqueue</em> empleada para diferir trabajo? ¿Se insertan las tareas diferidas en la misma cola?</p>
+</li>
+<li>
+<p>¿Cuál es el propósito de la estructura específica (<code>my_work_t</code>) definida en el ejemplo <code>worqueue3.c</code> ?</p>
+</li>
+</ol>
+<h3 id="ejercicio-3">Ejercicio 3<a class="headerlink" href="#ejercicio-3" title="Permanent link">&para;</a></h3>
+<p>Analizar el módulo <code>ExampleTimer</code> que gestiona un temporizador del kernel que se activa cada segundo e imprime un mensaje con <code>printk()</code>.  Al igual que se hizo con el ejemplo de <em>kernel thread</em> de la práctica anterior, se recomienda usar el comando : <code>sudo dmesg -w</code>, para poder observar la impresión periódica del mensaje del temporizador el fichero de log del kernel.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kernel@debian:~$<span class="w"> </span>sudo<span class="w"> </span>dmesg<span class="w"> </span>-w
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="o">[</span>sudo<span class="o">]</span><span class="w"> </span>password<span class="w"> </span><span class="k">for</span><span class="w"> </span>kernel:<span class="w"> </span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>...
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:22<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233644</span>.504010<span class="o">]</span><span class="w"> </span>Tic
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:23<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233645</span>.524021<span class="o">]</span><span class="w"> </span>Tac
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:24<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233646</span>.544028<span class="o">]</span><span class="w"> </span>Tic
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:25<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233647</span>.564029<span class="o">]</span><span class="w"> </span>Tac
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:26<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233648</span>.584021<span class="o">]</span><span class="w"> </span>Tic
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>Dec<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">14</span>:15:27<span class="w"> </span>debian<span class="w"> </span>kernel:<span class="w"> </span><span class="o">[</span><span class="m">233649</span>.604031<span class="o">]</span><span class="w"> </span>Tac
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>...
+</span></code></pre></div>
+<p>Los temporizadores del kernel son <em>one shot</em> por defecto; es decir, una vez que se ejecuta la función asociada, el temporizador no se reconfigura automáticamente para invocar de nuevo la función en el futuro. Sin embargo, en el módulo del kernel de ejemplo, la función del temporizador se invoca una vez por segundo hasta que el módulo se descarga del kernel. ¿Cómo se consigue que el módulo del kernel tenga este comportamiento?</p>
+<h3 id="ejercicio-4">Ejercicio 4<a class="headerlink" href="#ejercicio-4" title="Permanent link">&para;</a></h3>
+<p>Una de las aplicaciones del uso de PWM por hardware es la generación de una señal digital con frecuencia específica (y potencialmente variable) para reproducir notas musicales utilizando un zumbador o <em>buzzer</em> pasivo, como el que integra la placa Bee v2.0. La Raspberry Pi (modelos 3B+ o 4) integra dos canales PWM (0 y 1), que están asociados a los GPIOs 12 y 13 respectivamente según la configuración actual del kernel (véase el fichero <code>/boot/config.txt</code>). Con las conexiones fijadas actualmente en la placa, la señal de entrada del <em>buzzer</em> está conectada directamente al GPIO 12 (canal PWM0).</p>
+<p>Este ejercicio consiste en estudiar el módulo del kernel de ejemplo <code>test-buzzer.c</code>, que al cargarse reproduce mediante el <em>buzzer</em> una melodía fija (hardcodeada en las fuentes) usando una señal PWM desde una tarea diferida (<em>workqueue</em>).  <strong>Nota importante:</strong> Cabe destacar que las funciones analizadas en la sección anterior que aceptan un parámetro de tipo <code>struct pwm_device</code> son bloqueantes, por lo que solo pueden invocarse desde contexto de proceso. Éste el tipo de contexto en el que se ejecutan las tareas diferidas mediante <em>workqueues</em>. </p>
+<p>Para la realización de la práctica es preciso reusar el código de este módulo de ejemplo. Por ello, se proporciona a continuación una breve descripción de las estructuras, definiciones y funciones auxiliares más importantes del módulo. </p>
+<p>Para representar cada nota o silencio que forma parte de la melodía se emplea la siguiente estructura de 32 bits:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">music_step</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">freq</span><span class="o">:</span><span class="w"> </span><span class="mi">24</span><span class="p">;</span><span class="w"> </span><span class="cm">/* Frequency in centihertz */</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="o">:</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w">     </span><span class="cm">/* Duration of the note */</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">};</span>
+</span></code></pre></div>
+<p>El campo <code>freq</code> (24 bits) codifica la frecuencia de la nota en centihercios (el valor 0 se usa para representar los silencios). El campo <code>len</code> (de 8 bits) almacena la duración de la nota o silencio. Esta duración se representa mediante una máscara de bits, donde los siete primeros bits se asocian a la presencia de alguna de las siguientes figuras básicas en la especificación de la duración de la nota:</p>
+<ul>
+<li>Bit 0: Redonda (1)^[Los valores entre paréntesis denotan el número de figuras del tipo en cuestión que equivalen a la duración de una redonda, la figura de referencia habitual en música.]</li>
+<li>Bit 1: Blanca (2)</li>
+<li>Bit 2: Negra (4)</li>
+<li>Bit 3: Corchea (8)</li>
+<li>Bit 4: Semicorchea (16)</li>
+<li>Bit 5: Fusa (32)</li>
+<li>Bit 6: Semifusa (64)</li>
+</ul>
+<p>El bit 7 del campo <code>len</code> se emplea para indicar si la figura en cuestión se encuentra dentro de un <a href="https://comamusical.com/tresillo/"><em>tresillo</em></a>: figura musical irregular que agrupa 3 figuras musicales en el tiempo de 2 equivalentes regulares.</p>
+<p>Esta representación de la duración con 8 bits hace posible cubrir un amplio espectro de duraciones de notas presentes en melodías de la música popular. Así por ejemplo:</p>
+<ul>
+<li>Para representar la duración de una negra el campo len tendrá el valor 4 (bit 2 activo, únicamente)</li>
+<li>Para representar una corchea en nuestra "partitura" usaremos <code>len=8</code> (bit 2 activo únicamente). Si esta corchea formara parte de un tresillo, se habilitaría también el bit 7 (<code>len=0x88</code>).</li>
+<li>Para las figuras con puntillo, que representan 1.5 veces la duración de la figura original a la que se aplica el puntillo, es preciso activar dos bits en el campo <code>len</code>.  En particular, si queremos representar una negra con puntillo, es necesario reflejar la duración de una negra más la mitad de ésta (corchea), para lo cual se han de activar los bits 2 y 3 en el campo len (<code>len=0x0C</code>). </li>
+</ul>
+<p>La melodía que el módulo del kernel reproduce se encuentra definida como variable local <code>melodic_line</code> de la función <code>my_wq_function()</code> que representa el trabajo diferido:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="cm">/* Frequency of selected notes in centihertz */</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="cp">#define C4 26163</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="cp">#define D4 29366</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="cp">#define E4 32963</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="cp">#define F4 34923</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="cp">#define G4 39200</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="cp">#define C5 52325</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="p">...</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">my_wq_function</span><span class="p">(</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">work_struct</span><span class="w"> </span><span class="o">*</span><span class="n">work</span><span class="w"> </span><span class="p">)</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="p">{</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">music_step</span><span class="w"> </span><span class="n">melodic_line</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">        </span><span class="p">{</span><span class="n">C4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">E4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">G4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">C5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">},</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">        </span><span class="p">{</span><span class="n">C5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">G4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">E4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">C4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">        </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span><span class="w"> </span><span class="cm">/* Terminator */</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">    </span><span class="p">};</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">beat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 120 quarter notes per minute */</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">music_step</span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">melodic_line</span><span class="p">;</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">    </span><span class="cm">/* Play notes sequentially until end marker is found */</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">melodic_line</span><span class="p">;</span><span class="w"> </span><span class="o">!</span><span class="n">is_end_marker</span><span class="p">(</span><span class="n">next</span><span class="p">);</span><span class="w"> </span><span class="n">next</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="n">Code</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">play</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">current</span><span class="w"> </span><span class="n">note</span><span class="w"> </span><span class="p">...</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>La melodía (array) se define mediante un inicializador estático de "C". Dicho array consta de una entrada por cada nota o silencio de la melodía, con un <code>music_step</code> terminador al final. Por simplicidad en la representación de la melodía se hace referencia a las notas de la misma mediante una macro que asocia la representación en inglés de la nota (por ejemplo, E4 es la nota mi con altura 4) con su frecuencia en centihercios correspondiente a la afinación temperada estándar. Para consultar la frecuencia de otras notas musicales se puede visitar <a href="https://mixbutton.com/mixing-articles/music-note-to-frequency-chart/">esta página</a>.</p>
+<p>La tarea diferida recorre secuencialmente la cada paso  (<code>music_step</code>) de la melodía. Si el paso actual es un silencio  (frecuencia igual 0)  se desactiva la señal PWM, y si es una nota (frecuencia distinta de 0) se establece adecuadamente el periodo de la señal PWM con el valor inverso de la frecuencia de la nota. A continuación se ejecuta la función <code>msleep()</code> para que el <em>kernel thread</em> que ejecuta esta tarea diferida se bloquee durante el tiempo asociado a la nota o silencio actual de la melodía. Para el cálculo del tiempo es preciso que haya una referencia de la duración de cada figura musical (blanca, negra, etc.). Por simplicidad, la variable local <code>beat</code> almacena el número de negras por minuto a modo de indicación de metrónomo, que en este caso se fija a 120. La función <code>calculate_delay_ms()</code> definida en el módulo del kernel calcula la duración de la nota (retardo especificado en milisegundos) en base a los bits activados en el campo len y considerando el valor actual de <code>beat</code> como referencia (segundo parámetro de la llamada):</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="cm">/**</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="cm"> * Transform note length into ms,</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="cm"> * taking the beat of a quarter note as reference</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="cm"> */</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">calculate_delay_ms</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">note_len</span><span class="p">,</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">qnote_ref</span><span class="p">){</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">duration</span><span class="o">=</span><span class="p">(</span><span class="n">note_len</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x7f</span><span class="p">);</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">triplet</span><span class="o">=</span><span class="p">(</span><span class="n">note_len</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x80</span><span class="p">);</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">current_duration</span><span class="p">;</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">total</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="cm">/* Calculate the total duration of the note</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="cm">     * as the summation of the figures that make</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="cm">     * up this note (bits 0-6)</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="cm">     */</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">duration</span><span class="p">){</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">        </span><span class="n">current_duration</span><span class="o">=</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="p">);</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">current_duration</span><span class="p">){</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">            </span><span class="cm">/* Scale note accordingly */</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">triplet</span><span class="p">)</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">                </span><span class="n">current_duration</span><span class="o">=</span><span class="p">(</span><span class="n">current_duration</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">        </span><span class="cm">/**</span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="cm">         * 24000/qnote_ref denote number of ms associated</span>
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="cm">         * with a whole note (redonda)</span>
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="cm">         */</span>
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">            </span><span class="n">total</span><span class="o">+=</span><span class="p">(</span><span class="mi">240000</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">qnote_ref</span><span class="o">*</span><span class="n">current_duration</span><span class="p">);</span>
+</span><span id="__span-10-28"><a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="w">            </span><span class="cm">/* Clear bit */</span>
+</span><span id="__span-10-29"><a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="w">            </span><span class="n">duration</span><span class="o">&amp;=~</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="p">);</span>
+</span><span id="__span-10-30"><a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-31"><a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">        </span><span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span><span id="__span-10-32"><a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-33"><a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">total</span><span class="p">;</span>
+</span><span id="__span-10-34"><a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Tras analizar el código del módulo, trata de responder a las siguientes preguntas:</p>
+<ul>
+<li>¿Por qué la melodía se reproduce una sola vez al cargar el módulo del kernel?</li>
+<li>¿Qué cambio debería realizarse en la implementación para que la melodía se reprodujera más rápido (por ejemplo al doble de velocidad)?</li>
+<li>¿Qué sucede si intentamos descargar el módulo mientras la melodía está aún reproduciéndose? ¿Cómo se consigue este comportamiento?</li>
+</ul>
+<h2 id="desarrollo-de-la-practica">Desarrollo de la práctica<a class="headerlink" href="#desarrollo-de-la-practica" title="Permanent link">&para;</a></h2>
+<p>Esta práctica consta de dos partes. En la primera parte se ejercitará el uso de manejadores de interrupción y temporizadores del kernel. En la segunda parte, se emplearán estas dos abstracciones del kernel en combinación con las <em>workqueues</em> y la API de PWM. </p>
+<h3 id="parte-a">Parte A<a class="headerlink" href="#parte-a" title="Permanent link">&para;</a></h3>
+<p>Desarrollar un módulo del kernel  <em>SMP-safe</em> llamado  <code>timerleds.c</code> que establezca la configuración de los LEDs de la placa Bee para que se enciendan/apaguen usando una secuencia prefijada, como un contador binario, o el encendido de un LED distinto en cada paso de la secuencia (desplazamiento). La transición entre cada paso de la secuencia debe realizarse automáticamente utilizando un temporizador del kernel, que actualice periódicamente el estado de los LEDs. El periodo del temporizador (dado en milisegundos) ha de ser configurable mediante un parámetro <code>timer_period_ms</code> a establecer durante la carga del módulo.</p>
+<p>Además, el módulo del kernel debe permitir al usuario pausar y reanudar la actividad del temporizador del kernel mediante el uso del pulsador SW1 de la placa. Implementar esta funcionalidad conlleva instalar un manejador de interrupción asociado al GPIO del pulsador SW1. <strong>Nota importante:</strong> téngase en cuenta que la función <code>del_timer_sync()</code> para desactivar un temporizador del kernel activo es bloqueante, por lo que NO puede ejecutarse en contexto de interrupción.</p>
+<p>Por simplicidad en el desarrollo de este apartado se aconseja reutilizar código de los siguientes ejemplos:</p>
+<ul>
+<li><code>TimerExample</code> : Ejercicio 3 de esta práctica</li>
+<li><code>GPIODInterrupt</code> : Código analizado en clase (Ejercicio 1) , donde se hace uso combinado de los LEDs y el pulsador</li>
+<li><code>Hello5</code>: Módulo de ejemplo de la Práctica 1, donde se ilustra el uso de parámetros de los módulos del kernel.</li>
+</ul>
+<h3 id="parte-b">Parte B<a class="headerlink" href="#parte-b" title="Permanent link">&para;</a></h3>
+<p>Desarrollar un driver <em>SMP-safe</em> en Linux (<code>buzzer.c</code>) que permita reproducir melodías proporcionadas por el usuario empleando el buzzer presente en la placa Bee v2.0. El driver exportará un fichero especial de caracteres <code>/dev/buzzer</code> que permitirá configurar tanto la melodía a reproducir, como la velocidad de reproducción de ésta. Además, el usuario podrá iniciar la reproducción de la melodía, detenerla o reanudarla presionando el pulsador SW1 de la placa Bee.  </p>
+<p>El usuario especificará al módulo del kernel la melodía a reproducir escribiendola en el fichero<code>/dev/buzzer</code>. La melodía se representa mediante una cadena de caracteres, que comienza  por el prefijo "music " seguido de una lista de notas musicales o silencios con una duración determinada. Cada nota en la melodia se denota mediante un par "frecuencia:duración", donde ambos componentes del par tendrán la misma semántica que en el módulo del kernel <code>TestBuzzer</code> del Ejercicio 4 (estructura <code>music_step</code>). Dos notas consecutivas de una línea melódica se separarán mediante una coma. </p>
+<p>Para ilustrar esta representación de las melodías, considérese el siguiente comando, que permite configurar la misma melodía que se encuentra hardcodeada en el ejemplo <code>TestBuzzer</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>music<span class="w"> </span><span class="m">26163</span>:0x4,32963:0x4,39200:0x4,52325:0x4,0:0x2,52325:0x4,39200:0x4,32963:0x4,26163:0x4<span class="w"> </span>&gt;<span class="w"> </span>/dev/buzzer
+</span></code></pre></div>
+<p>El driver también permitirá la configuración del ritmo de reproducción de la melodía escribiendo en <code>/dev/buzzer</code> el valor de un parámetro <code>beat</code> que indique cuántas negras por minuto han de reproducirse (como la variable <code>beat</code> del ejemplo <code>TestBuzzer</code>). Para modificar o consultar el valor actual de este parámetro se deberá escribir o leer del fichero especial de caracteres del siguiente modo:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">## Establecer valor de beat a 150</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>beat<span class="w"> </span><span class="m">150</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/buzzer
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1">## Consultar el valor actual de beat</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>$<span class="w"> </span>cat<span class="w"> </span>/dev/buzzer
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="nv">beat</span><span class="o">=</span><span class="m">150</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>...
+</span></code></pre></div>
+<p>Para simplificar el desarrollo de la práctica y la configuración de melodías se proporcionan algunos ficheros en el directorio <code>Util</code> de los ejemplos de esta práctica. En particular, en este directorio se encuentra la utilidad <code>music_converter.py</code>,  y una serie de melodías en un formato de mayor nivel de abstracción (ficheros ".music") que el que el driver usa como entrada. Se deja como ejercicio analizar ese formato de alto nivel y tratar de escribir nuevas melodías usando este sencillo formato. </p>
+<p>La utilidad <code>music_converter.py</code> permite convertir las melodías ".music" al formato de entrada del driver usando como argumentos un fichero donde se encuentra la tabla de frecuencias que corresponde a cada nota musical, y el fichero de extensión ".music" a convertir. El modo de uso del programa es el siguiente:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>music_converter.py<span class="w"> </span>freq_table.csv<span class="w"> </span>&lt;fichero.music&gt;<span class="w"> </span>
+</span></code></pre></div>
+<p>Como la utilidad imprime el resultado de la conversión por la salida estándar, es preciso usar una sentencia de redirección para escribir la configuración en <code>/dev/buzzer</code>, como en el siguiente ejemplo:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="w"> </span>pi@raspberrypi:~/P5/Util$<span class="w"> </span>./music_converter.py<span class="w"> </span>freq_table.csv<span class="w"> </span>ode_to_joy.music<span class="w"> </span>&gt;<span class="w"> </span>/dev/buzzer
+</span></code></pre></div>
+<p>Por simplicidad se recomienda almacenar la melodía en una variable global <code>melody</code>: un array de estructuras <code>music_step</code> , cuya memoria  ha de reservarse con <code>vmalloc(PAGE_SIZE)</code> en la función de inicialización del módulo del kernel. </p>
+<p>Para concluir la descripción de la práctica se proporcionan a continuación detalles adicionales de su funcionamiento, así como restricciones de implementación.</p>
+<h4 id="gestion-del-pulsador-sw1">Gestión del pulsador SW1<a class="headerlink" href="#gestion-del-pulsador-sw1" title="Permanent link">&para;</a></h4>
+<p>Inicialmente al cargar el módulo no se reproducirá ninguna melodía. El usuario deberá pulsar SW1 para que se inicie la reproducción de la melodía actual (establecida por defecto, o configurada previamente por el usuario escribiendo en <code>/dev/buzzer</code>). Si la reproducción de la melodía no ha terminado, las pulsaciones sucesivas de SW1 detendrán y reanudarán (respectivamente) la reproducción en/desde el punto donde se encontrase. Si la melodía acabó de reproducirse, una nueva pulsación de SW1 reiniciará la reproducción de la melodía desde el principio.</p>
+<h4 id="reproduccion-de-la-melodia-mediante-tarea-diferida-y-temporizador-del-kernel">Reproducción de la melodía mediante tarea diferida y temporizador del kernel<a class="headerlink" href="#reproduccion-de-la-melodia-mediante-tarea-diferida-y-temporizador-del-kernel" title="Permanent link">&para;</a></h4>
+<p>En el ejemplo <code>TestBuzzer</code> la ejecución de la tarea diferida se encarga de la reproducción de la melodía completa. Para ello se hace uso de un bucle, con una iteración por nota, en el que la señal PWM se mantiene con la misma configuración durante el tiempo que corresponde a la duración de la nota. La llamada <code>msleep()</code> bloquea al <em>kernel thread</em> que ejecuta la tarea diferida durante el tiempo necesario pasado como parámetro. En un contexto donde el usuario puede configurar melodías muy largas esto genera tareas diferidas con un elevado tiempo de ejecución, lo cual además dificulta la implementación del control de la reproducción (parar, reanudar, etc.).</p>
+<p>Para solventar esta limitación, en esta parte de la práctica se usará una tarea diferida más ligera y un temporizador del kernel, que trabajarán de forma cooperativa para reproducir la melodía paso a paso. La tarea diferida se encargará de establecer la frecuencia de la nota actual (periodo señal PWM), mientras que el temporizador controlará la duración de la nota. Más concretamente, el funcionamiento será el siguiente: </p>
+<ul>
+<li>Cuando el usuario presione el pulsador SW1 (y se genere la interrupción correspondiente), será necesario planificar la tarea diferida. </li>
+<li>Al ejecutarse, la tarea diferida reproducirá la primera nota de la melodía, configurando adecuadamente el canal PWM conectado al <em>buzzer</em>. Para garantizar que la nota se mantenga el tiempo suficiente, la tarea diferida  programará un temporizador del kernel que expire al finalizar la duración de la nota, y retornará de la función correspondiente (fin de tarea diferida).</li>
+<li>Cuando el temporizador se active, la función del <em>timer</em> comprobará si la reproducción sigue en estado activo, y en tal caso planificará de nuevo la  tarea diferida que procesará la siguiente nota o silencio de la melodía, dando de nuevo paso al temporizador, así hasta el final de la reproducción.</li>
+</ul>
+<h4 id="gestion-de-la-concurrencia">Gestión de la concurrencia<a class="headerlink" href="#gestion-de-la-concurrencia" title="Permanent link">&para;</a></h4>
+<p>Uno de los mayores retos de implementación de la práctica es la gestión adecuada de la concurrencia. Considerando la especificación presentada en las secciones anteriores, existen 4 flujos de ejecución concurrentes en el módulo del kernel:</p>
+<ol>
+<li><strong>Función de escritura en <code>/dev/buzzer</code>.</strong> El usuario puede alterar la melodía actual siempre y cuando el buzzer no esté reproduciendo actualmente ninguna melodía (estado <code>BUZZER_PLAYING</code> que se describe más abajo). Cualquier intento de modificar la melodía cuando está reproduciéndose debe gestionarse retornando <code>-EBUSY</code> en la operación <em>write</em> del fichero especial de caracteres.</li>
+<li><strong>Manejador de interrupción del pulsador SW1</strong>. El estado de la reproducción de la melodía puede alterarse de forma asíncrona a petición del usuario </li>
+<li><strong>Temporizador del kernel</strong>. Este temporizador se activará al finalizar la duración de la nota actual, siempre y cuando la reproducción esté activa</li>
+<li><strong>Tarea diferida que reproduce la nota actual</strong>. La configuración del canal PWM se ha de hacer en este contexto por la naturaleza bloqueante de las funciones del API PWM.</li>
+</ol>
+<p>Para simplificar la labor de desarrollo, se recomienda la utilización de al menos cuatro variables globales (<code>lock</code>, <code>next_note</code>, <code>buzzer_state</code> y <code>buzzer_request</code>), las dos últimas de tipo enumerado:</p>
+<p>::: {fontsize=footnotesize}</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/spinlock.h&gt;</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="p">...</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="k">static</span><span class="w"> </span><span class="n">spinlock_t</span><span class="w"> </span><span class="n">lock</span><span class="p">;</span><span class="w"> </span><span class="cm">/* Cerrojo para proteger actualización/consulta </span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="cm">                            de variables buzzer_state y buzzer_request */</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">music_step</span><span class="o">*</span><span class="w"> </span><span class="n">next_note</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="cm">/* Puntero a la siguiente nota de la melodía </span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="cm">                                            actual  (solo alterado por tarea diferida) */</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="n">BUZZER_STOPPED</span><span class="p">,</span><span class="w"> </span><span class="cm">/* Buzzer no reproduce nada (la melodía terminó o no ha comenzado) */</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="n">BUZZER_PAUSED</span><span class="p">,</span><span class="w">  </span><span class="cm">/* Reproducción pausada por el usuario */</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">    </span><span class="n">BUZZER_PLAYING</span><span class="w">  </span><span class="cm">/* Buzzer reproduce actualmente la melodía */</span>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="p">}</span><span class="w"> </span><span class="n">buzzer_state_t</span><span class="p">;</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="k">static</span><span class="w"> </span><span class="n">buzzer_state_t</span><span class="w"> </span><span class="n">buzzer_state</span><span class="o">=</span><span class="n">BUZZER_STOPPED</span><span class="p">;</span><span class="w"> </span><span class="cm">/* Estado actual de la reproducción */</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">    </span><span class="n">REQUEST_START</span><span class="p">,</span><span class="w">      </span><span class="cm">/* Usuario pulsó SW1 durante estado BUZZER_STOPPED */</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="w">    </span><span class="n">REQUEST_RESUME</span><span class="p">,</span><span class="w">     </span><span class="cm">/* Usuario pulsó SW1 durante estado BUZZER_PAUSED */</span>
+</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="w">    </span><span class="n">REQUEST_PAUSE</span><span class="p">,</span><span class="w">      </span><span class="cm">/* Usuario pulsó SW1 durante estado BUZZER_PLAYING */</span>
+</span><span id="__span-15-21"><a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="w">    </span><span class="n">REQUEST_CONFIG</span><span class="p">,</span><span class="w">     </span><span class="cm">/* Usuario está configurando actualmente una nueva melodía vía /dev/buzzer  */</span>
+</span><span id="__span-15-22"><a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="w">    </span><span class="n">REQUEST_NONE</span><span class="w">            </span><span class="cm">/* Indicador de petición ya gestionada (a establecer por tarea diferida) */</span>
+</span><span id="__span-15-23"><a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="p">}</span><span class="w"> </span><span class="n">buzzer_request_t</span><span class="p">;</span>
+</span><span id="__span-15-24"><a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>
+</span><span id="__span-15-25"><a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="k">static</span><span class="w"> </span><span class="n">buzzer_request_t</span><span class="w"> </span><span class="n">buzzer_request</span><span class="o">=</span><span class="n">REQUEST_NONE</span><span class="p">;</span>
+</span></code></pre></div>
+<p>:::</p>
+<p>La idea general es que sólo la tarea diferida altere el estado de la variable <code>buzzer_state</code>, y los otros 3 flujos de ejecución solo consulten el valor de esa variable de estado. Para modificar el estado de la reproducción o inhibir cambios en éste (p.ej., si se está alterando la melodía a reproducir), el manejador de interrupción y la función de escritura sobre <code>/dev/buzzer</code> deberán actualizar la variable <code>buzzer_request</code>. La tarea diferida tendrá en cuenta la petición recibida y alterará adecuadamente el estado <code>buzzer_state</code>, estableciendo posteriormente la variable <code>buzzer_request</code> a  <code>REQUEST_NONE</code> (petición gestionada).</p>
+<p>Por último, nótese que para proteger el acceso concurrente a las variables globales <code>buzzer_state</code> y <code>buzzer_request</code> ha de usarse un <em>spin lock</em> (variable global <code>lock</code>). Además, para evitar interbloqueos en el acceso concurrente a estas variables desde contexto de proceso e interrupción se deben usar las primitivas <code>spin_lock_irqsave()</code> y <code>spin_unlock_irqrestore()</code> vistas en clase. </p>
+<h3 id="partes-opcionales">Partes opcionales<a class="headerlink" href="#partes-opcionales" title="Permanent link">&para;</a></h3>
+<h4 id="opcional-1">Opcional 1<a class="headerlink" href="#opcional-1" title="Permanent link">&para;</a></h4>
+<p>Modificar el código del módulo del kernel <em>GPIODInterrupt</em> del kernel de tal forma que haya un cierto retardo (p.ej. 100ms) entre la conmutación del estado de cada LED tras realizar la pulsación de SW1. Es decir que los LEDs conmuten uno detrás del otro, en lugar de simultáneamente como lo percibe el usuario.</p>
+<h4 id="opcional-2">Opcional 2<a class="headerlink" href="#opcional-2" title="Permanent link">&para;</a></h4>
+<p>Implementar un módulo del kernel que al cargarse muestre una secuencia continua y prefijada de colores (a escoger por el estudiante) usando el LED RGB D4 de la placa Bee. Este LED está situado justo debajo del display 7 segmentos.  Para controlar el LED han de usarse sus tres pines de entrada (R, G y B) --situados a la izquierda--, que es preciso conectar a tres GPIOs libres de la Raspberry Pi mediante cables <em>dupont</em>. Por ejemplo, para este propósito pueden usarse  los pines B26, B21 y B20, situados en la esquina superior izquierda de la placa. </p>
+<p>La intensidad de los componentes rojo (R), verde (G) y azul (B) del color del LED D4 se controlan mediante 3 señales PWM, que pueden generarse por software (<em>bit banging</em>) y/o por hardware (usando los canales PWM0 y/o PWM1). Existen distintas alternativas de implementación para esta parte opcional (p.ej., emplear un <em>kernel thread</em> para alterar los colores a lo largo del tiempo, o usar de forma combinada temporizadores del kernel y tareas diferidas). Queda a elección del estudiante cómo llevar a cabo la implementación, así como el  tipo de secuencia de colores utilizada.</p>
+<h4 id="opcional-3">Opcional 3<a class="headerlink" href="#opcional-3" title="Permanent link">&para;</a></h4>
+<p>Extender la funcionalidad del módulo desarrollado en la parte B de la práctica para integrar de forma creativa el uso de otros dispositivos de la placa Bee en combinación con los ya usados en ese módulo del kernel (<em>buzzer</em>, LEDS D1-D3 y pulsador SW1). Aunque se deja a elección del estudiante los dispositivos extra a utilizar, y su integración con el reproductor de melodías, a continuación se proporcionan algunas sugerencias:</p>
+<ul>
+<li>Uso de los pulsadores SW3 y SW2 para, respectivamente, ralentizar o acelerar el <em>tempo</em> de reproducción de la melodía tras su pulsación. Es decir, se propone el uso de estos pulsadores para ajustar el valor del parámetro <code>beat</code> usando controles hardware.</li>
+<li>Uso del LED D4 para mostrar un color particular al mismo tiempo que se reproduce cada nota específica de la melodía. </li>
+<li>Marcar el compás de la melodía que se esté reproduciendo, mediante el parpadeo de algún LED (D1-D4)</li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../sincronizacion/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Drivers en Linux. Sincronización en el kernel" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Drivers en Linux. Sincronización en el kernel
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

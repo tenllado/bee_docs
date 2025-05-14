@@ -8,15 +8,8 @@
       
       
       
-      
-        <link rel="prev" href="../i2c_linux/">
-      
-      
-        <link rel="next" href="../robotica/">
-      
-      
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.5">
     
     
       
@@ -24,14 +17,13 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.2afb09e1.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
       
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
       
-
-
     
-    
-      
     
     
       
@@ -43,18 +35,23 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
-    
   </head>
   
   
-    <body dir="ltr">
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
   
+    
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -74,19 +71,16 @@
     
       
 
-  
-
-<header class="md-header md-header--shadow" data-md-component="header">
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="BEE Docs" class="md-header__button md-logo" aria-label="BEE Docs" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -106,49 +100,39 @@
     </div>
     
     
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
-    
-    
-      
-      
-        <label class="md-header__button md-icon" for="__search">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        </label>
-        <div class="md-search" data-md-component="search" role="dialog">
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
         </button>
       </nav>
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+      <div class="md-search__scrollwrap" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
+          <ol class="md-search-result__list"></ol>
         </div>
       </div>
     </div>
   </div>
 </div>
-      
     
     
   </nav>
@@ -173,7 +157,6 @@
                     
 
 
-
   
 
 <nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
@@ -181,7 +164,7 @@
     <a href=".." title="BEE Docs" class="md-nav__button md-logo" aria-label="BEE Docs" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
     </a>
     BEE Docs
@@ -191,243 +174,160 @@
     
       
       
+      
+
   
   
   
-  
-    
-    
-    
-    
     
     <li class="md-nav__item md-nav__item--nested">
       
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-        
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Documentación Técnica
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Documentación Técnica" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Documentación Técnica
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
           
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Documentación Técnica
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1">
-            <span class="md-nav__icon md-icon"></span>
-            Documentación Técnica
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
-                
-  
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Placa de expansión BEE
-    
-  </span>
-  
-
+        Placa de expansión BEE
       </a>
     </li>
   
 
-              
             
-          </ul>
-        </nav>
-      
+          
+        </ul>
+      </nav>
     </li>
   
 
     
       
       
+      
+
   
   
     
   
   
-  
-    
-    
-    
-    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
-        
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Prácticas
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prácticas" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Prácticas
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Prácticas
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            Prácticas
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
-                
-  
   
   
   
     <li class="md-nav__item">
       <a href="../gpio_linux/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Control GPIO en Linux
-    
-  </span>
-  
-
+        Control GPIO en Linux
       </a>
     </li>
   
 
-              
+            
+          
             
               
-                
-  
   
   
   
     <li class="md-nav__item">
       <a href="../pwm_linux/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Control PWM en Linux
-    
-  </span>
-  
-
+        Control PWM en Linux
       </a>
     </li>
   
 
-              
+            
+          
             
               
-                
-  
   
   
   
     <li class="md-nav__item">
       <a href="../spi_linux/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Control de dispositivos SPI
-    
-  </span>
-  
-
+        Control de dispositivos SPI
       </a>
     </li>
   
 
-              
+            
+          
             
               
-                
-  
   
   
   
     <li class="md-nav__item">
       <a href="../i2c_linux/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Control de dispositivos I2C
-    
-  </span>
-  
-
+        Control de dispositivos I2C
       </a>
     </li>
   
 
-              
+            
+          
             
               
-                
   
   
     
   
   
-  
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Control de servomotores con PWM
-    
-  </span>
-  
-
+          Control de servomotores con PWM
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    Control de servomotores con PWM
-    
-  </span>
-  
-
+        Control de servomotores con PWM
       </a>
       
         
@@ -449,18 +349,14 @@
       
         <li class="md-nav__item">
   <a href="#servomotores" class="md-nav__link">
-    <span class="md-ellipsis">
-      Servomotores
-    </span>
+    Servomotores
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#senal-pwm" class="md-nav__link">
-    <span class="md-ellipsis">
-      Señal PWM
-    </span>
+    Señal PWM
   </a>
   
     <nav class="md-nav" aria-label="Señal PWM">
@@ -468,27 +364,21 @@
         
           <li class="md-nav__item">
   <a href="#pwm-hardware" class="md-nav__link">
-    <span class="md-ellipsis">
-      PWM hardware
-    </span>
+    PWM hardware
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#configuracion-de-la-frecuencia-pwm" class="md-nav__link">
-    <span class="md-ellipsis">
-      Configuración de la Frecuencia PWM
-    </span>
+    Configuración de la Frecuencia PWM
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#codigo" class="md-nav__link">
-    <span class="md-ellipsis">
-      Código
-    </span>
+    Código
   </a>
   
 </li>
@@ -500,9 +390,7 @@
       
         <li class="md-nav__item">
   <a href="#conexiones-con-la-placa-bee" class="md-nav__link">
-    <span class="md-ellipsis">
-      Conexiones con la placa BEE
-    </span>
+    Conexiones con la placa BEE
   </a>
   
 </li>
@@ -514,34 +402,80 @@
     </li>
   
 
-              
+            
+          
             
               
-                
-  
   
   
   
     <li class="md-nav__item">
       <a href="../robotica/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Prácticas de Robótica
-    
-  </span>
-  
-
+        Prácticas de Robótica
       </a>
     </li>
   
 
-              
             
-          </ul>
-        </nav>
-      
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-kernel/config/" class="md-nav__link">
+        Drivers en Linux. Preparación del entorno de trabajo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-kernel/drivers/" class="md-nav__link">
+        Drivers en Linux. Aspectos básicos y GPIO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-kernel/sincronizacion/" class="md-nav__link">
+        Drivers en Linux. Sincronización en el kernel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-kernel/interrupt-timers-pwm/" class="md-nav__link">
+        Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -554,12 +488,10 @@
             
             
           
-          
-            <div class="md-content" data-md-component="content">
-              <article class="md-content__inner md-typeset">
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
                 
-                  
-
 
 
 <h1 id="control-de-servomotores-con-pwm">Control de servomotores con PWM<a class="headerlink" href="#control-de-servomotores-con-pwm" title="Permanent link">&para;</a></h1>
@@ -718,28 +650,49 @@ que asegurarnos que las tierras de ambos motores y la tierra de la placa BEE
 (conector azul en la imagen, entre otros) están conectadas al mismo punto para
 tener una referencia común.</p>
 
-
-
-
-
-
-
-
-
-
-
-
-                
-              </article>
-            </div>
-          
-          
-<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+              
+            </article>
+          </div>
         </div>
         
       </main>
       
         <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../i2c_linux/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Control de dispositivos I2C" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Control de dispositivos I2C
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../robotica/" class="md-footer__link md-footer__link--next" aria-label="Next: Prácticas de Robótica" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Prácticas de Robótica
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -761,14 +714,10 @@ tener una referencia común.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate"], "search": "../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-    
-      
-      <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
-    
-    
-      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
       
         <script src="../javascripts/mathjax.js"></script>
       

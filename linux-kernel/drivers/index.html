@@ -1,0 +1,926 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.5">
+    
+    
+      
+        <title>Drivers en Linux. Aspectos básicos y GPIO - BEE Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#drivers-en-linux-aspectos-basicos-y-gpio" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BEE Docs" class="md-header__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BEE Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Drivers en Linux. Aspectos básicos y GPIO
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BEE Docs" class="md-nav__button md-logo" aria-label="BEE Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    BEE Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Documentación Técnica
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Documentación Técnica" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Documentación Técnica
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Placa de expansión BEE
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Prácticas
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Prácticas" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Prácticas
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gpio_linux/" class="md-nav__link">
+        Control GPIO en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwm_linux/" class="md-nav__link">
+        Control PWM en Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spi_linux/" class="md-nav__link">
+        Control de dispositivos SPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../i2c_linux/" class="md-nav__link">
+        Control de dispositivos I2C
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../control_servomotores/" class="md-nav__link">
+        Control de servomotores con PWM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robotica/" class="md-nav__link">
+        Prácticas de Robótica
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        Drivers en Linux. Preparación del entorno de trabajo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Drivers en Linux. Aspectos básicos y GPIO
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Drivers en Linux. Aspectos básicos y GPIO
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos" class="md-nav__link">
+    Objetivos
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    Ejercicios
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    Ejercicio 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    Ejercicio 2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    Ejercicio 3
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    Ejercicio 4
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-5" class="md-nav__link">
+    Ejercicio 5
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-6" class="md-nav__link">
+    Ejercicio 6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-7" class="md-nav__link">
+    Ejercicio 7
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#desarrollo-de-la-practica" class="md-nav__link">
+    Desarrollo de la práctica
+  </a>
+  
+    <nav class="md-nav" aria-label="Desarrollo de la práctica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parte-a" class="md-nav__link">
+    Parte A
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parte-b" class="md-nav__link">
+    Parte B
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sincronizacion/" class="md-nav__link">
+        Drivers en Linux. Sincronización en el kernel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interrupt-timers-pwm/" class="md-nav__link">
+        Drivers en Linux. Gestión de interrupciones, temporizadores, y trabajos diferidos
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="drivers-en-linux-aspectos-basicos-y-gpio">Drivers en Linux. Aspectos básicos y GPIO<a class="headerlink" href="#drivers-en-linux-aspectos-basicos-y-gpio" title="Permanent link">&para;</a></h1>
+<h2 id="objetivos">Objetivos<a class="headerlink" href="#objetivos" title="Permanent link">&para;</a></h2>
+<p>Los principales objetivos de esta práctica son los siguientes:</p>
+<ol>
+<li>Familiarizarse con las principales estructuras y abstracciones que se emplean en la implementación de drivers de dispositivos de caracteres en Linux.</li>
+<li>Introducirse en el uso de la <em>descriptor</em> API para el sistema GPIO en Linux</li>
+<li>Aprender a gestionar los LEDs y el display 7 segmentos de la placa Bee v2.0 desde el kernel Linux.</li>
+</ol>
+<p>El código para esta práctica puede descargarse <a href="/linux-kernel/src/drivers.tgz">aquí</a>.</p>
+<p>Se recomienda al estudiante seguir un orden particular al desarrollar la práctica. Los pasos recomendados son los siguientes:</p>
+<ol>
+<li>
+<p>Seguir el tutorial de <a href="/linux-kernel/config">preparación del entorno de prácticas</a> con la Raspberry Pi, la placa de E/S y la máquina virtual de Debian</p>
+</li>
+<li>
+<p>Realizar los ejercicios 1-6 de este guión, que se centran en ilustrar el funcionamiento de los drivers de dispositivos de caracteres y la API de GPIO en Linux.</p>
+</li>
+<li>
+<p>Desarrollar el módulo del kernel solicitado en la Parte A de la práctica.</p>
+</li>
+<li>
+<p>Realizar el ejercicio 7 del guión, que ilustra el funcionamiento a bajo nivel del display 7 segmentos de la placa Bee v2.0.</p>
+</li>
+<li>
+<p>Desarrollar la <a href="#parteC">Parte B</a> de la práctica, en la que será preciso modificar el módulo del kernel proporcionado en el ejercicio 7</p>
+</li>
+</ol>
+<p><strong>Teoría de la práctica</strong></p>
+<p>La teoría asociada a esta práctica se imparte en la asignatura "Arquitectura Interna de Linux y Android", ofertada en las distintas titulaciones de grado en la Facultad de Informática de la Universidad Complutense de Madrid. Para más información sobre la asignatura consultad a <a href="mailto:jcsaezal@ucm.es">Juan Carlos Sáez Alcaide</a>.</p>
+<p>Para documentarse sobre la temática de forma autónoma se proporcionan las siguientes referencias:</p>
+<ul>
+<li>Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang. <em>Linux Kernel Module Programming Guide</em>. 2025. <a href="https://sysprog21.github.io/lkmpg/">Disponible online</a>. Versión en <a href="Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang">PDF</a></li>
+<li>Kaiwan N. Billimoria. <em>Linux Kernel Programming</em>. Packt Publishing. 1st edition. 2021</li>
+<li>Kaiwan N. Billimoria. <em>Linux Kernel Programming. Part 2 - Char Device Drivers and Kernel Synchronization</em>. Packt Publishing. 1st edition. 2021</li>
+<li>Robert Love; <em>Linux Kernel Development</em>. Addison Wesley, 3rd Edition. Julio 2010</li>
+</ul>
+<h2 id="ejercicios">Ejercicios<a class="headerlink" href="#ejercicios" title="Permanent link">&para;</a></h2>
+<h3 id="ejercicio-1">Ejercicio 1<a class="headerlink" href="#ejercicio-1" title="Permanent link">&para;</a></h3>
+<p>Probar y analizar el código de los módulos de ejemplo <code>Chardev2</code> y <code>ChardevMisc</code>. Compilar y cargar cada uno de los módulos del kernel y responder a las siguientes preguntas para cada uno de ellos:</p>
+<ol>
+<li>¿Cuál es la ruta (<em>path</em>) del fichero de dispositivo que se crea automáticamente al cargar el módulo?</li>
+<li>¿En qué fichero especial del sistema puede consultarse el major number asignado al driver correspondiente?</li>
+<li>¿Qué <em>minor number</em> tiene asociado cada uno de los ficheros especiales creados al cargar los módulos del kernel? ¿Qué llamada del driver se encarga de asignar ese <em>minor number</em>? </li>
+<li>¿Qué sucede al escribir en el fichero especial de dispositivo (p.ej., <code>echo hello &gt; /dev/chardev</code>)? ¿Por que se produce este comportamiento?</li>
+</ol>
+<h3 id="ejercicio-2">Ejercicio 2<a class="headerlink" href="#ejercicio-2" title="Permanent link">&para;</a></h3>
+<p>Algunas  funciones de la API del kernel Linux retornan un puntero a una estructura, que representa un objeto del kernel. En algunos casos, como en la función <code>proc_create()</code>,  un valor de retorno igual a NULL indica que se ha producido un error. Un valor distinto de NULL refleja que la función se ha ejecutado correctamente, y que por tanto, la estructura devuelta es válida. El problema de esta aproximación a la gestión de errores es que la función invocadora desconoce el error concreto que se ha producido, ya que solo puede saber si ha habido error o no. </p>
+<p>Para ofrecer mayor robustez en la gestión de errores en funciones que retornan un puntero a una estructura, es posible usar el propio puntero retornado para almacenar el código del error que se ha producido usando la macro <code>ERR_PTR()</code>. Consulta la implementación de la función <code>class_create()</code>  cuya implementación, que puede encontrarse <a href="https://elixir.bootlin.com/linux/v6.2.16/source/drivers/base/class.c#L231">aquí</a>, hace uso de la citada macro. </p>
+<p>Al usar funciones que codifican errores de esta forma es posible comprobar desde la función invocadora si el valor de retorno almacena un código de error usando la macro <code>IS_ERR()</code>. Además, en caso de que se haya producido un error la macro <code>PTR_ERR()</code> permite recuperar el código (negativo) de error a partir del puntero. Analiza detenidamente el uso de las macros  <code>IS_ERR()</code> y  <code>PTR_ERR()</code>  en el módulo de ejemplo <code>Chardev2</code>.</p>
+<h3 id="ejercicio-3">Ejercicio 3<a class="headerlink" href="#ejercicio-3" title="Permanent link">&para;</a></h3>
+<p>El módulo del kernel de ejemplo <code>ChardevData</code> constituye una variante de <code>Chardev2</code>, donde las variables globales a las que se accede en las operaciones <code>open()</code>, <code>read()</code> y <code>release()</code> se han reemplazado por una estructura privada asociada al <code>struct device_data</code> que crea el driver. Consulta la implementación del módulo <code>ChardevData</code> y responde a las siguientes preguntas.</p>
+<ol>
+<li>¿Qué ventaja crees que tiene reemplazar las citadas variables globales por la estructura privada?</li>
+<li>¿Que llamada de la API de Linux permite asociar en esta implementación la estructura privada al al <code>struct device</code> que crea el driver?</li>
+<li>¿Cómo es posible recuperar dicha estructura privada en las operaciones <code>open()</code>, <code>read()</code> y <code>release()</code>? <strong>Pista:</strong> La estructura <code>struct file*</code> que se pasa como parámetro a estas operaciones representa el fichero abierto sobre el que se invocan las operaciones desde espacio de usuario, y su campo <code>private_data</code> se utiliza en el driver para almacenar un puntero.</li>
+</ol>
+<h3 id="ejercicio-4">Ejercicio 4<a class="headerlink" href="#ejercicio-4" title="Permanent link">&para;</a></h3>
+<p>Analizar la implementación del módulo de ejemplo <code>Clipboard-dev</code>. Se trata de una variante del ejemplo <code>Clipboard</code> de la práctica 1, donde el "clipboard" se expone usando un fichero especial de caracteres <code>/dev/clipboard</code> en lugar de un fichero en <code>/proc</code>.  Identifica las diferencias entre la implementación de ambos módulos del kernel: <code>diff -u &lt;ruta clipboard.c&gt; &lt;ruta clipboard-dev.c&gt;</code></p>
+<p>En ambos módulos del kernel están presentes las funciones <code>clipboard_write()</code> y <code>clipboard_read()</code> para gestionar las acciones de lectura y escritura sobre el fichero especial que representa el "clipboard" en cada caso. ¿Qué diferencias encuentras entre la implementación de estas funciones presentes tanto en <code>Clipboard</code> como en <code>Clipboard-dev</code>?</p>
+<h3 id="ejercicio-5">Ejercicio 5<a class="headerlink" href="#ejercicio-5" title="Permanent link">&para;</a></h3>
+<p>En el directorio del módulo de ejemplo Clipboard de la práctica 1 pueden encontrarse dos ficheros de GNU Make: <code>Makefile</code> y <code>Makefile.cross</code>. El segundo de ellos sirve para realizar compilación cruzada del módulo del kernel para la Raspberry Pi desde nuestro <em>host</em> de desarrollo (la máquina virtual de Debian). </p>
+<p>Este ejercicio consiste en realizar una compilación cruzada del módulo del kernel Clipboard para la Raspberry Pi y probar el fichero <code>.ko</code> resultante de dicha compilación en la placa.  Para ello han de seguirse los siguientes pasos:</p>
+<ol>
+<li>
+<p>Abrir un navegador web en la máquina virtual y descargar el fichero <code>linux-raspberry.tgz</code> usando <a href="https://drive.google.com/file/d/1ELwo5z1C9x8ophO3eYXfkdZm1X9DdsbQ/view?usp=sharing">este enlace</a>. El fichero comprimido contiene un kernel Linux ya compilado para la Raspberry Pi, que nos permite realizar compilación cruzada de módulos del kernel.</p>
+</li>
+<li>
+<p>Extraer el fichero comprimido en el <code>HOME</code> del usuario <code>kernel</code>. (Se asume que el fichero descargado se almacena en <code>~/Descargas</code>).</p>
+</li>
+</ol>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">$</span> <span class="nb">cd</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">$</span> <span class="n">tar</span> <span class="n">xzvf</span> <span class="p">./</span><span class="n">Descargas</span><span class="p">/</span><span class="n">linux-raspberry</span><span class="p">.</span><span class="n">tgz</span>
+</span></code></pre></div>
+<ol>
+<li>Instalar el compilador cruzado (debería encontrarse ya instalado en la máquina virtual):</li>
+</ol>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>gcc-8-arm-linux-gnueabihf<span class="w"> </span>gcc-arm-linux-gnueabihf
+</span></code></pre></div>
+<ol>
+<li>Ir al directorio <code>Clipboard</code> y borrar ficheros resultantes de compilaciones previas usando el <code>Makefile</code> convencional:</li>
+</ol>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">kernel</span><span class="nv">@debian</span><span class="p">:~$</span> <span class="nb">cd </span><span class="n">FicherosP1</span><span class="p">/</span><span class="n">Clipboard</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">kernel</span><span class="nv">@debian</span><span class="p">:~/</span><span class="n">FicherosP1</span><span class="p">$</span> <span class="n">make</span> <span class="n">clean</span> 
+</span></code></pre></div>
+<ol>
+<li>
+<p>Generar el <code>.ko</code> adecuado para el kernel de la Raspberry pi usando el comando <code>make -f Makefile.cross</code> desde el mismo directorio donde nos encontramos. Nótese que con la opción -f de GNU Make se escoge manualmente el fichero Makefile para realizar la compilación.</p>
+</li>
+<li>
+<p>Finalmente, copiar el fichero <code>.ko</code> a la Raspberry Pi usando <code>scp</code> y probar dicho módulo en la placa</p>
+<ul>
+<li>Comando de copia del fichero al directorio <code>HOME</code> del usuario <code>pi</code> en la placa: <code>scp clipboard.ko pi@pi:.</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="ejercicio-6">Ejercicio 6<a class="headerlink" href="#ejercicio-6" title="Permanent link">&para;</a></h3>
+<p>El módulo del kernel <code>ModledsPi_gpiod</code> modifica el estado de los LEDs D1, D2 y D3 de la placa Bee v2.0. En particular, al cargar este módulo en la Raspberry Pi, los citados LEDs se encienden; al descargar el módulo, estos LEDs se apagan.</p>
+<p>En este ejercicio se plantea analizar la implementación de este módulo, cuyo código deberá reutilizarse para la implementación de la práctica. Para ello se ha de prestar especial atención a la siguiente función:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">set_pi_leds</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">mask</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">NR_GPIO_LEDS</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">gpiod_set_value</span><span class="p">(</span><span class="n">gpio_descriptors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="n">mask</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x1</span><span class="w"> </span><span class="p">);</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>La función <code>set_pi_leds()</code> acepta como parámetro una máscara de bits que especifica el estado de cada LED. Si el bit correspondiente está a "1", el LED asociado se enciende; si está a "0" se apagará.  La correspondencia entre los bits de la máscara (<code>unsigned int</code>) y los LEDs es la siguiente:</p>
+<ul>
+<li>Bit 0: Led D3</li>
+<li>Bit 1: Led D2</li>
+<li>Bit 2: Led D1</li>
+<li>Bits 3-31: Se ignoran</li>
+</ul>
+<h3 id="ejercicio-7">Ejercicio 7<a class="headerlink" href="#ejercicio-7" title="Permanent link">&para;</a></h3>
+<p>Estudiar el funcionamiento e implementación del módulo de ejemplo <code>Misc7seg</code>, que al igual que el del ejercicio anterior ha sido creado especificamente para la placa de E/S Bee 2.0. Este driver --módulo del kernel--, al cargarse, expone el display 7 segmentos de la placa al usuario mediante el fichero especial de caracteres <code>/dev/display7s</code>, perteneciente a la clase <code>misc</code> del LDM.  El driver permite alterar el estado del display escribiendo desde espacio de usuario en dicho fichero especial. La implementación, no obstante, ignora la cadena o secuencia de bytes escrita en el fichero de dispositivo con <code>write()</code>, y simplemente altera el estado del display encendiendo segmentos específicos siguiendo un patrón determinado. Para averiguar el patrón de encendido de los segmentos, que se realiza en <code>display7s_write()</code>, se pueden realizar escrituras con <code>echo &gt; /dev/display7s</code> de forma manual, o empleando un bucle infinito (a terminar con CTRL+C) como en el siguiente comando:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span><span class="k">while</span><span class="w"> </span>true<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/display7s<span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.4<span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</span></code></pre></div>
+<p>Una parte crítica de este ejercicio es comprender cómo el módulo del kernel controla el estado del display 7 segmentos, usando pines específicos de la Raspberry Pi. El display integrado en la placa tiene los 7 segmentos habituales (<code>a</code>,<code>b</code>,<code>c</code>, ...., <code>g</code>) y uno extra para el punto --llamado <code>dp</code>--. Ya que dedicar 8 pines para controlar estos segmentos limita enormemente el uso simultáneo de otros dispositivos de E/S, la placa Bee v2.0 integra un circuito para controlar el display que solo requiere 3 pines. La siguiente figura muestra un diagrama del circuito:</p>
+<p><img alt="" src="../img/display7s-circuit.png" /></p>
+<p>El circuito consta de 3 módulos fundamentales: un registro de desplazamiento (etapa de entrada), un registro convencional con carga paralela, y el módulo del display 7 segmentos propiamente dicho, que integra los LEDs correspondientes y una serie de resistencias de entrada (no mostradas en el diagrama, por simplicidad). El sistema consta de las siguientes 3 entradas:</p>
+<ul>
+<li><strong>SDI</strong> (<em>Serial Data Input</em>): codifica el bit de entrada serie al registro de desplazamiento<ul>
+<li>Esta entrada se controla con el GPIO 18 de la Raspberry Pi</li>
+</ul>
+</li>
+<li><strong>SRCLK</strong> (<em>Shift Register Clock</em>): señal de reloj del registro de desplazamiento<ul>
+<li>Esta señal de reloj se controla con el GPIO 23 de la Raspberry Pi</li>
+</ul>
+</li>
+<li><strong>RCLK</strong> (<em>Register Clock</em>): señal de reloj del registro de salida<ul>
+<li>Esta señal de reloj se controla con el GPIO 24 de la Raspberry Pi</li>
+</ul>
+</li>
+</ul>
+<p>Como podemos observar en el diagrama, las señales de <em>enable</em> (EN) del registro de desplazamiento, y de <em>carga</em> (LOAD) del registro de salida están a 1, por lo que los módulos realizarán su acción específica --desplazamiento, y carga paralela, respectivamente-- siempre que se produzca un flanco de subida en su señal de reloj correspondiente. </p>
+<p>El estado de los segmentos se representa mediante un número de 8 bits, estando representado el segmento <em>a</em> mediante el bit más significativo, y <em>dp</em> por el bit menos significativo. Como los LEDs del módulo que implementa el display 7 segmentos están en configuración de <em>cátodo común</em>, un bit a 1 enciende el segmento correspondiente, y un 0 lo apaga.</p>
+<p>Intuitivamente, para actualizar el estado del display desde la CPU han de seguirse estos pasos:</p>
+<ol>
+<li>Asegurarse de que los pines que controlan la señal de reloj <strong>SRCLK</strong> y <strong>RCLK</strong> están a cero al principio del procedimiento  </li>
+<li>Para cada bit del número de estado (8 bits), recorriendo los bits de izquierda a derecha:<ul>
+<li>Escribir el bit actual en la entrada <strong>SDI</strong> usando el GPIO asociado</li>
+<li>Generar un pulso de reloj en el registro de desplazamiento con la entrada <strong>SRCLK</strong> modulando la señal ("dibujando el pulso") mediante el pin GPIO correspondiente </li>
+<li><strong>RCLK</strong> estará siempre a cero durante esta etapa.</li>
+</ul>
+</li>
+<li>Al final del punto anterior, la entrada paralela del registro de salida ya tiene los bits en el orden deseado ya que se han ido desplazando todos hacia la izquierda. Por lo tanto, basta generar un pulso de reloj en la señal <strong>RCLK</strong>, para cargar el número en el registro. Al hacer esto, se actualizará automáticamente la salida del registro, y por tanto el estado de los segmentos en el display.</li>
+</ol>
+<p>La función del driver que implementa el citado procedimiento de actualización del estado del display es <code>update_7sdisplay()</code>: </p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cp">#define SEGMENT_COUNT 8</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">update_7sdisplay</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">{</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">SEGMENT_COUNT</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="cm">/* Explore current bit (from most significant to least significant) */</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mh">0x80</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">))</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">            </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="k">else</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">            </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="cm">/* Set value of serial input */</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">        </span><span class="n">gpiod_set_value</span><span class="p">(</span><span class="n">gpio_descriptors</span><span class="p">[</span><span class="n">SDI_IDX</span><span class="p">],</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="cm">/* Generate clock cycle in shift register */</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">        </span><span class="n">gpiod_set_value</span><span class="p">(</span><span class="n">gpio_descriptors</span><span class="p">[</span><span class="n">SRCLK_IDX</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">        </span><span class="n">msleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">        </span><span class="n">gpiod_set_value</span><span class="p">(</span><span class="n">gpio_descriptors</span><span class="p">[</span><span class="n">SRCLK_IDX</span><span class="p">],</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span><span class="cm">/* Generate clock cycle in output register to update 7-seg display */</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">    </span><span class="n">gpiod_set_value</span><span class="p">(</span><span class="n">gpio_descriptors</span><span class="p">[</span><span class="n">RCLK_IDX</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">    </span><span class="n">msleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">    </span><span class="n">gpiod_set_value</span><span class="p">(</span><span class="n">gpio_descriptors</span><span class="p">[</span><span class="n">RCLK_IDX</span><span class="p">],</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>La alteración de las señales SDI, SRCLK y RCLK se realiza mediante <em>bit banging</em>, es decir modificando el valor del pin manualmente desde la CPU, pero de forma temporizada, realizando las esperas necesarias para garantizar que la señal se mantenga un cierto tiempo en el valor lógico deseado. En particular, para garantizar que el pulso de reloj tenga una duración mínima garantizada de 1ms, el driver hace uso de la función <code>msleep()</code> del kernel, que bloquea al flujo de ejecución invocador durante el periodo de tiempo en ms indicado como argumento.  </p>
+<h2 id="desarrollo-de-la-practica">Desarrollo de la práctica<a class="headerlink" href="#desarrollo-de-la-practica" title="Permanent link">&para;</a></h2>
+<p>Esta práctica consta de dos partes: A y B </p>
+<h3 id="parte-a">Parte A<a class="headerlink" href="#parte-a" title="Permanent link">&para;</a></h3>
+<p>Implementar un driver de dispositivo de caracteres <code>Modleds-dev-pi</code> que permita establecer el estado de los LEDS D1-D3 de la placa Bee v2.0. Al cargar dicho driver se creará automáticamente un fichero especial de caracteres <code>/dev/leds</code> . El estado de los LEDs podrá alterarse escribiendo un número del 0 al 7 (máscara de 3 bits) al fichero especial. La correspondencia entre los bits de esta máscara y los LEDs será la siguiente:</p>
+<ul>
+<li>Bit 2: encender/apagar LED D3</li>
+<li>Bit 1: encender/apagar LED D2</li>
+<li>Bit 0: encender/apagar LED D1</li>
+</ul>
+<p>La siguiente tabla muestra algunos ejemplos:</p>
+<table>
+<thead>
+<tr>
+<th>Número escrito en  <code>/dev/leds</code></th>
+<th>D3</th>
+<th>D2</th>
+<th>D1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>ON</td>
+<td>OFF</td>
+<td>OFF</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ON</td>
+<td>ON</td>
+<td>ON</td>
+</tr>
+<tr>
+<td>3</td>
+<td>OFF</td>
+<td>ON</td>
+<td>ON</td>
+</tr>
+<tr>
+<td>0</td>
+<td>OFF</td>
+<td>OFF</td>
+<td>OFF</td>
+</tr>
+<tr>
+<td>2</td>
+<td>OFF</td>
+<td>ON</td>
+<td>OFF</td>
+</tr>
+</tbody>
+</table>
+<p>Si el usuario escribe una cadena de caracteres que no sea 0-7 la escritura sobre el dispositivo deberá devolver un error:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">9</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/leds
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>-bash:<span class="w"> </span>echo:<span class="w"> </span>write<span class="w"> </span>error:<span class="w"> </span>Invalid<span class="w"> </span>argument
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>potato<span class="w"> </span>&gt;<span class="w"> </span>/dev/leds
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>-bash:<span class="w"> </span>echo:<span class="w"> </span>write<span class="w"> </span>error:<span class="w"> </span>Invalid<span class="w"> </span>argument
+</span></code></pre></div>
+<p>Para probar el funcionamiento del driver <code>Modleds-dev</code> se aconseja ejecutar el siguiente script BASH, que altera periódicamente el estado de los LEDs para emular un contador binario módulo 7:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">while</span><span class="w"> </span><span class="nb">true</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">do</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="o">((</span><span class="w"> </span><span class="nv">i</span><span class="o">=</span><span class="m">0</span><span class="p">;</span><span class="w"> </span><span class="nv">$i</span>&lt;<span class="m">8</span><span class="w"> </span><span class="p">;</span><span class="w"> </span>i++<span class="w"> </span><span class="o">))</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">   </span><span class="k">do</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/leds
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span>sleep<span class="w"> </span><span class="m">0</span>.4
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">   </span><span class="k">done</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="k">done</span>
+</span></code></pre></div>
+<h4 id="parte-opcional">Parte opcional<a class="headerlink" href="#parte-opcional" title="Permanent link">&para;</a></h4>
+<p>Modificar el ejemplo <code>ChardevData</code> , de tal forma que se creen 3 dispositivos de caracteres independientes al cargar el módulo: <code>/dev/chardev0</code>, <code>/dev/chardev1</code> y <code>/dev/chardev2</code>. Cada uno de estos dispositivos tiene que tener asociado una estructura independiente de tipo <code>device_data</code>:</p>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">device_data</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">Device_Open</span><span class="p">;</span><span class="w"> </span><span class="cm">/* Is device open?  Used to prevent multiple access to device */</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">msg</span><span class="p">[</span><span class="n">BUF_LEN</span><span class="p">];</span><span class="w">   </span><span class="cm">/* The msg the device will give when asked */</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">msg_Ptr</span><span class="p">;</span><span class="w">       </span><span class="cm">/* This will be initialized every time the</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="cm">                            device is opened successfully */</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">counter</span><span class="p">;</span><span class="w">       </span><span class="cm">/* Tracks the number of times the character</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="cm">                             device has been opened */</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">device</span><span class="o">*</span><span class="w"> </span><span class="n">device</span><span class="p">;</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="kt">dev_t</span><span class="w"> </span><span class="n">major_minor</span><span class="p">;</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="p">};</span>
+</span></code></pre></div>
+<p>Al asociar una estructura independiente a cada dispositivo "virtual" de caracteres, cada uno de ellos será completamente independiente de cara al usuario, como se ilustra en el siguiente ejemplo de ejecución:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1">## Compilación y carga del módulo modificado</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>pi@raspberrypi:~/Solutions/ChardevDataMulti<span class="w"> </span>$<span class="w"> </span>make
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>make<span class="w"> </span>-C<span class="w"> </span>/lib/modules/5.10.92-v7+/build<span class="w"> </span><span class="nv">M</span><span class="o">=</span>/home/pi/Solutions/ChardevDataMulti<span class="w"> </span>modules
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>make<span class="o">[</span><span class="m">1</span><span class="o">]</span>:<span class="w"> </span>Entering<span class="w"> </span>directory<span class="w"> </span><span class="s1">&#39;/usr/src/linux-headers-5.10.92-v7+&#39;</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span>CC<span class="w"> </span><span class="o">[</span>M<span class="o">]</span><span class="w">  </span>/home/pi/Solutions/ChardevDataMulti/chardev_data.o
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span>MODPOST<span class="w"> </span>/home/pi/Solutions/ChardevDataMulti/Module.symvers
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span>CC<span class="w"> </span><span class="o">[</span>M<span class="o">]</span><span class="w">  </span>/home/pi/Solutions/ChardevDataMulti/chardev_data.mod.o
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span>LD<span class="w"> </span><span class="o">[</span>M<span class="o">]</span><span class="w">  </span>/home/pi/Solutions/chardev_data.ko
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>make<span class="o">[</span><span class="m">1</span><span class="o">]</span>:<span class="w"> </span>Leaving<span class="w"> </span>directory<span class="w"> </span><span class="s1">&#39;/usr/src/linux-headers-5.10.92-v7+&#39;</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>pi@raspberrypi:~/Solutions/ChardevDataMulti<span class="w"> </span>$<span class="w"> </span>sudo<span class="w"> </span>insmod<span class="w"> </span>chardev_data.ko<span class="w"> </span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="c1">## Interacción con dispositivos de caracteres independientes</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>pi@raspberrypi:~/Solutions/ChardevDataMulti<span class="w"> </span>$<span class="w"> </span><span class="nb">cd</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>ls<span class="w"> </span>/dev/chardev*
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>/dev/chardev0<span class="w">  </span>/dev/chardev1<span class="w">  </span>/dev/chardev2
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/chardev0
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>I<span class="w"> </span>already<span class="w"> </span>told<span class="w"> </span>you<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="nb">times</span><span class="w"> </span>Hello<span class="w"> </span>world!
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/chardev1
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>I<span class="w"> </span>already<span class="w"> </span>told<span class="w"> </span>you<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="nb">times</span><span class="w"> </span>Hello<span class="w"> </span>world!
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/chardev2
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>I<span class="w"> </span>already<span class="w"> </span>told<span class="w"> </span>you<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="nb">times</span><span class="w"> </span>Hello<span class="w"> </span>world!
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/chardev2
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>I<span class="w"> </span>already<span class="w"> </span>told<span class="w"> </span>you<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nb">times</span><span class="w"> </span>Hello<span class="w"> </span>world!
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span>cat<span class="w"> </span>/dev/chardev0
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>I<span class="w"> </span>already<span class="w"> </span>told<span class="w"> </span>you<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nb">times</span><span class="w"> </span>Hello<span class="w"> </span>world!
+</span></code></pre></div>
+<h3 id="parte-b">Parte B<a class="headerlink" href="#parte-b" title="Permanent link">&para;</a></h3>
+<p>Extender la funcionalidad del módulo de ejemplo <code>Misc7seg</code> (Ejercicio 7), para que el usuario pueda especificar el dígito hexadecimal (de 0 a F) que se desea mostrar en el display 7 segmentos escribiendo en el fichero especial de caracteres <code>/dev/display7s</code>. Para ello se ha de modificar la función <code>display7s_write()</code> . También se recomienda definir macros que codifiquen el número de 8 bits que ha de escribirse en el display para representar cada dígito hexadecimal. </p>
+<h4 id="ejemplo-de-ejecucion">Ejemplo de ejecución<a class="headerlink" href="#ejemplo-de-ejecucion" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">9</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/display7s
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1">## Debería mostrar el número 9 en el display</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>A<span class="w"> </span>&gt;<span class="w"> </span>/dev/display7s
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1">## Debería mostrar la letra A (número 10) en el display</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>f<span class="w"> </span>&gt;<span class="w"> </span>/dev/display7s
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1">## Debería mostrar la letra F (número 15) en el display</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="c1">## Casos de error</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">27</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/display7s
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>-bash:<span class="w"> </span>echo:<span class="w"> </span>write<span class="w"> </span>error:<span class="w"> </span>Invalid<span class="w"> </span>argument
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>h<span class="w"> </span>&gt;<span class="w"> </span>/dev/display7s
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>-bash:<span class="w"> </span>echo:<span class="w"> </span>write<span class="w"> </span>error:<span class="w"> </span>Invalid<span class="w"> </span>argument
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>$<span class="w"> </span>pi@raspberrypi:~<span class="w"> </span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>potato<span class="w"> </span>&gt;<span class="w"> </span>/dev/display7s
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>-bash:<span class="w"> </span>echo:<span class="w"> </span>write<span class="w"> </span>error:<span class="w"> </span>Invalid<span class="w"> </span>argument
+</span></code></pre></div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../config/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Drivers en Linux. Preparación del entorno de trabajo" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Drivers en Linux. Preparación del entorno de trabajo
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../sincronizacion/" class="md-footer__link md-footer__link--next" aria-label="Next: Drivers en Linux. Sincronización en el kernel" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Drivers en Linux. Sincronización en el kernel
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
