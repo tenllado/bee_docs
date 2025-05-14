@@ -607,9 +607,9 @@
 </span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span>link/ether<span class="w"> </span><span class="m">00</span>:00:1b:3c:00:49<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
 </span></code></pre></div>
 <p>Llegados a este punto es crucial anotar el nombre asignado por Linux para la interfaz USB Ethernet conectada a nuestro equipo, ya que este nombre deberá almacenarse en dos ficheros que editaremos a continuación. Esto es preciso para configurar correctamente la red interna, por donde estableceremos comunicación con la Raspberry Pi. En particular, es preciso realizar lo siguiente:</p>
-<ul>
-<li>Reemplazar los ficheros <code>/usr/local/bin/setup-network.sh</code> y <code>/etc/hosts</code> con la versión de los mismos que se encuentra <a href="https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz">aquí</a>. Para ello se pueden ejecutar los siguientes comandos:</li>
-</ul>
+<ol>
+<li>
+<p>Reemplazar los ficheros <code>/usr/local/bin/setup-network.sh</code> y <code>/etc/hosts</code> con la versión de los mismos que se encuentra <a href="https://jcsaezal.github.io/lin-ucm-docs/code/fixed-files.tgz">aquí</a>. Para ello se pueden ejecutar los siguientes comandos:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Crear directorio temporal para almacenar los ficheros</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>kernel@debian:~$<span class="w"> </span>mkdir<span class="w"> </span>/tmp/new
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>kernel@debian:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/new
@@ -640,7 +640,7 @@
 </span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>
 </span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>kernel@debian:/tmp/new$<span class="w"> </span>./copy_files.sh
 </span></code></pre></div>
-<ul>
+</li>
 <li>
 <p>Efectuar las siguientes modificaciones en el  fichero <code>/etc/network/interfaces</code> como <em>root</em> (p.ej.: <code>sudo nano /etc/network/interfaces</code> )</p>
 </li>
@@ -674,7 +674,7 @@
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>sysctl<span class="w"> </span>-w<span class="w"> </span>net.ipv4.ip_forward<span class="o">=</span><span class="m">1</span>
 </span></code></pre></div>
 </li>
-</ul>
+</ol>
 <p>Tras llevar a cabo estas modificaciones en los ficheros, procederemos a configurar la red interna ejecutando el script <code>setup-network.sh</code> con <code>sudo</code>:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kernel@debian:~$<span class="w"> </span>sudo<span class="w"> </span>setup-network.sh
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>net.ipv4.ip_forward<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>
